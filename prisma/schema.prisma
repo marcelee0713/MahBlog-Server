@@ -3,6 +3,206 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Users {
+  userId                  String                  @id @default(cuid())
+  email                   String                  @unique
+  password                String
+  emailVerifiedAt         DateTime?
+  profile                 UserProfile?
+  userSourceConnections   UserConnections[]       @relation("SourceUser")
+  userTargetConnections   UserConnections[]       @relation("TargetUser")
+  notifications           UserNotifications[]
+  sessions                UserSessions[]
+  blacklistedTokens       UserBlacklistedTokens[]
+  reports                 UserReports[]
+  blogs                   Blogs[]
+  likedBlogs              BlogLikes[]
+  likedCommentsAndReplies BlogCommentLikes[]
+  commentedBlogs          BlogComments[]
+  repliedComments         BlogCommentReplies[]
+  createdAt               DateTime                @default(now())
+  role                    Role                    @default(USER)
+}
+
+model UserProfile {
+  profileId      String  @id @default(cuid())
+  userId         String  @unique
+  user           Users   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  firstName      String  @db.VarChar(50)
+  middleName     String? @db.VarChar(50)
+  lastName       String  @db.VarChar(80)
+  profilePicture String?
+  profileCover   String?
+}
+
+model UserConnections {
+  connectionId String           @id @default(cuid())
+  sourceUser   Users            @relation("SourceUser", fields: [sourceUserId], references: [userId])
+  sourceUserId String
+  targetUser   Users            @relation("TargetUser", fields: [targetUserId], references: [userId])
+  targetUserId String
+  status       ConnectionStatus @default(PENDING)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model UserNotifications {
+  notificationId String             @id @default(cuid())
+  userId         String?
+  status         NotificationStatus @default(NOT_SEEN)
+  type           NotificationType
+  users          Users?             @relation(fields: [userId], references: [userId])
+  createdAt      DateTime           @default(now())
+}
+
+model UserSessions {
+  sessionId    String   @id
+  userId       String?
+  refreshToken String
+  users        Users?   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+}
+
+model UserBlacklistedTokens {
+  token     String   @id
+  holderId  String?
+  users     Users?   @relation(fields: [holderId], references: [userId])
+  createdAt DateTime
+  expiresAt DateTime
+}
+
+model UserReports {
+  reportId    String     @id @default(cuid())
+  reporterId  String?
+  reportedId  String?
+  description String     @db.VarChar(500)
+  type        ReportType
+  users       Users?     @relation(fields: [reporterId], references: [userId])
+  createdAt   DateTime   @default(now())
+}
+
+model Blogs {
+  blogId         String               @id @default(cuid())
+  authorId       String?
+  coverImage     String?
+  title          String               @db.VarChar(255)
+  description    String
+  visiblity      BlogVisibility
+  contents       BlogContents[]
+  likes          BlogLikes[]
+  comments       BlogComments[]
+  commentReplies BlogCommentReplies[]
+  users          Users?               @relation(fields: [authorId], references: [userId], onDelete: Cascade)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+}
+
+model BlogContents {
+  blogContentId String   @id @default(cuid())
+  blogId        String?
+  index         Int
+  title         String?  @db.VarChar(255)
+  description   String?
+  contentImage  String?
+  blog          Blogs?   @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+}
+
+model BlogLikes {
+  blogLikeId String   @id @default(cuid())
+  blogId     String?
+  userId     String?
+  createdAt  DateTime @default(now())
+  users      Users?   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  blog       Blogs?   @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+}
+
+model BlogComments {
+  commentId String               @id @default(cuid())
+  blogId    String?
+  userId    String?
+  comment   String
+  replies   BlogCommentReplies[]
+  likes     BlogCommentLikes[]
+  users     Users?               @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  blog      Blogs?               @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+}
+
+model BlogCommentReplies {
+  replyId          String               @id @default(cuid())
+  commentId        String?
+  blogId           String?
+  userId           String?
+  mentionedReplyId String?
+  reply            String
+  users            Users?               @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  blog             Blogs?               @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+  comment          BlogComments?        @relation(fields: [commentId], references: [commentId], onDelete: Cascade)
+  likes            BlogCommentLikes[]
+  mentionedReply   BlogCommentReplies?  @relation("MentionedReply", fields: [mentionedReplyId], references: [replyId], onDelete: Cascade)
+  mentionedReplies BlogCommentReplies[] @relation("MentionedReply")
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+}
+
+model BlogCommentLikes {
+  commentLikeId String              @id @default(cuid())
+  userId        String?
+  commentId     String?
+  replyId       String?
+  users         Users?              @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  comment       BlogComments?       @relation(fields: [commentId], references: [commentId], onDelete: Cascade)
+  reply         BlogCommentReplies? @relation(fields: [replyId], references: [replyId], onDelete: Cascade)
+  createdAt     DateTime            @default(now())
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum NotificationStatus {
+  SEEN
+  NOT_SEEN
+}
+
+enum NotificationType {
+  LIKED_BLOG
+  COMMENT_BLOG
+  REPLIED_COMMENT
+}
+
+enum ReportType {
+  BUG
+  INAPPROPRIATE_BLOG
+  SPAM
+  HARASSMENT
+  COPYRIGHT_VIOLATION
+  FAKE_NEWS
+  HATE_SPEECH
+  IMPERSONATION
+  PHISHING
+  MALWARE
+  OTHER
+}
+
+enum BlogVisibility {
+  PRIVATE
+  PUBLIC
+  CONNECTIONS
 }
