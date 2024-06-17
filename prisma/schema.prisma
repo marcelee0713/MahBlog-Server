@@ -81,6 +81,7 @@ model UserReports {
   reportId    String     @id @default(cuid())
   reporterId  String?
   reportedId  String?
+  email       String?
   description String     @db.VarChar(500)
   type        ReportType
   users       Users?     @relation(fields: [reporterId], references: [userId])
@@ -94,6 +95,7 @@ model Blogs {
   title          String               @db.VarChar(255)
   description    String
   visiblity      BlogVisibility
+  tags           BlogTags[]
   contents       BlogContents[]
   likes          BlogLikes[]
   comments       BlogComments[]
@@ -101,6 +103,13 @@ model Blogs {
   users          Users?               @relation(fields: [authorId], references: [userId], onDelete: Cascade)
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
+}
+
+model BlogTags {
+  tagId  String  @id @default(cuid())
+  blogId String?
+  tag    String  @db.VarChar(50)
+  Blogs  Blogs?  @relation(fields: [blogId], references: [blogId])
 }
 
 model BlogContents {
