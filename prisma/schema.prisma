@@ -25,6 +25,7 @@ model Users {
   likedCommentsAndReplies BlogCommentLikes[]
   commentedBlogs          BlogComments[]
   repliedComments         BlogCommentReplies[]
+  drafts                  Draft[]
   createdAt               DateTime                @default(now())
   role                    Role                    @default(USER)
 }
@@ -171,6 +172,36 @@ model BlogCommentLikes {
   comment       BlogComments?       @relation(fields: [commentId], references: [commentId], onDelete: Cascade)
   reply         BlogCommentReplies? @relation(fields: [replyId], references: [replyId], onDelete: Cascade)
   createdAt     DateTime            @default(now())
+}
+
+model Draft {
+  draftId     String          @id @default(cuid())
+  authorId    String?
+  coverImage  String?
+  title       String?         @db.VarChar(255)
+  description String?
+  tags        DraftTags[]
+  contents    DraftContents[]
+  Users       Users?          @relation(fields: [authorId], references: [userId])
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model DraftContents {
+  draftContentId String  @id @default(cuid())
+  draftId        String?
+  index          Int
+  title          String? @db.VarChar(255)
+  description    String?
+  contentImage   String?
+  Draft          Draft?  @relation(fields: [draftId], references: [draftId])
+}
+
+model DraftTags {
+  tagId   String  @id @default(cuid())
+  draftId String?
+  tag     String  @db.VarChar(50)
+  Draft   Draft?  @relation(fields: [draftId], references: [draftId])
 }
 
 enum ConnectionStatus {
