@@ -39,6 +39,7 @@ model UserProfile {
   lastName       String  @db.VarChar(80)
   profilePicture String?
   profileCover   String?
+  bio            String? @db.VarChar(255)
 }
 
 model UserConnections {
