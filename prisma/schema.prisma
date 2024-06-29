@@ -16,7 +16,8 @@ model Users {
   profile                 UserProfile?
   userSourceConnections   UserConnections[]       @relation("SourceUser")
   userTargetConnections   UserConnections[]       @relation("TargetUser")
-  notifications           UserNotifications[]
+  notifications           UserNotifications[]     @relation("Receiver")
+  notificator             UserNotifications[]     @relation("Sender")
   sessions                UserSessions[]
   blacklistedTokens       UserBlacklistedTokens[]
   reports                 UserReports[]
@@ -28,6 +29,7 @@ model Users {
   drafts                  Draft[]
   createdAt               DateTime                @default(now())
   role                    Role                    @default(USER)
+  status                  UserStatus              @default(ACTIVE)
 }
 
 model UserProfile {
@@ -54,12 +56,21 @@ model UserConnections {
 }
 
 model UserNotifications {
-  notificationId String             @id @default(cuid())
-  userId         String?
-  status         NotificationStatus @default(NOT_SEEN)
-  type           NotificationType
-  users          Users?             @relation(fields: [userId], references: [userId])
-  createdAt      DateTime           @default(now())
+  notificationId     String              @id @default(cuid())
+  message            String?
+  receiverId         String?
+  senderId           String?
+  blogId             String?
+  commentId          String?
+  replyId            String?
+  status             NotificationStatus  @default(NOT_SEEN)
+  type               NotificationType
+  receiver           Users?              @relation("Receiver", fields: [receiverId], references: [userId], onDelete: Cascade)
+  sender             Users?              @relation("Sender", fields: [senderId], references: [userId], onDelete: SetNull)
+  Blogs              Blogs?              @relation(fields: [blogId], references: [blogId], onDelete: SetNull)
+  BlogComments       BlogComments?       @relation(fields: [commentId], references: [commentId], onDelete: SetNull)
+  BlogCommentReplies BlogCommentReplies? @relation(fields: [replyId], references: [replyId], onDelete: SetNull)
+  createdAt          DateTime            @default(now())
 }
 
 model UserSessions {
@@ -96,7 +107,9 @@ model Blogs {
   coverImage     String?
   title          String               @db.VarChar(255)
   description    String
-  visiblity      BlogVisibility
+  notifications  UserNotifications[]
+  status         BlogStatus           @default(ACTIVE)
+  visiblity      BlogVisibility       @default(PUBLIC)
   tags           BlogTags[]
   contents       BlogContents[]
   likes          BlogLikes[]
@@ -135,16 +148,17 @@ model BlogLikes {
 }
 
 model BlogComments {
-  commentId String               @id @default(cuid())
-  blogId    String?
-  userId    String?
-  comment   String
-  replies   BlogCommentReplies[]
-  likes     BlogCommentLikes[]
-  users     Users?               @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  blog      Blogs?               @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
+  commentId     String               @id @default(cuid())
+  blogId        String?
+  userId        String?
+  comment       String
+  notifications UserNotifications[]
+  replies       BlogCommentReplies[]
+  likes         BlogCommentLikes[]
+  users         Users?               @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  blog          Blogs?               @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
 }
 
 model BlogCommentReplies {
@@ -160,6 +174,7 @@ model BlogCommentReplies {
   likes            BlogCommentLikes[]
   mentionedReply   BlogCommentReplies?  @relation("MentionedReply", fields: [mentionedReplyId], references: [replyId], onDelete: Cascade)
   mentionedReplies BlogCommentReplies[] @relation("MentionedReply")
+  notifications    UserNotifications[]
   createdAt        DateTime             @default(now())
   updatedAt        DateTime             @updatedAt
 }
@@ -205,6 +220,12 @@ model DraftTags {
   Draft   Draft?  @relation(fields: [draftId], references: [draftId])
 }
 
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
 enum ConnectionStatus {
   PENDING
   ACCEPTED
@@ -226,6 +247,7 @@ enum NotificationType {
   LIKED_BLOG
   COMMENT_BLOG
   REPLIED_COMMENT
+  REJECTED_CONNECTION_STATUS
 }
 
 enum ReportType {
@@ -240,6 +262,11 @@ enum ReportType {
   PHISHING
   MALWARE
   OTHER
+}
+
+enum BlogStatus {
+  ACTIVE
+  FLAGGED
 }
 
 enum BlogVisibility {
