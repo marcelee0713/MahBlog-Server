@@ -21,6 +21,7 @@ model Users {
   sessions                UserSessions[]
   blacklistedTokens       UserBlacklistedTokens[]
   reports                 UserReports[]
+  logs                    UserLogs[]
   blogs                   Blogs[]
   likedBlogs              BlogLikes[]
   likedCommentsAndReplies BlogCommentLikes[]
@@ -99,6 +100,15 @@ model UserReports {
   type        ReportType
   users       Users?     @relation(fields: [reporterId], references: [userId])
   createdAt   DateTime   @default(now())
+}
+
+model UserLogs {
+  logId     String   @id @default(cuid())
+  content   String
+  userId    String?
+  createdAt DateTime @default(now())
+  users     Users?   @relation(fields: [userId], references: [userId])
+  type      LogType  @default(OTHER)
 }
 
 model Blogs {
@@ -231,6 +241,13 @@ enum ConnectionStatus {
   ACCEPTED
   REJECTED
   BLOCKED
+}
+
+enum LogType {
+  UPDATE_PASSWORD
+  UPDATE_EMAIL
+  UPDATE_NAME
+  OTHER
 }
 
 enum Role {
