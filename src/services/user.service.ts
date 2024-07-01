@@ -1,7 +1,21 @@
-import { IUserService, SignInParams } from "../interfaces/user.interface";
+import { inject, injectable } from "inversify";
+import { IUser, IUserRepository, IUserService, SignInParams } from "../interfaces/user.interface";
 import { UserData } from "../types/user.types";
+import { TYPES } from "../constants";
 
+@injectable()
 export class UserService implements IUserService {
+  private entity: IUser;
+  private repo: IUserRepository;
+
+  constructor(
+    @inject(TYPES.UserModel) entity: IUser,
+    @inject(TYPES.UserRepository) repo: IUserRepository
+  ) {
+    this.entity = entity;
+    this.repo = repo;
+  }
+
   async signIn(email: string, password: string): Promise<string> {
     throw Error("Unused");
   }

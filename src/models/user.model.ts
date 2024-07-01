@@ -1,7 +1,9 @@
+import { injectable } from "inversify";
 import { REG_EX } from "../constants";
 import { IUser } from "../interfaces/user.interface";
 import { UserData, UserRoles, UserStatus } from "../types/user.types";
 
+@injectable()
 export class User implements IUser {
   userId!: string;
   email!: string;

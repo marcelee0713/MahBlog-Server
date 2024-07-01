@@ -3,6 +3,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import userRouter from "./routes/user.routes";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(
     credentials: true,
   })
 );
+app.set("trust proxy", 1);
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,5 +26,6 @@ app.listen(PORT, () => {
   console.log("Currently listening to port: " + PORT);
 });
 
-// TODO: Integration of Inversify
+app.use("/api/v1/user", userRouter);
+
 // TODO: Integration of User Entity with UserProfile, UserAuth, and etc...

@@ -1,7 +1,17 @@
+import { injectable } from "inversify";
 import { IUserRepository, SignInParams, UserUpdateParams } from "../interfaces/user.interface";
 import { UserData } from "../types/user.types";
+import { PrismaClient } from "@prisma/client";
+import { db } from "../config/db";
 
+@injectable()
 export class UserRepository implements IUserRepository {
+  private db: PrismaClient;
+
+  constructor() {
+    this.db = db;
+  }
+
   async createUser(params: SignInParams): Promise<void> {
     throw Error("Not implemented");
   }
