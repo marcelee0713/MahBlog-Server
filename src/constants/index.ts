@@ -3,6 +3,7 @@ export const TYPES = {
   UserService: Symbol.for("UserService"),
   UserRepository: Symbol.for("UserRepository"),
   UserController: Symbol.for("UserController"),
+  UserProfileModel: Symbol.for("UserProfileModel"),
 };
 
 export const REG_EX = {

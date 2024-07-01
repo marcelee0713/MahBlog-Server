@@ -1,4 +1,4 @@
-import { UserData, UserRoles, UserStatus, UserUpdateUseCase } from "../types/user.types";
+import { UserData, UserRoles, UserStatus, UserUpdateUseCase } from "../../types/user/user.types";
 
 export interface IUser {
   userId: string;

@@ -1,7 +1,8 @@
 import { injectable } from "inversify";
-import { REG_EX } from "../constants";
-import { IUser } from "../interfaces/user.interface";
-import { UserData, UserRoles, UserStatus } from "../types/user.types";
+import { REG_EX } from "../../constants";
+import { IUser } from "../../interfaces/user/user.interface";
+import { UserData, UserRoles, UserStatus } from "../../types/user/user.types";
+import { ErrorType } from "../../types";
 
 @injectable()
 export class User implements IUser {
@@ -71,11 +72,11 @@ export class User implements IUser {
   };
 
   validateEmail = (email: string) => {
-    if (!REG_EX.EMAIL.test(email)) throw "invalid-email";
+    if (!REG_EX.EMAIL.test(email)) throw new Error("invalid-email" as ErrorType);
   };
 
   validatePassword = (password: string) => {
-    if (!REG_EX.PASSWORD.test(password)) throw "invalid-password";
+    if (!REG_EX.PASSWORD.test(password)) throw new Error("invalid-password" as ErrorType);
   };
 
   validate = (email: string, password: string) => {
