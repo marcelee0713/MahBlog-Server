@@ -4,33 +4,39 @@ import {
   IUserRepository,
   IUserService,
   SignInParams,
-} from "../interfaces/user/user.interface";
-import { UserData } from "../types/user/user.types";
-import { TYPES } from "../constants";
-import { IUserProfile } from "../interfaces/user/user_profile.interface";
+} from "../../interfaces/user/user.interface";
+import { UserData } from "../../types/user/user.types";
+import { TYPES } from "../../constants";
+import { IUserProfile } from "../../interfaces/user/user.profile.interface";
+import { IUserSessionService } from "../../interfaces/user/user.session.interface";
 
 @injectable()
 export class UserService implements IUserService {
   private entity: IUser;
   private profile: IUserProfile;
   private repo: IUserRepository;
+  private session: IUserSessionService;
 
   constructor(
     @inject(TYPES.UserModel) entity: IUser,
     @inject(TYPES.UserProfileModel) profile: IUserProfile,
-    @inject(TYPES.UserRepository) repo: IUserRepository
+    @inject(TYPES.UserRepository) repo: IUserRepository,
+    @inject(TYPES.UserSessionService) session: IUserSessionService
   ) {
     this.entity = entity;
     this.profile = profile;
     this.repo = repo;
+    this.session = session;
   }
 
   async signIn(email: string, password: string): Promise<string> {
     this.entity.validate(email, password);
 
-    const user = await this.repo.getUserData(undefined, email);
+    const user = await this.repo.getUserData(email);
 
-    return user.userId;
+    const token = await this.session.createSession(user.userId);
+
+    return token;
   }
 
   async signOut(userId: string, sessionId: string): Promise<void> {

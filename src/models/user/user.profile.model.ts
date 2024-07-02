@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
-import { IUserProfile } from "../../interfaces/user/user_profile.interface";
+import { IUserProfile } from "../../interfaces/user/user.profile.interface";
 import { ErrorType } from "../../types";
-import { UserProfileData } from "../../types/user/user_profile.types";
+import { UserProfileData } from "../../types/user/user.profile.types";
 
 @injectable()
 export class UserProfile implements IUserProfile {

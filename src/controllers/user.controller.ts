@@ -13,8 +13,20 @@ export class UserController {
   }
 
   async onSignIn(req: Request, res: Response) {
-    const email = req.body.email;
-    const password = req.body.password;
+    try {
+      const email = req.body.email;
+      const password = req.body.password;
+
+      const token = await this.service.signIn(email, password);
+
+      return res.set("Authorization", `Bearer ${token}`).status(200).json({
+        token: token,
+      });
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.code).json(errObj);
+    }
   }
 
   async onSignOut(req: Request, res: Response) {

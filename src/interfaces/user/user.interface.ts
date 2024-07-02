@@ -39,7 +39,7 @@ export interface IUserService {
 
 export interface IUserRepository {
   createUser: (params: SignInParams) => Promise<void>;
-  getUserData: (userId?: string, email?: string) => Promise<UserData>;
+  getUserData: (email?: string) => Promise<UserData>;
   updateUserData: (params: UserUpdateParams) => Promise<void>;
   deleteUser: (userId: string) => Promise<void>;
 }

@@ -9,6 +9,8 @@ const controller = userContainer.container.get<UserController>(TYPES.UserControl
 
 userRouter.get("/", controller.onGetUser.bind(controller));
 
+userRouter.post("/sign-in", controller.onSignIn.bind(controller));
+
 userRouter.post("/sign-up", controller.onSignUp.bind(controller));
 
 export default userRouter;

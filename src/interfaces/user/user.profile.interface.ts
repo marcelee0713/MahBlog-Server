@@ -1,4 +1,4 @@
-import { UserProfileData } from "../../types/user/user_profile.types";
+import { UserProfileData } from "../../types/user/user.profile.types";
 
 export interface IUserProfile {
   profileId: string;

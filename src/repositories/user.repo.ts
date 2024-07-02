@@ -42,7 +42,6 @@ export class UserRepository implements IUserRepository {
     try {
       const user = await this.db.users.findFirst({
         where: {
-          userId: userId,
           email: email,
         },
       });
