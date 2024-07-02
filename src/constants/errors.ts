@@ -102,7 +102,7 @@ export const errors: Record<ErrorType, ErrorObject> = {
 
   "wrong-credentials": {
     code: 400,
-    error: "Email and password is either incorrect, please check your credentials.",
+    error: "Email or password is not correct, please check your credentials.",
     type: "wrong-credentials",
     status: "error",
   },

@@ -3,6 +3,7 @@ import { inject, injectable } from "inversify";
 import { IUserService } from "../interfaces/user/user.interface";
 import { TYPES } from "../constants";
 import { identifyErrors } from "../utils/error_handler";
+import { FormatResponse } from "../utils/response_handler";
 
 @injectable()
 export class UserController {
@@ -61,7 +62,7 @@ export class UserController {
 
       const data = await this.service.getUser(userId);
 
-      return res.set("Authorization", `Bearer ${token}`).status(200).json(data);
+      return res.set("Authorization", `Bearer ${token}`).status(200).json(FormatResponse(data));
     } catch (err) {
       const errObj = identifyErrors(err);
 

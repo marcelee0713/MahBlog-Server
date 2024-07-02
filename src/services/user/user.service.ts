@@ -32,7 +32,7 @@ export class UserService implements IUserService {
   async signIn(email: string, password: string): Promise<string> {
     this.entity.validate(email, password);
 
-    const user = await this.repo.getUserData({ email: email }, "EMAIL");
+    const user = await this.repo.getUserData({ email: email, password: password }, "EMAIL");
 
     const token = await this.session.createSession(user.userId);
 

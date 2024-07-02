@@ -54,6 +54,7 @@ export interface IUserRepository {
 export interface UserGetParams {
   userId: string;
   email: string;
+  password?: string;
 }
 
 export interface SignInParams {

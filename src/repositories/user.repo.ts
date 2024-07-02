@@ -3,7 +3,7 @@ import { IUserRepository, SignInParams, UserUpdateParams } from "../interfaces/u
 import { UserData, UserGetType, UserGetUseCase } from "../types/user/user.types";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../config/db";
-import bycrpt from "bcrypt";
+import bcrypt from "bcrypt";
 import { ErrorType } from "../types";
 import { returnError } from "../utils/error_handler";
 
@@ -15,15 +15,22 @@ export class UserRepository implements IUserRepository {
     this.db = db;
   }
 
-  async getUserData<T extends UserGetUseCase>(params: UserGetType<T>, type: T): Promise<UserData> {
+  async getUserData<T extends UserGetUseCase>(params: UserGetType<T>): Promise<UserData> {
     try {
       const user = await this.db.users.findFirst({
         where: {
           ...params,
+          password: undefined,
         },
       });
 
       if (!user) throw new Error("user-does-not-exist" as ErrorType);
+
+      if (params.password) {
+        const isMatch = await bcrypt.compare(params.password, user.password);
+
+        if (!isMatch) throw new Error("wrong-credentials" as ErrorType);
+      }
 
       return {
         ...user,
@@ -39,7 +46,7 @@ export class UserRepository implements IUserRepository {
       await this.db.users.create({
         data: {
           email: params.email,
-          password: await bycrpt.hash(params.password, 10),
+          password: await bcrypt.hash(params.password, 10),
           profile: {
             create: {
               firstName: params.firstName,
@@ -80,7 +87,7 @@ export class UserRepository implements IUserRepository {
             userId: params.userId,
           },
           data: {
-            password: await bycrpt.hash(params.password, 10),
+            password: await bcrypt.hash(params.password, 10),
           },
         });
 

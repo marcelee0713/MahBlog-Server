@@ -4,7 +4,8 @@ import { inject, injectable } from "inversify";
 import { IUserSessionService } from "../interfaces/user/user.session.interface";
 import { TYPES } from "../constants";
 import { IAuthService } from "../interfaces/auth.interface";
-import { identifyErrors } from "../utils/error_handler";
+import { bodyError, identifyErrors } from "../utils/error_handler";
+import { AnyZodObject, z } from "zod";
 
 @injectable()
 export class UserMiddleware {
@@ -67,5 +68,23 @@ export class UserMiddleware {
 
       return res.status(errObj.code).json(errObj);
     }
+  }
+
+  validateBody(schema: AnyZodObject) {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        await schema.parseAsync({
+          body: req.body,
+        });
+        return next();
+      } catch (error) {
+        const err = error;
+        if (err instanceof z.ZodError) {
+          return res.status(400).json(bodyError(err));
+        }
+
+        return res.status(500).json({ error: "Internal server error" });
+      }
+    };
   }
 }
