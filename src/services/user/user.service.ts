@@ -32,7 +32,7 @@ export class UserService implements IUserService {
   async signIn(email: string, password: string): Promise<string> {
     this.entity.validate(email, password);
 
-    const user = await this.repo.getUserData(email);
+    const user = await this.repo.getUserData({ email: email }, "EMAIL");
 
     const token = await this.session.createSession(user.userId);
 
@@ -50,12 +50,17 @@ export class UserService implements IUserService {
 
     await this.repo.createUser(params);
   }
+
   async getUser(userId: string): Promise<UserData> {
-    throw new Error("Method not implemented.");
+    const user = await this.repo.getUserData({ userId: userId }, "USER_ID");
+
+    return user;
   }
+
   async updateEmail(userId: string, oldEmail: string, newEmail: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   async updatePassword(
     userId: string,
     currentPassword: string,
@@ -63,9 +68,11 @@ export class UserService implements IUserService {
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   async verifyEmail(userId: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
   async deleteUser(userId: string): Promise<void> {
     throw new Error("Method not implemented.");
   }

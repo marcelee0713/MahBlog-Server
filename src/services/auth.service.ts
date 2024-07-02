@@ -106,19 +106,19 @@ export class AuthService implements IAuthService {
   decodeToken<T extends SessionType>(token: string, type: T): PayloadType<T> {
     switch (type) {
       case "ACCESS":
-        return this.jwtClient.verify(token, this.accessSecret) as PayloadType<T>;
+        return this.jwtClient.decode(token) as PayloadType<T>;
 
       case "REFRESH":
-        return this.jwtClient.verify(token, this.refreshSecret) as PayloadType<T>;
+        return this.jwtClient.decode(token) as PayloadType<T>;
 
       case "EMAIL_CHANGE":
-        return this.jwtClient.verify(token, this.emailChangeSecret) as PayloadType<T>;
+        return this.jwtClient.decode(token) as PayloadType<T>;
 
       case "EMAIL_VERIFY":
-        return this.jwtClient.verify(token, this.emailVerifySecret) as PayloadType<T>;
+        return this.jwtClient.decode(token) as PayloadType<T>;
 
       case "PASS_RESET":
-        return this.jwtClient.verify(token, this.passResetSecret) as PayloadType<T>;
+        return this.jwtClient.decode(token) as PayloadType<T>;
 
       default:
         throw new Error("internal-server-error" as ErrorType);

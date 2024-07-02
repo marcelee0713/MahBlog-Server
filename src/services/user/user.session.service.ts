@@ -8,6 +8,7 @@ import { IAuthService } from "../../interfaces/auth.interface";
 import { TYPES } from "../../constants";
 import { generateSessionId } from "../../utils/session_id_generator";
 import { returnError } from "../../utils/error_handler";
+import { ErrorType } from "../../types";
 
 @injectable()
 export class UserSessionService implements IUserSessionService {
@@ -64,7 +65,21 @@ export class UserSessionService implements IUserSessionService {
     }
   }
 
-  deleteSession = (userId: string, sessionId: string): Promise<void> => {
-    throw Error("Not implemented");
-  };
+  async getSession(userId: string, sessionId: string): Promise<string> {
+    try {
+      const session = await this.repo.get(userId, sessionId);
+
+      return session.refreshToken;
+    } catch (err) {
+      throw new Error(returnError(err));
+    }
+  }
+
+  async deleteSession(userId: string, sessionId: string): Promise<void> {
+    try {
+      await this.repo.delete(userId, sessionId);
+    } catch (err) {
+      throw new Error(returnError(err));
+    }
+  }
 }

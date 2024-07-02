@@ -1,4 +1,11 @@
-import { UserData, UserRoles, UserStatus, UserUpdateUseCase } from "../../types/user/user.types";
+import {
+  UserData,
+  UserGetType,
+  UserGetUseCase,
+  UserRoles,
+  UserStatus,
+  UserUpdateUseCase,
+} from "../../types/user/user.types";
 
 export interface IUser {
   userId: string;
@@ -39,9 +46,14 @@ export interface IUserService {
 
 export interface IUserRepository {
   createUser: (params: SignInParams) => Promise<void>;
-  getUserData: (email?: string) => Promise<UserData>;
+  getUserData: <T extends UserGetUseCase>(params: UserGetType<T>, type: T) => Promise<UserData>;
   updateUserData: (params: UserUpdateParams) => Promise<void>;
   deleteUser: (userId: string) => Promise<void>;
+}
+
+export interface UserGetParams {
+  userId: string;
+  email: string;
 }
 
 export interface SignInParams {

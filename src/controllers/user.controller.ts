@@ -19,9 +19,7 @@ export class UserController {
 
       const token = await this.service.signIn(email, password);
 
-      return res.set("Authorization", `Bearer ${token}`).status(200).json({
-        token: token,
-      });
+      return res.set("Authorization", `Bearer ${token}`).status(200).json({});
     } catch (err) {
       const errObj = identifyErrors(err);
 
@@ -57,12 +55,18 @@ export class UserController {
   }
 
   async onGetUser(req: Request, res: Response) {
-    const email = req.body.email;
-    const password = req.body.password;
+    try {
+      const userId = res.locals.userId;
+      const token = res.locals.token;
 
-    res.status(200).json({
-      data: "Wassup nigga",
-    });
+      const data = await this.service.getUser(userId);
+
+      return res.set("Authorization", `Bearer ${token}`).status(200).json(data);
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.code).json(errObj);
+    }
   }
 
   async onUpdateUser(req: Request, res: Response) {

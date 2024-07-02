@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IUserRepository, SignInParams, UserUpdateParams } from "../interfaces/user/user.interface";
-import { UserData } from "../types/user/user.types";
+import { UserData, UserGetType, UserGetUseCase } from "../types/user/user.types";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../config/db";
 import bycrpt from "bcrypt";
@@ -13,6 +13,25 @@ export class UserRepository implements IUserRepository {
 
   constructor() {
     this.db = db;
+  }
+
+  async getUserData<T extends UserGetUseCase>(params: UserGetType<T>, type: T): Promise<UserData> {
+    try {
+      const user = await this.db.users.findFirst({
+        where: {
+          ...params,
+        },
+      });
+
+      if (!user) throw new Error("user-does-not-exist" as ErrorType);
+
+      return {
+        ...user,
+        emailVerifiedAt: user.emailVerifiedAt ?? undefined,
+      };
+    } catch (err) {
+      throw new Error(returnError(err));
+    }
   }
 
   async createUser(params: SignInParams): Promise<void> {
@@ -34,25 +53,6 @@ export class UserRepository implements IUserRepository {
         if (err.code === "P2002") throw new Error("user-already-exist" as ErrorType);
       }
 
-      throw new Error(returnError(err));
-    }
-  }
-
-  async getUserData(userId?: string, email?: string): Promise<UserData> {
-    try {
-      const user = await this.db.users.findFirst({
-        where: {
-          email: email,
-        },
-      });
-
-      if (!user) throw new Error("user-does-not-exist" as ErrorType);
-
-      return {
-        ...user,
-        emailVerifiedAt: user.emailVerifiedAt ?? undefined,
-      };
-    } catch (err) {
       throw new Error(returnError(err));
     }
   }

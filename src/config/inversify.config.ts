@@ -17,6 +17,7 @@ import { UserSessionService } from "../services/user/user.session.service";
 import { UserSessionRepository } from "../repositories/user.session.repo";
 import { IAuthService } from "../interfaces/auth.interface";
 import { AuthService } from "../services/auth.service";
+import { UserMiddleware } from "../middlewares/user.middleware";
 
 export const container = new Container();
 
@@ -36,3 +37,6 @@ container.bind<IUserSessionRepository>(TYPES.UserSessionRepository).to(UserSessi
 
 // Auth/Token Service
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
+
+// User Middleware
+container.bind(TYPES.UserMiddleware).to(UserMiddleware);

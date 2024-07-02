@@ -1,4 +1,5 @@
 export const TYPES = {
+  UserMiddleware: Symbol.for("UserMiddleware"),
   UserModel: Symbol.for("UserModel"),
   UserService: Symbol.for("UserService"),
   UserRepository: Symbol.for("UserRepository"),
