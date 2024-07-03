@@ -40,7 +40,7 @@ export class UserService implements IUserService {
   }
 
   async signOut(userId: string, sessionId: string): Promise<void> {
-    throw Error("Unused");
+    await this.session.deleteSession(userId, sessionId);
   }
 
   async signUp(params: SignInParams): Promise<void> {
