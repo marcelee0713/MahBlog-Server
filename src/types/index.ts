@@ -6,6 +6,7 @@ export type ErrorType =
   | "user-session-expired"
   | "user-already-exist"
   | "user-not-authorized"
+  | "user-enters-same-password"
   | "missing-inputs"
   | "invalid-first-name"
   | "invalid-last-name"
@@ -14,7 +15,8 @@ export type ErrorType =
   | "invalid-password"
   | "invalid-bio"
   | "wrong-credentials"
-  | "authorization-header-missing";
+  | "authorization-header-missing"
+  | "request-expired";
 
 type FunctionKey<T> = {
   [K in keyof T]: T[K] extends CallableFunction ? K : never;

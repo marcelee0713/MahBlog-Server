@@ -5,7 +5,7 @@ import {
   IUserService,
   SignInParams,
 } from "../../interfaces/user/user.interface";
-import { UserData } from "../../types/user/user.types";
+import { UserData, UserUpdateUseCase } from "../../types/user/user.types";
 import { TYPES } from "../../constants";
 import { IUserProfile } from "../../interfaces/user/user.profile.interface";
 import { IUserSessionService } from "../../interfaces/user/user.session.interface";
@@ -58,7 +58,14 @@ export class UserService implements IUserService {
   }
 
   async updateEmail(userId: string, oldEmail: string, newEmail: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    this.entity.validateEmail(newEmail);
+
+    await this.repo.updateUserData({
+      useCase: "CHANGE_EMAIL",
+      userId: userId,
+      email: oldEmail,
+      newEmail: newEmail,
+    });
   }
 
   async updatePassword(
@@ -66,11 +73,24 @@ export class UserService implements IUserService {
     currentPassword: string,
     newPassword: string
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    this.entity.validatePassword(newPassword);
+
+    await this.repo.updateUserData({
+      useCase: "CHANGE_PASSWORD",
+      userId: userId,
+      password: currentPassword,
+      newPassword: newPassword,
+    });
   }
 
-  async verifyEmail(userId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async verifyEmail(userId: string, email: string): Promise<void> {
+    this.entity.validateEmail(email);
+
+    await this.repo.updateUserData({
+      useCase: "VERIFY_EMAIL",
+      userId: userId,
+      email: email,
+    });
   }
 
   async deleteUser(userId: string): Promise<void> {

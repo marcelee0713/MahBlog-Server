@@ -40,7 +40,7 @@ export interface IUserService {
   getUser: (userId: string) => Promise<UserData>;
   updateEmail: (userId: string, oldEmail: string, newEmail: string) => Promise<void>;
   updatePassword: (userId: string, currentPassword: string, newPassword: string) => Promise<void>;
-  verifyEmail(userId: string): Promise<void>;
+  verifyEmail: (userId: string, email: string) => Promise<void>;
   deleteUser: (userId: string) => Promise<void>;
 }
 
@@ -64,9 +64,22 @@ export interface SignInParams {
   password: string;
 }
 
+export interface UserUpdateBodyReq {
+  body: {
+    userId: string;
+    email?: string;
+    newEmail?: string;
+    currentPassword?: string;
+    password?: string;
+    useCase: UserUpdateUseCase;
+  };
+}
+
 export interface UserUpdateParams {
   userId: string;
   email?: string;
+  newEmail?: string;
   password?: string;
+  newPassword?: string;
   useCase: UserUpdateUseCase;
 }

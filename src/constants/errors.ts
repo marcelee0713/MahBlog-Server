@@ -44,6 +44,20 @@ export const errors: Record<ErrorType, ErrorObject> = {
     status: "error",
   },
 
+  "user-enters-same-password": {
+    code: 400,
+    error: "User can not change its password when it's the same.",
+    type: "user-enters-same-password",
+    status: "error",
+  },
+
+  "request-expired": {
+    code: 410,
+    error: "This request is have been expired.",
+    type: "request-expired",
+    status: "error",
+  },
+
   "user-not-authorized": {
     code: 401,
     error: "User is not authorized.",
@@ -52,8 +66,8 @@ export const errors: Record<ErrorType, ErrorObject> = {
   },
 
   "missing-inputs": {
-    code: 404,
-    error: "Please enter the missing inputs.",
+    code: 400,
+    error: "Please enter the value that are supposed to not be empty.",
     type: "missing-inputs",
     status: "error",
   },

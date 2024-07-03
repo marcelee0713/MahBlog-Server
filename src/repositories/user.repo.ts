@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IUserRepository, SignInParams, UserUpdateParams } from "../interfaces/user/user.interface";
-import { UserData, UserGetType, UserGetUseCase } from "../types/user/user.types";
+import { UserData, UserGetType, UserGetUseCase, UserUpdateUseCase } from "../types/user/user.types";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../config/db";
 import bcrypt from "bcrypt";
@@ -67,12 +67,15 @@ export class UserRepository implements IUserRepository {
   async updateUserData(params: UserUpdateParams): Promise<void> {
     try {
       if (params.useCase === "CHANGE_EMAIL") {
+        if (!params.email || !params.newEmail) throw new Error("missing-inputs" as ErrorType);
+
         await this.db.users.update({
           where: {
+            email: params.email,
             userId: params.userId,
           },
           data: {
-            email: params.email,
+            email: params.newEmail,
           },
         });
 
@@ -80,14 +83,25 @@ export class UserRepository implements IUserRepository {
       }
 
       if (params.useCase === "CHANGE_PASSWORD") {
-        if (!params.password) throw new Error("missing-inputs" as ErrorType);
+        if (!params.password || !params.newPassword) throw new Error("missing-inputs" as ErrorType);
+
+        const user = await this.db.users.findFirst({
+          where: {
+            userId: params.userId,
+          },
+        });
+
+        if (!user) throw new Error("user-does-not-exist" as ErrorType);
+
+        if (await bcrypt.compare(user.password, params.password))
+          throw new Error("user-enters-same-password" as ErrorType);
 
         await this.db.users.update({
           where: {
             userId: params.userId,
           },
           data: {
-            password: await bcrypt.hash(params.password, 10),
+            password: await bcrypt.hash(params.newPassword, 10),
           },
         });
 
@@ -95,11 +109,12 @@ export class UserRepository implements IUserRepository {
       }
 
       if (params.useCase === "VERIFY_EMAIL") {
-        if (!params.password) throw new Error("missing-inputs" as ErrorType);
+        if (!params.email) throw new Error("missing-inputs" as ErrorType);
 
         await this.db.users.update({
           where: {
             userId: params.userId,
+            email: params.email,
           },
           data: {
             emailVerifiedAt: new Date(),

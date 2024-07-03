@@ -7,7 +7,9 @@ export type UserStatus = "ACTIVE" | "SUSPENDED" | "BANNED";
 
 export type UserData = ExcludeFunctions<IUser>;
 
-export type UserUpdateUseCase = "CHANGE_PASSWORD" | "CHANGE_EMAIL" | "VERIFY_EMAIL";
+export const UserUpdateUseCaseArr = ["CHANGE_PASSWORD", "CHANGE_EMAIL", "VERIFY_EMAIL"] as const;
+
+export type UserUpdateUseCase = (typeof UserUpdateUseCaseArr)[number];
 
 export type UserGetUseCase = "EMAIL" | "USER_ID" | "BOTH";
 
