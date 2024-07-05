@@ -32,7 +32,7 @@ export class UserService implements IUserService {
   async signIn(email: string, password: string): Promise<string> {
     this.entity.validate(email, password);
 
-    const user = await this.repo.getUserData({ email: email, password: password }, "EMAIL");
+    const user = await this.repo.getUserData({ email: email, password: password }, "SIGNING_IN");
 
     const token = await this.session.createSession(user.userId);
 
@@ -96,6 +96,6 @@ export class UserService implements IUserService {
   }
 
   async deleteUser(userId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    await this.repo.deleteUser(userId);
   }
 }

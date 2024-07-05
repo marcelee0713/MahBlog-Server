@@ -11,7 +11,7 @@ export const UserUpdateUseCaseArr = ["CHANGE_PASSWORD", "CHANGE_EMAIL", "VERIFY_
 
 export type UserUpdateUseCase = (typeof UserUpdateUseCaseArr)[number];
 
-export type UserGetUseCase = "EMAIL" | "USER_ID" | "BOTH";
+export type UserGetUseCase = "EMAIL" | "USER_ID" | "BOTH" | "SIGNING_IN";
 
 export type UserGetByEmail = Omit<UserGetParams, "userId">;
 
@@ -23,4 +23,5 @@ type ParamMapping = {
   BOTH: UserGetParams;
   USER_ID: UserGetById;
   EMAIL: UserGetByEmail;
+  SIGNING_IN: UserGetByEmail;
 };

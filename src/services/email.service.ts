@@ -39,7 +39,6 @@ export class EmailService implements IEmailService {
         html: `<h1>Email Verification</h1><br><a href=${link}>Confirm Email and Sign in</a><br><p>This will expire in one day. <strong>DO NOT SHARE THIS LINK!</strong></p>`,
       });
     } catch (err) {
-      console.log(err);
       throw new Error("email-service-error" as ErrorType);
     }
   }

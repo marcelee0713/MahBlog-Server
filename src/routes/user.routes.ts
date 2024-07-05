@@ -10,21 +10,20 @@ const userRouter = express.Router();
 const controller = userContainer.container.get<UserController>(TYPES.UserController);
 export const middleware = userContainer.container.get<UserMiddleware>(TYPES.UserMiddleware);
 
+userRouter
+  .route("/")
+  .get(
+    (req, res, next) => middleware.verifySession(req, res, next),
+    controller.onGetUser.bind(controller)
+  )
+  .delete(
+    (req, res, next) => middleware.verifySession(req, res, next),
+    controller.onDeleteUser.bind(controller)
+  );
+
 userRouter.post("/sign-in", controller.onSignIn.bind(controller));
 
 userRouter.post("/sign-up", controller.onSignUp.bind(controller));
-
-userRouter.put(
-  "/verify-email",
-  middleware.validateBody(updateUserSchema),
-  controller.onUpdateUser.bind(controller)
-);
-
-userRouter.get(
-  "/",
-  (req, res, next) => middleware.verifySession(req, res, next),
-  controller.onGetUser.bind(controller)
-);
 
 userRouter.delete(
   "/sign-out",
@@ -43,6 +42,12 @@ userRouter.put(
   "/change-email",
   middleware.validateBody(updateUserSchema),
   (req, res, next) => middleware.verifySession(req, res, next),
+  controller.onUpdateUser.bind(controller)
+);
+
+userRouter.put(
+  "/verify-email",
+  middleware.validateBody(updateUserSchema),
   controller.onUpdateUser.bind(controller)
 );
 

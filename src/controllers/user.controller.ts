@@ -31,7 +31,10 @@ export class UserController {
 
       const token = await this.service.signIn(email, password);
 
-      return res.set("Authorization", `Bearer ${token}`).status(200).json({});
+      return res
+        .set("Authorization", `Bearer ${token}`)
+        .status(200)
+        .json(FormatResponse({}, "User signed in"));
     } catch (err) {
       const errObj = identifyErrors(err);
 
@@ -159,8 +162,17 @@ export class UserController {
   }
 
   async onDeleteUser(req: Request, res: Response) {
-    const email = req.body.email;
-    const password = req.body.password;
+    try {
+      const userId = res.locals.userId;
+
+      await this.service.deleteUser(userId);
+
+      return res.status(200).json(FormatResponse({}, "Deleted the user"));
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.code).json(errObj);
+    }
   }
 }
 

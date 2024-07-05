@@ -1,5 +1,6 @@
 export type ErrorType =
   | "session-does-not-exist"
+  | "user-not-verified"
   | "user-does-not-exist"
   | "user-session-does-not-exist"
   | "user-session-expired"

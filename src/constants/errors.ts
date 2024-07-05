@@ -65,6 +65,13 @@ export const errors: Record<ErrorType, ErrorObject> = {
     status: "error",
   },
 
+  "user-not-verified": {
+    code: 403,
+    error: "User is not verified.",
+    type: "user-not-verified",
+    status: "error",
+  },
+
   "missing-inputs": {
     code: 400,
     error: "Please enter the value that are supposed to not be empty.",

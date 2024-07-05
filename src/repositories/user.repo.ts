@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IUserRepository, SignInParams, UserUpdateParams } from "../interfaces/user/user.interface";
-import { UserData, UserGetType, UserGetUseCase, UserUpdateUseCase } from "../types/user/user.types";
+import { UserData, UserGetType, UserGetUseCase } from "../types/user/user.types";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../config/db";
 import bcrypt from "bcrypt";
@@ -15,7 +15,7 @@ export class UserRepository implements IUserRepository {
     this.db = db;
   }
 
-  async getUserData<T extends UserGetUseCase>(params: UserGetType<T>): Promise<UserData> {
+  async getUserData<T extends UserGetUseCase>(params: UserGetType<T>, type: T): Promise<UserData> {
     try {
       const user = await this.db.users.findFirst({
         where: {
@@ -30,6 +30,10 @@ export class UserRepository implements IUserRepository {
         const isMatch = await bcrypt.compare(params.password, user.password);
 
         if (!isMatch) throw new Error("wrong-credentials" as ErrorType);
+      }
+
+      if (type === "SIGNING_IN" && !user.emailVerifiedAt) {
+        throw new Error("user-not-verified" as ErrorType);
       }
 
       return {
