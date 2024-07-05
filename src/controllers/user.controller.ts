@@ -6,16 +6,20 @@ import { identifyErrors } from "../utils/error_handler";
 import { FormatResponse } from "../utils/response_handler";
 import { IAuthService } from "../interfaces/auth.interface";
 import { ErrorType } from "../types";
+import { IEmailService } from "../interfaces/email.interface";
 
 @injectable()
 export class UserController {
   private auth: IAuthService;
   private service: IUserService;
+  private emailService: IEmailService;
 
   constructor(
     @inject(TYPES.AuthService) auth: IAuthService,
+    @inject(TYPES.EmailService) emailService: IEmailService,
     @inject(TYPES.UserService) service: IUserService
   ) {
+    this.emailService = emailService;
     this.auth = auth;
     this.service = service;
   }
@@ -58,16 +62,25 @@ export class UserController {
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
 
-      await this.service.signUp({
+      const userData = await this.service.signUp({
         email: email,
         password: password,
         firstName: firstName,
         lastName: lastName,
       });
 
-      // TODO: Send an email verification
+      const token = this.auth.createToken(
+        { email: userData.email, userId: userData.userId },
+        "EMAIL_VERIFY"
+      );
 
-      return res.status(200).json({});
+      await this.emailService.sendEmailVerification({
+        clientRoute: "/verify-email",
+        emailToSend: userData.email,
+        token: token,
+      });
+
+      return res.status(200).json(FormatResponse({}, "Created a user"));
     } catch (err) {
       const errObj = identifyErrors(err);
 

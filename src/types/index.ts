@@ -1,5 +1,4 @@
 export type ErrorType =
-  | "internal-server-error"
   | "session-does-not-exist"
   | "user-does-not-exist"
   | "user-session-does-not-exist"
@@ -16,7 +15,9 @@ export type ErrorType =
   | "invalid-bio"
   | "wrong-credentials"
   | "authorization-header-missing"
-  | "request-expired";
+  | "request-expired"
+  | "internal-server-error"
+  | "email-service-error";
 
 type FunctionKey<T> = {
   [K in keyof T]: T[K] extends CallableFunction ? K : never;

@@ -127,4 +127,12 @@ export const errors: Record<ErrorType, ErrorObject> = {
     type: "authorization-header-missing",
     status: "error",
   },
+
+  "email-service-error": {
+    code: 500,
+    error: `Something went wrong in the server that's trying to 
+      communicate to the email services, please report it to the devs!`,
+    status: "error",
+    type: "email-service-error",
+  },
 };

@@ -41,9 +41,9 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async createUser(params: SignInParams): Promise<void> {
+  async createUser(params: SignInParams): Promise<UserData> {
     try {
-      await this.db.users.create({
+      const user = await this.db.users.create({
         data: {
           email: params.email,
           password: await bcrypt.hash(params.password, 10),
@@ -55,6 +55,11 @@ export class UserRepository implements IUserRepository {
           },
         },
       });
+
+      return {
+        ...user,
+        emailVerifiedAt: user.emailVerifiedAt ?? undefined,
+      };
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2002") throw new Error("user-already-exist" as ErrorType);

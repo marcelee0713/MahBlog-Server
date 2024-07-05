@@ -4,8 +4,6 @@ declare global {
       NODE_ENV: "development" | "production";
       PORT: string;
       DATABASE_URL: string;
-      SECRET_EMAIL_PASSWORD: string;
-      SECRET_EMAIL: string;
       REFRESH_TOKEN_SECRETKEY: string;
       ACCESS_TOKEN_SECRETKEY: string;
       EMAIL_CHANGE_SECRETKEY: string;
@@ -16,6 +14,9 @@ declare global {
       ADMIN_PASSWORD: string;
       ADMIN_EMAIL_ADDRESS: string;
       SET_ID_CHARACTERS: string;
+      EMAIL_SERVICE_PASSWORD: string;
+      EMAIL_SERVICE_ADDRESS: string;
+      EMAIL_SERVICE_USER: string;
     }
   }
 }

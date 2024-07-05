@@ -43,12 +43,14 @@ export class UserService implements IUserService {
     await this.session.deleteSession(userId, sessionId);
   }
 
-  async signUp(params: SignInParams): Promise<void> {
+  async signUp(params: SignInParams): Promise<UserData> {
     this.entity.validate(params.email, params.password);
 
     this.profile.validate(params.firstName, params.lastName);
 
-    await this.repo.createUser(params);
+    const user = await this.repo.createUser(params);
+
+    return user;
   }
 
   async getUser(userId: string): Promise<UserData> {

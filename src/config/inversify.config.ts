@@ -18,6 +18,8 @@ import { UserSessionRepository } from "../repositories/user.session.repo";
 import { IAuthService } from "../interfaces/auth.interface";
 import { AuthService } from "../services/auth.service";
 import { UserMiddleware } from "../middlewares/user.middleware";
+import { IEmailService } from "../interfaces/email.interface";
+import { EmailService } from "../services/email.service";
 
 export const container = new Container();
 
@@ -35,8 +37,9 @@ container.bind<IUserSession>(TYPES.UserSessionModel).to(UserSession);
 container.bind<IUserSessionService>(TYPES.UserSessionService).to(UserSessionService);
 container.bind<IUserSessionRepository>(TYPES.UserSessionRepository).to(UserSessionRepository);
 
-// Auth/Token Service
+// External Services
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
+container.bind<IEmailService>(TYPES.EmailService).to(EmailService);
 
 // User Middleware
 container.bind(TYPES.UserMiddleware).to(UserMiddleware);

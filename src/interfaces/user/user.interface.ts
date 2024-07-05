@@ -36,7 +36,7 @@ export interface IUser {
 export interface IUserService {
   signIn: (email: string, password: string) => Promise<string>;
   signOut: (userId: string, sessionId: string) => Promise<void>;
-  signUp: (params: SignInParams) => Promise<void>;
+  signUp: (params: SignInParams) => Promise<UserData>;
   getUser: (userId: string) => Promise<UserData>;
   updateEmail: (userId: string, oldEmail: string, newEmail: string) => Promise<void>;
   updatePassword: (userId: string, currentPassword: string, newPassword: string) => Promise<void>;
@@ -45,7 +45,7 @@ export interface IUserService {
 }
 
 export interface IUserRepository {
-  createUser: (params: SignInParams) => Promise<void>;
+  createUser: (params: SignInParams) => Promise<UserData>;
   getUserData: <T extends UserGetUseCase>(params: UserGetType<T>, type: T) => Promise<UserData>;
   updateUserData: (params: UserUpdateParams) => Promise<void>;
   deleteUser: (userId: string) => Promise<void>;
