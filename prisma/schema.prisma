@@ -86,7 +86,7 @@ model UserSessions {
 model UserBlacklistedTokens {
   token     String   @id
   holderId  String?
-  users     Users?   @relation(fields: [holderId], references: [userId])
+  users     Users?   @relation(fields: [holderId], references: [userId], onDelete: Cascade)
   createdAt DateTime
   expiresAt DateTime
 }
@@ -98,7 +98,7 @@ model UserReports {
   email       String?
   description String     @db.VarChar(500)
   type        ReportType
-  users       Users?     @relation(fields: [reporterId], references: [userId])
+  users       Users?     @relation(fields: [reporterId], references: [userId], onDelete: Cascade)
   createdAt   DateTime   @default(now())
 }
 
@@ -107,7 +107,7 @@ model UserLogs {
   content   String
   userId    String?
   createdAt DateTime @default(now())
-  users     Users?   @relation(fields: [userId], references: [userId])
+  users     Users?   @relation(fields: [userId], references: [userId], onDelete: Cascade)
   type      LogType  @default(OTHER)
 }
 
@@ -134,7 +134,7 @@ model BlogTags {
   tagId  String  @id @default(cuid())
   blogId String?
   tag    String  @db.VarChar(50)
-  Blogs  Blogs?  @relation(fields: [blogId], references: [blogId])
+  Blogs  Blogs?  @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
 }
 
 model BlogContents {
@@ -208,7 +208,7 @@ model Draft {
   description String?
   tags        DraftTags[]
   contents    DraftContents[]
-  Users       Users?          @relation(fields: [authorId], references: [userId])
+  Users       Users?          @relation(fields: [authorId], references: [userId], onDelete: Cascade)
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 }
@@ -220,14 +220,14 @@ model DraftContents {
   title          String? @db.VarChar(255)
   description    String?
   contentImage   String?
-  Draft          Draft?  @relation(fields: [draftId], references: [draftId])
+  Draft          Draft?  @relation(fields: [draftId], references: [draftId], onDelete: Cascade)
 }
 
 model DraftTags {
   tagId   String  @id @default(cuid())
   draftId String?
   tag     String  @db.VarChar(50)
-  Draft   Draft?  @relation(fields: [draftId], references: [draftId])
+  Draft   Draft?  @relation(fields: [draftId], references: [draftId], onDelete: Cascade)
 }
 
 enum UserStatus {

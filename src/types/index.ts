@@ -17,6 +17,7 @@ export type ErrorType =
   | "wrong-credentials"
   | "authorization-header-missing"
   | "request-expired"
+  | "request-already-used"
   | "internal-server-error"
   | "email-service-error";
 

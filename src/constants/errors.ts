@@ -53,8 +53,15 @@ export const errors: Record<ErrorType, ErrorObject> = {
 
   "request-expired": {
     code: 410,
-    error: "This request is have been expired.",
+    error: "This request have been expired.",
     type: "request-expired",
+    status: "error",
+  },
+
+  "request-already-used": {
+    code: 409,
+    error: "This request have been already used.",
+    type: "request-already-used",
     status: "error",
   },
 

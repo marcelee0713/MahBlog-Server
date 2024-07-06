@@ -8,6 +8,9 @@ export const TYPES = {
   UserSessionModel: Symbol.for("UserSessionModel"),
   UserSessionService: Symbol.for("UserSessionService"),
   UserSessionRepository: Symbol.for("UserSessionRepository"),
+  UserBlacklistedToken: Symbol.for("UserBlacklistedToken"),
+  UserBlacklistedTokenService: Symbol.for("UserBlacklistedTokenService"),
+  UserBlacklistedTokenRepository: Symbol.for("UserBlacklistedTokenRepository"),
   AuthService: Symbol.for("AuthService"),
   EmailService: Symbol.for("EmailService"),
 };

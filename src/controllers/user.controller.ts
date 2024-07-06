@@ -7,21 +7,25 @@ import { FormatResponse } from "../utils/response_handler";
 import { IAuthService } from "../interfaces/auth.interface";
 import { ErrorType } from "../types";
 import { IEmailService } from "../interfaces/email.interface";
+import { IUserBlacklistedTokenService } from "../interfaces/user/user.blacklisted_token.interface";
 
 @injectable()
 export class UserController {
   private auth: IAuthService;
   private service: IUserService;
   private emailService: IEmailService;
+  private blacklisted: IUserBlacklistedTokenService;
 
   constructor(
     @inject(TYPES.AuthService) auth: IAuthService,
     @inject(TYPES.EmailService) emailService: IEmailService,
-    @inject(TYPES.UserService) service: IUserService
+    @inject(TYPES.UserService) service: IUserService,
+    @inject(TYPES.UserBlacklistedTokenService) blacklisted: IUserBlacklistedTokenService
   ) {
     this.emailService = emailService;
     this.auth = auth;
     this.service = service;
+    this.blacklisted = blacklisted;
   }
 
   async onSignIn(req: Request, res: Response) {
@@ -129,16 +133,24 @@ export class UserController {
 
         if (!token) throw new Error("missing-inputs" as ErrorType);
 
-        // TODO: Check if this token is blacklisted
-        // TODO: Put the code on this block
+        const payload = this.auth.decodeToken(token, "EMAIL_VERIFY");
+
+        const onTheList = await this.blacklisted.isBlacklisted(payload.userId, token);
+
+        if (onTheList) throw new Error("request-already-used" as ErrorType);
 
         const valid = this.auth.verifyToken(token, "EMAIL_VERIFY");
 
         if (!valid) throw new Error("request-expired" as ErrorType);
 
-        const payload = this.auth.decodeToken(token, "EMAIL_VERIFY");
-
         await this.service.verifyEmail(payload.userId, payload.email);
+
+        await this.blacklisted.addTokenToBlacklist({
+          token: token,
+          userId: payload.userId,
+          exp: payload.exp,
+          iat: payload.iat,
+        });
       }
 
       if (data.body.useCase === "CHANGE_EMAIL") {
@@ -147,6 +159,8 @@ export class UserController {
         const newEmail = data.body.newEmail;
 
         if (!currentEmail || !newEmail) throw new Error("missing-inputs" as ErrorType);
+
+        // TODO: Check the user update logs if the user can change its password
 
         await this.service.updateEmail(userId, currentEmail, newEmail);
 

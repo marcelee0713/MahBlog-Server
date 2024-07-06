@@ -20,6 +20,14 @@ import { AuthService } from "../services/auth.service";
 import { UserMiddleware } from "../middlewares/user.middleware";
 import { IEmailService } from "../interfaces/email.interface";
 import { EmailService } from "../services/email.service";
+import {
+  IUserBlacklistedToken,
+  IUserBlacklistedTokenRepository,
+  IUserBlacklistedTokenService,
+} from "../interfaces/user/user.blacklisted_token.interface";
+import { UserBlacklistedToken } from "../models/user/user.blacklisted_token.model";
+import { UserBlacklistedTokenService } from "../services/user/user.blacklisted_token.service";
+import { UserBlacklistedTokenRepository } from "../repositories/user.blacklisted_tokens.repo";
 
 export const container = new Container();
 
@@ -36,6 +44,15 @@ container.bind<IUserProfile>(TYPES.UserProfileModel).to(UserProfile);
 container.bind<IUserSession>(TYPES.UserSessionModel).to(UserSession);
 container.bind<IUserSessionService>(TYPES.UserSessionService).to(UserSessionService);
 container.bind<IUserSessionRepository>(TYPES.UserSessionRepository).to(UserSessionRepository);
+
+// User Blacklisted tokens
+container.bind<IUserBlacklistedToken>(TYPES.UserBlacklistedToken).to(UserBlacklistedToken);
+container
+  .bind<IUserBlacklistedTokenService>(TYPES.UserBlacklistedTokenService)
+  .to(UserBlacklistedTokenService);
+container
+  .bind<IUserBlacklistedTokenRepository>(TYPES.UserBlacklistedTokenRepository)
+  .to(UserBlacklistedTokenRepository);
 
 // External Services
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
