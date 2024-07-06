@@ -85,6 +85,7 @@ export class UserRepository implements IUserRepository {
           },
           data: {
             email: params.newEmail,
+            emailVerifiedAt: null,
           },
         });
 

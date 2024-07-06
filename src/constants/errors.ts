@@ -1,3 +1,4 @@
+import { UPDATE_DAYS_COOLDOWN } from ".";
 import { ErrorObject } from "../interfaces/error.interface";
 import { ErrorType } from "../types";
 
@@ -49,6 +50,13 @@ export const errors: Record<ErrorType, ErrorObject> = {
     error: "User can not change its password when it's the same.",
     type: "user-enters-same-password",
     status: "error",
+  },
+
+  "user-modification-denied": {
+    code: 403,
+    error: `User can not modify it because it was recently changed, please wait for ${UPDATE_DAYS_COOLDOWN.NAME_AND_EMAIL} days in order to change it again.`,
+    status: "error",
+    type: "user-modification-denied",
   },
 
   "request-expired": {

@@ -28,24 +28,28 @@ import {
 import { UserBlacklistedToken } from "../models/user/user.blacklisted_token.model";
 import { UserBlacklistedTokenService } from "../services/user/user.blacklisted_token.service";
 import { UserBlacklistedTokenRepository } from "../repositories/user.blacklisted_tokens.repo";
+import {
+  IUserLogs,
+  IUserLogsRepository,
+  IUserLogsService,
+} from "../interfaces/user/user.logs.interface";
+import { UserLogs } from "../models/user/user.logs.model";
+import { UserLogsService } from "../services/user/user.logs.service";
+import { UserLogsRepository } from "../repositories/user.logs.repo";
 
 export const container = new Container();
 
-// User
 container.bind<IUser>(TYPES.UserModel).to(User);
 container.bind<IUserService>(TYPES.UserService).to(UserService);
 container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
 container.bind(TYPES.UserController).to(UserController);
 
-// User Profile
 container.bind<IUserProfile>(TYPES.UserProfileModel).to(UserProfile);
 
-// User Session
 container.bind<IUserSession>(TYPES.UserSessionModel).to(UserSession);
 container.bind<IUserSessionService>(TYPES.UserSessionService).to(UserSessionService);
 container.bind<IUserSessionRepository>(TYPES.UserSessionRepository).to(UserSessionRepository);
 
-// User Blacklisted tokens
 container.bind<IUserBlacklistedToken>(TYPES.UserBlacklistedToken).to(UserBlacklistedToken);
 container
   .bind<IUserBlacklistedTokenService>(TYPES.UserBlacklistedTokenService)
@@ -54,9 +58,11 @@ container
   .bind<IUserBlacklistedTokenRepository>(TYPES.UserBlacklistedTokenRepository)
   .to(UserBlacklistedTokenRepository);
 
-// External Services
+container.bind<IUserLogs>(TYPES.UserLogs).to(UserLogs);
+container.bind<IUserLogsService>(TYPES.UserLogsService).to(UserLogsService);
+container.bind<IUserLogsRepository>(TYPES.UserLogsRepository).to(UserLogsRepository);
+
+container.bind(TYPES.UserMiddleware).to(UserMiddleware);
+
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.EmailService).to(EmailService);
-
-// User Middleware
-container.bind(TYPES.UserMiddleware).to(UserMiddleware);

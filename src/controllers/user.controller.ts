@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { IUserService, UserUpdateBodyReq } from "../interfaces/user/user.interface";
-import { TYPES } from "../constants";
+import { CLIENT_ROUTES, TYPES } from "../constants";
 import { identifyErrors } from "../utils/error_handler";
 import { FormatResponse } from "../utils/response_handler";
 import { IAuthService } from "../interfaces/auth.interface";
 import { ErrorType } from "../types";
 import { IEmailService } from "../interfaces/email.interface";
 import { IUserBlacklistedTokenService } from "../interfaces/user/user.blacklisted_token.interface";
+import { IUserLogsService } from "../interfaces/user/user.logs.interface";
 
 @injectable()
 export class UserController {
@@ -15,17 +16,20 @@ export class UserController {
   private service: IUserService;
   private emailService: IEmailService;
   private blacklisted: IUserBlacklistedTokenService;
+  private logs: IUserLogsService;
 
   constructor(
     @inject(TYPES.AuthService) auth: IAuthService,
     @inject(TYPES.EmailService) emailService: IEmailService,
     @inject(TYPES.UserService) service: IUserService,
-    @inject(TYPES.UserBlacklistedTokenService) blacklisted: IUserBlacklistedTokenService
+    @inject(TYPES.UserBlacklistedTokenService) blacklisted: IUserBlacklistedTokenService,
+    @inject(TYPES.UserLogsService) logs: IUserLogsService
   ) {
     this.emailService = emailService;
     this.auth = auth;
     this.service = service;
     this.blacklisted = blacklisted;
+    this.logs = logs;
   }
 
   async onSignIn(req: Request, res: Response) {
@@ -126,6 +130,8 @@ export class UserController {
         if (!currentPassword || !newPassword) throw new Error("missing-inputs" as ErrorType);
 
         await this.service.updatePassword(userId, currentPassword, newPassword);
+
+        await this.logs.addLog(userId, "UPDATE_PASSWORD");
       }
 
       if (data.body.useCase === "VERIFY_EMAIL") {
@@ -160,14 +166,69 @@ export class UserController {
 
         if (!currentEmail || !newEmail) throw new Error("missing-inputs" as ErrorType);
 
-        // TODO: Check the user update logs if the user can change its password
+        const updateable = await this.logs.updateable(userId, "UPDATE_EMAIL");
 
-        await this.service.updateEmail(userId, currentEmail, newEmail);
+        if (!updateable) throw new Error("user-modification-denied" as ErrorType);
 
-        // TODO: Aad a user update log in here.
+        const token = this.auth.createToken(
+          { userId: userId, oldEmail: currentEmail, newEmail: newEmail },
+          "EMAIL_CHANGE"
+        );
+
+        await this.emailService.sendEmailChangeConfirmation({
+          clientRoute: CLIENT_ROUTES.EMAIL_CHANGE,
+          emailToSend: currentEmail,
+          token: token,
+        });
       }
 
       return res.status(200).json(FormatResponse({}, `Use case used: ${data.body.useCase}`));
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.code).json(errObj);
+    }
+  }
+
+  async onEmailChange(req: Request, res: Response) {
+    try {
+      const token = req.query.token as string;
+
+      if (!token) throw new Error("missing-inputs" as ErrorType);
+
+      const payload = this.auth.decodeToken(token, "EMAIL_CHANGE");
+
+      const onTheList = await this.blacklisted.isBlacklisted(payload.userId, token);
+
+      if (onTheList) throw new Error("request-already-used" as ErrorType);
+
+      const isValid = this.auth.verifyToken(token, "EMAIL_CHANGE");
+
+      if (!isValid) throw new Error("request-expired" as ErrorType);
+
+      const updateable = await this.logs.updateable(payload.userId, "UPDATE_EMAIL");
+
+      if (!updateable) throw new Error("user-modification-denied" as ErrorType);
+
+      await this.service.updateEmail(payload.userId, payload.oldEmail, payload.newEmail);
+
+      await this.logs.addLog(payload.userId, "UPDATE_EMAIL");
+
+      const emailVerficationToken = this.auth.createToken(
+        {
+          email: payload.newEmail,
+          userId: payload.userId,
+        },
+        "EMAIL_VERIFY"
+      );
+
+      await this.emailService.sendEmailVerification({
+        clientRoute: CLIENT_ROUTES.EMAIL_VERIFICATION,
+        emailToSend: payload.newEmail,
+        token: emailVerficationToken,
+      });
+
+      return res.status(200).json(FormatResponse({}));
     } catch (err) {
       const errObj = identifyErrors(err);
 

@@ -33,6 +33,7 @@ export class UserBlacklistedToken implements IUserBlacklistedToken {
     this.expiresAt = date;
   };
 
+  // For admin use
   isValid(expirationDate: Date): boolean {
     const timeToday = new Date().getTime();
     const expirationTime = expirationDate.getTime();

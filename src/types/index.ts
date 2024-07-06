@@ -7,6 +7,7 @@ export type ErrorType =
   | "user-already-exist"
   | "user-not-authorized"
   | "user-enters-same-password"
+  | "user-modification-denied"
   | "missing-inputs"
   | "invalid-first-name"
   | "invalid-last-name"

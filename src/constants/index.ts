@@ -11,6 +11,9 @@ export const TYPES = {
   UserBlacklistedToken: Symbol.for("UserBlacklistedToken"),
   UserBlacklistedTokenService: Symbol.for("UserBlacklistedTokenService"),
   UserBlacklistedTokenRepository: Symbol.for("UserBlacklistedTokenRepository"),
+  UserLogs: Symbol.for("UserLogs"),
+  UserLogsService: Symbol.for("UserLogsService"),
+  UserLogsRepository: Symbol.for("UserLogsRepository"),
   AuthService: Symbol.for("AuthService"),
   EmailService: Symbol.for("EmailService"),
 };
@@ -41,4 +44,21 @@ export const EMAIL_CHANGE_CONTENT = {
 export const EMAIL_RESET_PASSWORD = {
   NAME: "MahBlog Email Reset Password",
   SUBJECT: "An email reset password to reset your password from MahBlog.",
+};
+
+export const UPDATE_DAYS_COOLDOWN = {
+  NAME_AND_EMAIL: 90,
+};
+
+export const DEFAULT_LOG_CONTENT = {
+  UPDATE_EMAIL: "User update its email",
+  UPDATE_PASSWORD: "User update its password",
+  UPDATE_NAME: "User updated its name",
+  OTHER: "User updated something unknown",
+};
+
+export const CLIENT_ROUTES = {
+  EMAIL_CHANGE: "/email-change-confirmation",
+  EMAIL_VERIFICATION: "/verify-email",
+  RESET_PASSWORD: "/reset-password",
 };

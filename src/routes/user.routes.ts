@@ -39,16 +39,22 @@ userRouter.put(
 );
 
 userRouter.put(
-  "/change-email",
+  "/verify-email",
+  middleware.validateBody(updateUserSchema),
+  controller.onUpdateUser.bind(controller)
+);
+
+userRouter.post(
+  "/req-change-email",
   middleware.validateBody(updateUserSchema),
   (req, res, next) => middleware.verifySession(req, res, next),
   controller.onUpdateUser.bind(controller)
 );
 
 userRouter.put(
-  "/verify-email",
-  middleware.validateBody(updateUserSchema),
-  controller.onUpdateUser.bind(controller)
+  "/change-email",
+  (req, res, next) => middleware.verifySession(req, res, next),
+  controller.onEmailChange.bind(controller)
 );
 
 export default userRouter;
