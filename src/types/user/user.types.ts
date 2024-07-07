@@ -19,6 +19,10 @@ export type UserGetById = Omit<UserGetParams, "email">;
 
 export type UserGetType<T extends UserGetUseCase> = ParamMapping[T];
 
+export const UserGetByEmailUseCaseArr = ["VERIFY_EMAIL", "GET_USER_DATA"] as const;
+
+export type UserGetByEmailUseCase = (typeof UserGetByEmailUseCaseArr)[number];
+
 type ParamMapping = {
   BOTH: UserGetParams;
   USER_ID: UserGetById;

@@ -3,7 +3,11 @@ import * as userContainer from "../config/inversify.config";
 import { UserController } from "../controllers/user.controller";
 import { TYPES } from "../constants";
 import { UserMiddleware } from "../middlewares/user.middleware";
-import { updateUserSchema } from "../middlewares/schemas/user.schema";
+import {
+  emailVerificationReqSchema,
+  getUserByEmailSchema,
+  updateUserSchema,
+} from "../middlewares/schemas/user.schema";
 
 const userRouter = express.Router();
 
@@ -49,6 +53,18 @@ userRouter.post(
   middleware.validateBody(updateUserSchema),
   (req, res, next) => middleware.verifySession(req, res, next),
   controller.onUpdateUser.bind(controller)
+);
+
+userRouter.post(
+  "/get-user-by-email",
+  middleware.validateBody(getUserByEmailSchema),
+  controller.onGetUserByEmail.bind(controller)
+);
+
+userRouter.post(
+  "/req-email-verification",
+  middleware.validateBody(emailVerificationReqSchema),
+  controller.onGetUserByEmail.bind(controller)
 );
 
 userRouter.put(

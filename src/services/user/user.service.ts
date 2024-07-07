@@ -59,6 +59,12 @@ export class UserService implements IUserService {
     return user;
   }
 
+  async getUserByEmail(email: string): Promise<UserData> {
+    const user = await this.repo.getUserData({ email: email }, "EMAIL");
+
+    return user;
+  }
+
   async updateEmail(userId: string, oldEmail: string, newEmail: string): Promise<void> {
     this.entity.validateEmail(newEmail);
 

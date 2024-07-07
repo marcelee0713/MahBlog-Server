@@ -31,6 +31,13 @@ export const errors: Record<ErrorType, ErrorObject> = {
     status: "error",
   },
 
+  "user-already-verified": {
+    code: 409,
+    error: "User had already verified its email.",
+    type: "user-already-verified",
+    status: "error",
+  },
+
   "user-session-does-not-exist": {
     code: 404,
     error: "User session does not exist.",

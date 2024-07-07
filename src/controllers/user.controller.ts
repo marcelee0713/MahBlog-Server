@@ -9,6 +9,7 @@ import { ErrorType } from "../types";
 import { IEmailService } from "../interfaces/email.interface";
 import { IUserBlacklistedTokenService } from "../interfaces/user/user.blacklisted_token.interface";
 import { IUserLogsService } from "../interfaces/user/user.logs.interface";
+import { UserGetByEmailUseCase } from "../types/user/user.types";
 
 @injectable()
 export class UserController {
@@ -236,6 +237,41 @@ export class UserController {
     }
   }
 
+  async onGetUserByEmail(req: Request, res: Response) {
+    try {
+      const email: string = req.body.email;
+      const useCase: UserGetByEmailUseCase = req.body.useCase;
+
+      const data = await this.service.getUserByEmail(email);
+
+      if (useCase === "VERIFY_EMAIL") {
+        if (data.emailVerifiedAt) throw new Error("user-already-verified" as ErrorType);
+
+        const emailVerficationToken = this.auth.createToken(
+          {
+            email: data.email,
+            userId: data.userId,
+          },
+          "EMAIL_VERIFY"
+        );
+
+        await this.emailService.sendEmailVerification({
+          clientRoute: CLIENT_ROUTES.EMAIL_VERIFICATION,
+          emailToSend: data.email,
+          token: emailVerficationToken,
+        });
+
+        return res.status(200).json(FormatResponse({}, "Email verification sent."));
+      }
+
+      return res.status(200).json(FormatResponse(data));
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.code).json(errObj);
+    }
+  }
+
   async onDeleteUser(req: Request, res: Response) {
     try {
       const userId = res.locals.userId;
@@ -251,4 +287,6 @@ export class UserController {
   }
 }
 
-// TODO: DO ALL THE TODOS
+// TODO:
+// Email verification request
+// Password reset request there will two different routes for this.

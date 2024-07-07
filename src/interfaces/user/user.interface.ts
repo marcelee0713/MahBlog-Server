@@ -38,6 +38,7 @@ export interface IUserService {
   signOut: (userId: string, sessionId: string) => Promise<void>;
   signUp: (params: SignInParams) => Promise<UserData>;
   getUser: (userId: string) => Promise<UserData>;
+  getUserByEmail: (email: string) => Promise<UserData>;
   updateEmail: (userId: string, oldEmail: string, newEmail: string) => Promise<void>;
   updatePassword: (userId: string, currentPassword: string, newPassword: string) => Promise<void>;
   verifyEmail: (userId: string, email: string) => Promise<void>;

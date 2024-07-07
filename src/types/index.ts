@@ -5,6 +5,7 @@ export type ErrorType =
   | "user-session-does-not-exist"
   | "user-session-expired"
   | "user-already-exist"
+  | "user-already-verified"
   | "user-not-authorized"
   | "user-enters-same-password"
   | "user-modification-denied"
