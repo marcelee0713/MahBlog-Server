@@ -25,3 +25,9 @@ export const emailVerificationReqSchema = z.object({
     useCase: z.literal("VERIFY_EMAIL" as UserGetByEmailUseCase),
   }),
 });
+
+export const resetPasswordReqSchema = z.object({
+  body: z.object({
+    email: z.string().email().trim(),
+  }),
+});

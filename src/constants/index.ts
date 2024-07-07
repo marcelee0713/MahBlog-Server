@@ -43,7 +43,7 @@ export const EMAIL_CHANGE_CONTENT = {
 
 export const EMAIL_RESET_PASSWORD = {
   NAME: "MahBlog Email Reset Password",
-  SUBJECT: "An email reset password to reset your password from MahBlog.",
+  SUBJECT: "An email for resetting your password from MahBlog.",
 };
 
 export const UPDATE_DAYS_COOLDOWN = {

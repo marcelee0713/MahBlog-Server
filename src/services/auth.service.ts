@@ -12,7 +12,7 @@ export class AuthService implements IAuthService {
   private accessSecret: string;
   private emailChangeSecret: string;
   private emailVerifySecret: string;
-  private passResetSecret: string;
+  private resetPassSecret: string;
 
   constructor() {
     this.jwtClient = jwt;
@@ -20,7 +20,7 @@ export class AuthService implements IAuthService {
     this.accessSecret = process.env.ACCESS_TOKEN_SECRETKEY as string;
     this.emailChangeSecret = process.env.EMAIL_CHANGE_SECRETKEY as string;
     this.emailVerifySecret = process.env.EMAIL_VERIFICATION_SECRETKEY as string;
-    this.passResetSecret = process.env.SECRET_EMAIL_PASSWORD as string;
+    this.resetPassSecret = process.env.RESET_PASSWORD_SECRETKEY as string;
   }
 
   createToken<T extends SessionType>(payload: PayloadType<T>, type: T): string {
@@ -57,8 +57,8 @@ export class AuthService implements IAuthService {
         return token;
       }
 
-      case "PASS_RESET": {
-        const token = this.jwtClient.sign(payload as PayloadType<T>, this.passResetSecret, {
+      case "RESET_PASS": {
+        const token = this.jwtClient.sign(payload as PayloadType<T>, this.resetPassSecret, {
           expiresIn: TOKENS_LIFESPAN.PASS_RESET,
         });
 
@@ -89,8 +89,8 @@ export class AuthService implements IAuthService {
           this.jwtClient.verify(token, this.emailVerifySecret);
           break;
 
-        case "PASS_RESET":
-          this.jwtClient.verify(token, this.passResetSecret);
+        case "RESET_PASS":
+          this.jwtClient.verify(token, this.resetPassSecret);
           break;
 
         default:
@@ -117,7 +117,7 @@ export class AuthService implements IAuthService {
       case "EMAIL_VERIFY":
         return this.jwtClient.decode(token) as PayloadType<T>;
 
-      case "PASS_RESET":
+      case "RESET_PASS":
         return this.jwtClient.decode(token) as PayloadType<T>;
 
       default:

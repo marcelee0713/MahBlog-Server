@@ -5,7 +5,7 @@ import {
   IUserService,
   SignInParams,
 } from "../../interfaces/user/user.interface";
-import { UserData, UserUpdateUseCase } from "../../types/user/user.types";
+import { UserData } from "../../types/user/user.types";
 import { TYPES } from "../../constants";
 import { IUserProfile } from "../../interfaces/user/user.profile.interface";
 import { IUserSessionService } from "../../interfaces/user/user.session.interface";

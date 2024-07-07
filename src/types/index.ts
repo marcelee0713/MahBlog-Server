@@ -9,6 +9,7 @@ export type ErrorType =
   | "user-not-authorized"
   | "user-enters-same-password"
   | "user-modification-denied"
+  | "user-current-password-does-not-match"
   | "missing-inputs"
   | "invalid-first-name"
   | "invalid-last-name"

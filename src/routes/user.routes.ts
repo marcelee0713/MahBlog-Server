@@ -6,6 +6,7 @@ import { UserMiddleware } from "../middlewares/user.middleware";
 import {
   emailVerificationReqSchema,
   getUserByEmailSchema,
+  resetPasswordReqSchema,
   updateUserSchema,
 } from "../middlewares/schemas/user.schema";
 
@@ -49,6 +50,12 @@ userRouter.put(
 );
 
 userRouter.post(
+  "/get-user-by-email",
+  middleware.validateBody(getUserByEmailSchema),
+  controller.onGetUserByEmail.bind(controller)
+);
+
+userRouter.post(
   "/req-change-email",
   middleware.validateBody(updateUserSchema),
   (req, res, next) => middleware.verifySession(req, res, next),
@@ -56,15 +63,21 @@ userRouter.post(
 );
 
 userRouter.post(
-  "/get-user-by-email",
-  middleware.validateBody(getUserByEmailSchema),
+  "/req-email-verification",
+  middleware.validateBody(emailVerificationReqSchema),
   controller.onGetUserByEmail.bind(controller)
 );
 
 userRouter.post(
-  "/req-email-verification",
-  middleware.validateBody(emailVerificationReqSchema),
-  controller.onGetUserByEmail.bind(controller)
+  "/req-reset-password",
+  middleware.validateBody(resetPasswordReqSchema),
+  controller.onResetPasswordReq.bind(controller)
+);
+
+userRouter.put(
+  "/reset-password",
+  middleware.validateBody(updateUserSchema),
+  controller.onUpdateUser.bind(controller)
 );
 
 userRouter.put(

@@ -61,7 +61,7 @@ export class EmailService implements IEmailService {
     }
   }
 
-  async sendPasswordReset(info: EmailParams): Promise<void> {
+  async sendResetPassword(info: EmailParams): Promise<void> {
     try {
       const link = `${this.clientBaseUrl}${info.clientRoute}?token=${info.token}`;
 

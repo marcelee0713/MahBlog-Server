@@ -8,7 +8,7 @@ declare global {
       ACCESS_TOKEN_SECRETKEY: string;
       EMAIL_CHANGE_SECRETKEY: string;
       EMAIL_VERIFICATION_SECRETKEY: string;
-      PASSWORD_RESET_SECRETKEY: string;
+      RESET_PASSWORD_SECRETKEY: string;
       CLIENT_BASE_URL: string;
       ADMIN_USERNAME: string;
       ADMIN_PASSWORD: string;

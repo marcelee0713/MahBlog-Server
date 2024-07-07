@@ -135,6 +135,31 @@ export class UserController {
         await this.logs.addLog(userId, "UPDATE_PASSWORD");
       }
 
+      if (data.body.useCase === "RESET_PASSWORD") {
+        const token = req.query.token as string;
+        const currentPassword = data.body.currentPassword ?? "";
+        const newPassword = data.body.password ?? "";
+
+        if (!currentPassword || !newPassword || !token)
+          throw new Error("missing-inputs" as ErrorType);
+
+        if (!token) throw new Error("missing-inputs" as ErrorType);
+
+        const payload = this.auth.decodeToken(token, "RESET_PASS");
+
+        const onTheList = await this.blacklisted.isBlacklisted(payload.userId, token);
+
+        if (onTheList) throw new Error("request-already-used" as ErrorType);
+
+        const isValid = this.auth.verifyToken(token, "RESET_PASS");
+
+        if (!isValid) throw new Error("request-expired" as ErrorType);
+
+        await this.service.updatePassword(payload.userId, currentPassword, newPassword);
+
+        await this.blacklisted.addTokenToBlacklist({ token: token, ...payload });
+      }
+
       if (data.body.useCase === "VERIFY_EMAIL") {
         const token = req.query.token as string;
 
@@ -272,6 +297,28 @@ export class UserController {
     }
   }
 
+  async onResetPasswordReq(req: Request, res: Response) {
+    try {
+      const email: string = req.body.email;
+
+      const data = await this.service.getUserByEmail(email);
+
+      const passwordResetToken = this.auth.createToken({ userId: data.userId }, "RESET_PASS");
+
+      await this.emailService.sendResetPassword({
+        clientRoute: CLIENT_ROUTES.RESET_PASSWORD,
+        emailToSend: data.email,
+        token: passwordResetToken,
+      });
+
+      return res.status(200).json(FormatResponse({}, "Password reset request sent"));
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.code).json(errObj);
+    }
+  }
+
   async onDeleteUser(req: Request, res: Response) {
     try {
       const userId = res.locals.userId;
@@ -288,5 +335,4 @@ export class UserController {
 }
 
 // TODO:
-// Email verification request
 // Password reset request there will two different routes for this.

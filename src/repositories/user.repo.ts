@@ -36,9 +36,15 @@ export class UserRepository implements IUserRepository {
         throw new Error("user-not-verified" as ErrorType);
       }
 
+      // I don't know why the password is on the object when I don't even have
+      // a password field on my interface "UserData" whenever I use the spread operator.
       return {
-        ...user,
+        userId: user.userId,
+        email: user.email,
+        role: user.role,
+        status: user.status,
         emailVerifiedAt: user.emailVerifiedAt ?? undefined,
+        createdAt: user.createdAt,
       };
     } catch (err) {
       throw new Error(returnError(err));
@@ -103,8 +109,13 @@ export class UserRepository implements IUserRepository {
 
         if (!user) throw new Error("user-does-not-exist" as ErrorType);
 
-        if (await bcrypt.compare(user.password, params.password))
-          throw new Error("user-enters-same-password" as ErrorType);
+        const matchPassword = await bcrypt.compare(params.password, user.password);
+
+        const samePassword = await bcrypt.compare(params.newPassword, user.password);
+
+        if (!matchPassword) throw new Error("user-current-password-does-not-match" as ErrorType);
+
+        if (samePassword) throw new Error("user-enters-same-password" as ErrorType);
 
         await this.db.users.update({
           where: {

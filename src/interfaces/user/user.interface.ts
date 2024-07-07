@@ -67,7 +67,7 @@ export interface SignInParams {
 
 export interface UserUpdateBodyReq {
   body: {
-    userId: string;
+    userId?: string;
     email?: string;
     newEmail?: string;
     currentPassword?: string;

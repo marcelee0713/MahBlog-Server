@@ -27,6 +27,6 @@ export interface EmailChangePayload extends AuthServicePayload {
   newEmail: string;
 }
 
-export interface PassResetPayload extends AuthServicePayload {
+export interface ResetPassPayload extends AuthServicePayload {
   userId: string;
 }

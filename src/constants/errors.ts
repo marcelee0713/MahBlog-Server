@@ -66,6 +66,13 @@ export const errors: Record<ErrorType, ErrorObject> = {
     type: "user-modification-denied",
   },
 
+  "user-current-password-does-not-match": {
+    code: 400,
+    error: "User current password does not match.",
+    status: "error",
+    type: "user-current-password-does-not-match",
+  },
+
   "request-expired": {
     code: 410,
     error: "This request have been expired.",
