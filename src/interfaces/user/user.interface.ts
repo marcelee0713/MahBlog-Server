@@ -72,6 +72,7 @@ export interface UserUpdateBodyReq {
     newEmail?: string;
     currentPassword?: string;
     password?: string;
+    token?: string;
     useCase: UserUpdateUseCase;
   };
 }

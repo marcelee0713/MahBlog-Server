@@ -136,7 +136,7 @@ export class UserController {
       }
 
       if (data.body.useCase === "RESET_PASSWORD") {
-        const token = req.query.token as string;
+        const token = data.body.token as string;
         const currentPassword = data.body.currentPassword ?? "";
         const newPassword = data.body.password ?? "";
 
@@ -161,7 +161,7 @@ export class UserController {
       }
 
       if (data.body.useCase === "VERIFY_EMAIL") {
-        const token = req.query.token as string;
+        const token = data.body.token as string;
 
         if (!token) throw new Error("missing-inputs" as ErrorType);
 
@@ -218,7 +218,7 @@ export class UserController {
 
   async onEmailChange(req: Request, res: Response) {
     try {
-      const token = req.query.token as string;
+      const token = req.body.token as string;
 
       if (!token) throw new Error("missing-inputs" as ErrorType);
 
@@ -335,4 +335,5 @@ export class UserController {
 }
 
 // TODO:
-// Password reset request there will two different routes for this.
+// On Reset Password have an option to remove all sessions.
+// On Changing Email remove all sessions.

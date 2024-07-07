@@ -9,6 +9,7 @@ export const updateUserSchema = z.object({
     currentPassword: z.string().min(8).optional(),
     password: z.string().min(8).optional(),
     useCase: z.enum(UserUpdateUseCaseArr),
+    token: z.string().optional(),
   }),
 });
 
@@ -29,5 +30,11 @@ export const emailVerificationReqSchema = z.object({
 export const resetPasswordReqSchema = z.object({
   body: z.object({
     email: z.string().email().trim(),
+  }),
+});
+
+export const tokenSchema = z.object({
+  body: z.object({
+    token: z.string(),
   }),
 });
