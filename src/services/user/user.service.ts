@@ -43,6 +43,10 @@ export class UserService implements IUserService {
     await this.session.deleteSession(userId, sessionId);
   }
 
+  async signOutAll(userId: string): Promise<void> {
+    await this.session.deleteSessions(userId);
+  }
+
   async signUp(params: SignInParams): Promise<UserData> {
     this.entity.validate(params.email, params.password);
 

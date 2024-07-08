@@ -26,10 +26,12 @@ export interface IUserSessionService {
   createSession: (userId: string) => Promise<string>;
   getSession: (userId: string, sessionId: string) => Promise<string>;
   deleteSession: (userId: string, sessionId: string) => Promise<void>;
+  deleteSessions: (userId: string) => Promise<void>;
 }
 
 export interface IUserSessionRepository {
   create: (params: UserSessionData) => Promise<void>;
   get: (userId: string, sessionId: string) => Promise<UserSessionData>;
   delete: (userId: string, sessionId: string) => Promise<void>;
+  deleteAll: (userId: string) => Promise<void>;
 }

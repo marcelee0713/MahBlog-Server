@@ -8,6 +8,7 @@ export const updateUserSchema = z.object({
     newEmail: z.string().email().trim().optional(),
     currentPassword: z.string().min(8).optional(),
     password: z.string().min(8).optional(),
+    removeSessions: z.boolean().optional(),
     useCase: z.enum(UserUpdateUseCaseArr),
     token: z.string().optional(),
   }),

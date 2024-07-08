@@ -133,6 +133,8 @@ export class UserController {
         await this.service.updatePassword(userId, currentPassword, newPassword);
 
         await this.logs.addLog(userId, "UPDATE_PASSWORD");
+
+        if (data.body.removeSessions) await this.service.signOutAll(userId);
       }
 
       if (data.body.useCase === "RESET_PASSWORD") {
@@ -158,6 +160,8 @@ export class UserController {
         await this.service.updatePassword(payload.userId, currentPassword, newPassword);
 
         await this.blacklisted.addTokenToBlacklist({ token: token, ...payload });
+
+        if (data.body.removeSessions) await this.service.signOutAll(payload.userId);
       }
 
       if (data.body.useCase === "VERIFY_EMAIL") {
@@ -253,6 +257,8 @@ export class UserController {
         emailToSend: payload.newEmail,
         token: emailVerficationToken,
       });
+
+      await this.service.signOutAll(payload.userId);
 
       return res.status(200).json(FormatResponse({}));
     } catch (err) {

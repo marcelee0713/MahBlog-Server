@@ -36,6 +36,7 @@ export interface IUser {
 export interface IUserService {
   signIn: (email: string, password: string) => Promise<string>;
   signOut: (userId: string, sessionId: string) => Promise<void>;
+  signOutAll: (userId: string) => Promise<void>;
   signUp: (params: SignInParams) => Promise<UserData>;
   getUser: (userId: string) => Promise<UserData>;
   getUserByEmail: (email: string) => Promise<UserData>;
@@ -73,6 +74,7 @@ export interface UserUpdateBodyReq {
     currentPassword?: string;
     password?: string;
     token?: string;
+    removeSessions?: boolean;
     useCase: UserUpdateUseCase;
   };
 }

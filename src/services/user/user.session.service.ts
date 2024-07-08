@@ -26,59 +26,51 @@ export class UserSessionService implements IUserSessionService {
   }
 
   async createSession(userId: string): Promise<string> {
-    try {
-      const sessionId = generateSessionId();
+    const sessionId = generateSessionId();
 
-      const token = this.auth.createToken(
-        {
-          userId: userId,
-          sessionId: sessionId,
-        },
-        "REFRESH"
-      );
+    const token = this.auth.createToken(
+      {
+        userId: userId,
+        sessionId: sessionId,
+      },
+      "REFRESH"
+    );
 
-      const payload = this.auth.decodeToken(token, "REFRESH");
+    const payload = this.auth.decodeToken(token, "REFRESH");
 
-      const iat = this.entity.convertNumberToDate(payload.iat);
+    const iat = this.entity.convertNumberToDate(payload.iat);
 
-      const exp = this.entity.convertNumberToDate(payload.exp);
+    const exp = this.entity.convertNumberToDate(payload.exp);
 
-      await this.repo.create({
-        ...payload,
-        refreshToken: token,
-        createdAt: iat,
-        expiresAt: exp,
-      });
+    await this.repo.create({
+      ...payload,
+      refreshToken: token,
+      createdAt: iat,
+      expiresAt: exp,
+    });
 
-      const accessToken = this.auth.createToken(
-        {
-          userId: userId,
-          sessionId: sessionId,
-        },
-        "ACCESS"
-      );
+    const accessToken = this.auth.createToken(
+      {
+        userId: userId,
+        sessionId: sessionId,
+      },
+      "ACCESS"
+    );
 
-      return accessToken;
-    } catch (err) {
-      throw new Error(returnError(err));
-    }
+    return accessToken;
   }
 
   async getSession(userId: string, sessionId: string): Promise<string> {
-    try {
-      const session = await this.repo.get(userId, sessionId);
+    const session = await this.repo.get(userId, sessionId);
 
-      return session.refreshToken;
-    } catch (err) {
-      throw new Error(returnError(err));
-    }
+    return session.refreshToken;
   }
 
   async deleteSession(userId: string, sessionId: string): Promise<void> {
-    try {
-      await this.repo.delete(userId, sessionId);
-    } catch (err) {
-      throw new Error(returnError(err));
-    }
+    await this.repo.delete(userId, sessionId);
+  }
+
+  async deleteSessions(userId: string): Promise<void> {
+    await this.repo.deleteAll(userId);
   }
 }

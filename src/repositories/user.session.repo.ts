@@ -77,4 +77,22 @@ export class UserSessionRepository implements IUserSessionRepository {
       throw new Error("internal-server-error" as ErrorType);
     }
   }
+
+  async deleteAll(userId: string): Promise<void> {
+    try {
+      await this.db.userSessions.deleteMany({
+        where: {
+          userId: userId,
+        },
+      });
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === "P2025") {
+          throw new Error("user-session-does-not-exist" as ErrorType);
+        }
+      }
+
+      throw new Error("internal-server-error" as ErrorType);
+    }
+  }
 }
