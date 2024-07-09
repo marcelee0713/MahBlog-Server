@@ -34,6 +34,4 @@ export interface IUserProfile {
   validateBio: (bio?: string) => void;
 }
 
-export interface IUserService {}
-
-// TODO: Soon do the use cases of UserProfile that includes services, repo, and etc..
+export interface IUserProfileService {}

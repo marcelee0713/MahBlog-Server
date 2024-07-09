@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { IUserLogsRepository } from "../interfaces/user/user.logs.interface";
 import { ErrorType } from "../types";
 import { LogType, UserLogData } from "../types/user/user.logs.types";
@@ -26,12 +26,12 @@ export class UserLogsRepository implements IUserLogsRepository {
       throw new Error("internal-server-error" as ErrorType);
     }
   }
-  async get(userId: string, type: LogType): Promise<UserLogData | null> {
+  async get(userId: string, type?: LogType): Promise<UserLogData | null> {
     try {
       const log = await this.db.userLogs.findFirst({
         where: {
           userId: userId,
-          type: type,
+          type: type ?? undefined,
         },
         orderBy: {
           createdAt: "desc",
@@ -44,6 +44,58 @@ export class UserLogsRepository implements IUserLogsRepository {
         ...log,
       };
     } catch (err) {
+      throw new Error("internal-server-error" as ErrorType);
+    }
+  }
+
+  async getAll(userId: string, type?: LogType): Promise<UserLogData[]> {
+    try {
+      const logs = await this.db.userLogs.findMany({
+        where: {
+          userId: userId,
+          type: type ?? undefined,
+        },
+      });
+
+      return logs;
+    } catch (err) {
+      throw new Error("internal-server-error" as ErrorType);
+    }
+  }
+
+  async delete(logId: string, userId: string): Promise<void> {
+    try {
+      await this.db.userLogs.delete({
+        where: {
+          logId: logId,
+          userId: userId,
+        },
+      });
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === "P2025") {
+          throw new Error("user-log-does-not-exist" as ErrorType);
+        }
+      }
+
+      throw new Error("internal-server-error" as ErrorType);
+    }
+  }
+
+  async deleteAll(userId: string): Promise<void> {
+    try {
+      await this.db.userLogs.deleteMany({
+        where: {
+          userId: userId,
+        },
+      });
+    } catch (err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === "P2025") {
+          throw new Error("user-log-does-not-exist" as ErrorType);
+        }
+      }
+
       throw new Error("internal-server-error" as ErrorType);
     }
   }

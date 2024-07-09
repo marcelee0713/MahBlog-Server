@@ -10,13 +10,6 @@ export const errors: Record<ErrorType, ErrorObject> = {
     status: "error",
   },
 
-  "session-does-not-exist": {
-    code: 404,
-    error: "User does not exist.",
-    type: "user-does-not-exist",
-    status: "error",
-  },
-
   "user-does-not-exist": {
     code: 404,
     error: "User does not exist.",
@@ -71,6 +64,13 @@ export const errors: Record<ErrorType, ErrorObject> = {
     error: "User current password does not match.",
     status: "error",
     type: "user-current-password-does-not-match",
+  },
+
+  "user-log-does-not-exist": {
+    code: 404,
+    error: "User log does not exist.",
+    status: "error",
+    type: "user-log-does-not-exist",
   },
 
   "request-expired": {

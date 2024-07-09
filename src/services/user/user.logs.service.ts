@@ -4,8 +4,9 @@ import {
   IUserLogsRepository,
   IUserLogsService,
 } from "../../interfaces/user/user.logs.interface";
-import { LogType } from "../../types/user/user.logs.types";
+import { LogType, UserLogData } from "../../types/user/user.logs.types";
 import { TYPES } from "../../constants";
+import { ErrorType } from "../../types";
 
 @injectable()
 export class UserLogsService implements IUserLogsService {
@@ -36,5 +37,27 @@ export class UserLogsService implements IUserLogsService {
     if (canUpdate) true;
 
     return false;
+  }
+
+  async getLog(userId: string, type?: LogType): Promise<UserLogData> {
+    const log = await this.repo.get(userId, type);
+
+    if (!log) throw new Error("user-log-does-not-exist" as ErrorType);
+
+    return log;
+  }
+
+  async getLogs(userId: string, type?: LogType): Promise<UserLogData[]> {
+    const logs = await this.getLogs(userId, type);
+
+    return logs;
+  }
+
+  async deleteLog(userId: string, logId: string): Promise<void> {
+    await this.repo.delete(userId, logId);
+  }
+
+  async deleteLogs(userId: string): Promise<void> {
+    await this.repo.deleteAll(userId);
   }
 }

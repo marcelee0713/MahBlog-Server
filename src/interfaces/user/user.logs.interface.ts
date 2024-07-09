@@ -22,13 +22,16 @@ export interface IUserLogs {
 export interface IUserLogsService {
   addLog: (userId: string, type: LogType) => Promise<void>;
   updateable: (userId: string, type: LogType) => Promise<boolean>;
+  getLog: (userId: string, type?: LogType) => Promise<UserLogData>;
+  getLogs: (userId: string, type?: LogType) => Promise<UserLogData[]>;
+  deleteLog: (userId: string, logId: string) => Promise<void>;
+  deleteLogs: (userId: string) => Promise<void>;
 }
 
 export interface IUserLogsRepository {
   add: (userId: string, type: LogType, content: string) => Promise<void>;
-  get: (userId: string, type: LogType) => Promise<UserLogData | null>;
+  get: (userId: string, type?: LogType) => Promise<UserLogData | null>;
+  getAll: (userId: string, type?: LogType) => Promise<UserLogData[]>;
+  delete: (logId: string, userId: string) => Promise<void>;
+  deleteAll: (userId: string) => Promise<void>;
 }
-
-// TODOS:
-// - Create a router and controller for this
-// - Routes would check if the name and email is updateable

@@ -28,4 +28,5 @@ app.listen(PORT, () => {
 
 app.use("/api/v1/user", userRouter);
 
-// TODO: Integration of User Entity with UserProfile, UserAuth, and etc...
+// TODO: UserReport, UserProfile, and other user Related
+// TODO: Interactors, Repo, and Controllers, and routes (if applicable)

@@ -339,7 +339,3 @@ export class UserController {
     }
   }
 }
-
-// TODO:
-// On Reset Password have an option to remove all sessions.
-// On Changing Email remove all sessions.
