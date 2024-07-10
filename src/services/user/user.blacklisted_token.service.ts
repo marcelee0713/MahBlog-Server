@@ -38,4 +38,22 @@ export class UserBlacklistedTokenService implements IUserBlacklistedTokenService
 
     return true;
   }
+
+  async deletedBlacklistedToken(tokenId: string): Promise<void> {
+    await this.repo.deleteToken(tokenId);
+  }
+
+  async clearExpiredTokens(): Promise<void> {
+    const blacklistedTokens = await this.repo.getAll();
+
+    const expiredTokens: string[] = [];
+
+    for (let i = 0; i < blacklistedTokens.length; i++) {
+      if (!this.entity.isValid(blacklistedTokens[i].expiresAt)) {
+        expiredTokens.push(blacklistedTokens[i].token);
+      }
+    }
+
+    await this.repo.deleteExpiredTokens(expiredTokens);
+  }
 }

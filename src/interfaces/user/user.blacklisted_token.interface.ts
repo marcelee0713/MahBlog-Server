@@ -25,11 +25,16 @@ export interface IUserBlacklistedToken {
 export interface IUserBlacklistedTokenService {
   addTokenToBlacklist(params: AddBlacklistedTokenParams): Promise<void>;
   isBlacklisted(userId: string, tokenToCheck: string): Promise<boolean>;
+  deletedBlacklistedToken(tokenId: string): Promise<void>;
+  clearExpiredTokens(): Promise<void>;
 }
 
 export interface IUserBlacklistedTokenRepository {
   add(data: UserBlackListedAddRepoParams): Promise<void>;
   get(userId: string, token: string): Promise<UserBlacklistedTokenData | null>;
+  getAll(userId?: string): Promise<UserBlacklistedTokenData[]>;
+  deleteToken(token: string): Promise<void>;
+  deleteExpiredTokens(tokens: string[]): Promise<void>;
 }
 
 export interface AddBlacklistedTokenParams {

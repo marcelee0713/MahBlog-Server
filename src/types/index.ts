@@ -2,6 +2,7 @@ export type ErrorType =
   | "user-not-verified"
   | "user-does-not-exist"
   | "user-session-does-not-exist"
+  | "user-blacklisted-token-does-not-exist"
   | "user-session-expired"
   | "user-log-does-not-exist"
   | "user-already-exist"
