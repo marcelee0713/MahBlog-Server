@@ -73,6 +73,20 @@ export const errors: Record<ErrorType, ErrorObject> = {
     type: "user-log-does-not-exist",
   },
 
+  "user-blacklisted-token-does-not-exist": {
+    code: 404,
+    error: "User black listed token does not exist",
+    status: "error",
+    type: "user-blacklisted-token-does-not-exist",
+  },
+
+  "invalid-image-upload": {
+    code: 400,
+    error: "Invalid image, only accepts png, jpg, jpeg, and gif with a maximum of 3mb.",
+    status: "error",
+    type: "invalid-image-upload",
+  },
+
   "request-expired": {
     code: 410,
     error: "This request have been expired.",

@@ -5,6 +5,8 @@ export const TYPES = {
   UserRepository: Symbol.for("UserRepository"),
   UserController: Symbol.for("UserController"),
   UserProfileModel: Symbol.for("UserProfileModel"),
+  UserProfileService: Symbol.for("UserProfileService"),
+  UserProfileRepository: Symbol.for("UserProfileRepository"),
   UserSessionModel: Symbol.for("UserSessionModel"),
   UserSessionService: Symbol.for("UserSessionService"),
   UserSessionRepository: Symbol.for("UserSessionRepository"),
@@ -14,6 +16,7 @@ export const TYPES = {
   UserLogs: Symbol.for("UserLogs"),
   UserLogsService: Symbol.for("UserLogsService"),
   UserLogsRepository: Symbol.for("UserLogsRepository"),
+  MediaService: Symbol.for("MediaService"),
   AuthService: Symbol.for("AuthService"),
   EmailService: Symbol.for("EmailService"),
 };

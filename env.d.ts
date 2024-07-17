@@ -17,6 +17,9 @@ declare global {
       EMAIL_SERVICE_PASSWORD: string;
       EMAIL_SERVICE_ADDRESS: string;
       EMAIL_SERVICE_USER: string;
+      CLOUDINARY_CLOUD_NAME: string;
+      CLOUDINARY_API_KEY: string;
+      CLOUDINARY_API_SECRET: string;
     }
   }
 }

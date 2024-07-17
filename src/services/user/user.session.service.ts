@@ -7,7 +7,6 @@ import {
 import { IAuthService } from "../../interfaces/auth.interface";
 import { TYPES } from "../../constants";
 import { generateSessionId } from "../../utils/session_id_generator";
-import { returnError } from "../../utils/error_handler";
 
 @injectable()
 export class UserSessionService implements IUserSessionService {

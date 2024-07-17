@@ -11,6 +11,7 @@ export type ErrorType =
   | "user-enters-same-password"
   | "user-modification-denied"
   | "user-current-password-does-not-match"
+  | "invalid-image-upload"
   | "missing-inputs"
   | "invalid-first-name"
   | "invalid-last-name"

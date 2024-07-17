@@ -34,4 +34,11 @@ export interface IUserProfile {
   validateBio: (bio?: string) => void;
 }
 
-export interface IUserProfileService {}
+export interface IUserProfileService {
+  getUserProfile: (userId: string) => Promise<UserProfileData>;
+  updateName: (userId: string, fName: string, lName: string, mName?: string) => Promise<void>;
+  updateBio: (userId: string, bio?: string) => Promise<string>;
+  updateProfileImage: (userId: string, imageUrl: string) => Promise<void>;
+}
+
+// Finish the UserProfile's Controller, Services, and Repository. By using multer and cloudinary

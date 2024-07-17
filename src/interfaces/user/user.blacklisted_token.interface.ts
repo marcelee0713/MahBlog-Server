@@ -43,5 +43,3 @@ export interface AddBlacklistedTokenParams {
   iat?: number;
   exp?: number;
 }
-
-// TODOS: Create a delete expired blacklisted tokens here for the admin
