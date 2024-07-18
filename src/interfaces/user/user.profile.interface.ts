@@ -1,4 +1,9 @@
-import { UserProfileData } from "../../types/user/user.profile.types";
+import {
+  UserProfileData,
+  UserProfileRemoveUseCase,
+  UserProfileUpdateType,
+  UserProfileUpdateUseCase,
+} from "../../types/user/user.profile.types";
 
 export interface IUserProfile {
   profileId: string;
@@ -37,8 +42,28 @@ export interface IUserProfile {
 export interface IUserProfileService {
   getUserProfile: (userId: string) => Promise<UserProfileData>;
   updateName: (userId: string, fName: string, lName: string, mName?: string) => Promise<void>;
-  updateBio: (userId: string, bio?: string) => Promise<string>;
+  updateBio: (userId: string, bio: string) => Promise<void>;
   updateProfileImage: (userId: string, imageUrl: string) => Promise<void>;
+  updateCoverImage: (userId: string, imageUrl: string) => Promise<void>;
+  remove: (userId: string, type: UserProfileRemoveUseCase) => Promise<void>;
+}
+
+export interface IUserProfileRepository {
+  get: (userId: string) => Promise<UserProfileData>;
+  delete: (userId: string, type: UserProfileRemoveUseCase) => Promise<void>;
+  update: <T extends UserProfileUpdateUseCase>(
+    params: UserProfileUpdateType<T>,
+    type: UserProfileUpdateUseCase
+  ) => Promise<void>;
+}
+
+export interface UserProfileUpdateParams {
+  userId: string;
+  fName: string;
+  lName: string;
+  imageUrl: string;
+  mName?: string;
+  bio: string;
 }
 
 // Finish the UserProfile's Controller, Services, and Repository. By using multer and cloudinary

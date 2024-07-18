@@ -7,6 +7,7 @@ export const TYPES = {
   UserProfileModel: Symbol.for("UserProfileModel"),
   UserProfileService: Symbol.for("UserProfileService"),
   UserProfileRepository: Symbol.for("UserProfileRepository"),
+  UserProfileController: Symbol.for("UserProfileController"),
   UserSessionModel: Symbol.for("UserSessionModel"),
   UserSessionService: Symbol.for("UserSessionService"),
   UserSessionRepository: Symbol.for("UserSessionRepository"),

@@ -6,6 +6,8 @@ import { TYPES } from "../constants";
 import { IAuthService } from "../interfaces/auth.interface";
 import { bodyError, identifyErrors } from "../utils/error_handler";
 import { AnyZodObject, z } from "zod";
+import multer from "multer";
+import { upload } from "../config/multer";
 
 @injectable()
 export class UserMiddleware {
@@ -85,6 +87,19 @@ export class UserMiddleware {
 
         return res.status(500).json({ error: "Internal server error" });
       }
+    };
+  }
+
+  validateMulter(name: string) {
+    return (req: Request, res: Response, next: NextFunction) => {
+      upload.single(name)(req, res, (err: unknown) => {
+        if (err) {
+          const errObj = identifyErrors(new Error("invalid-image-upload"));
+          return res.status(errObj.code).json(errObj);
+        }
+
+        next();
+      });
     };
   }
 }

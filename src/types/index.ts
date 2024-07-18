@@ -24,7 +24,8 @@ export type ErrorType =
   | "request-expired"
   | "request-already-used"
   | "internal-server-error"
-  | "email-service-error";
+  | "email-service-error"
+  | "media-service-error";
 
 type FunctionKey<T> = {
   [K in keyof T]: T[K] extends CallableFunction ? K : never;

@@ -5,7 +5,11 @@ import { User } from "../models/user/user.model";
 import { UserService } from "../services/user/user.service";
 import { UserRepository } from "../repositories/user.repo";
 import { UserController } from "../controllers/user.controller";
-import { IUserProfile } from "../interfaces/user/user.profile.interface";
+import {
+  IUserProfile,
+  IUserProfileRepository,
+  IUserProfileService,
+} from "../interfaces/user/user.profile.interface";
 import { UserProfile } from "../models/user/user.profile.model";
 import {
   IUserSession,
@@ -36,6 +40,11 @@ import {
 import { UserLogs } from "../models/user/user.logs.model";
 import { UserLogsService } from "../services/user/user.logs.service";
 import { UserLogsRepository } from "../repositories/user.logs.repo";
+import { IMediaService } from "../interfaces/media.interface";
+import { MediaService } from "../services/media.service";
+import { UserProfileService } from "../services/user/user.profile.service";
+import { UserProfileRepository } from "../repositories/user.profile.repo";
+import { UserProfileController } from "../controllers/user.profile.controller";
 
 export const container = new Container();
 
@@ -45,6 +54,9 @@ container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
 container.bind(TYPES.UserController).to(UserController);
 
 container.bind<IUserProfile>(TYPES.UserProfileModel).to(UserProfile);
+container.bind<IUserProfileService>(TYPES.UserProfileService).to(UserProfileService);
+container.bind<IUserProfileRepository>(TYPES.UserProfileRepository).to(UserProfileRepository);
+container.bind(TYPES.UserProfileController).to(UserProfileController);
 
 container.bind<IUserSession>(TYPES.UserSessionModel).to(UserSession);
 container.bind<IUserSessionService>(TYPES.UserSessionService).to(UserSessionService);
@@ -66,3 +78,4 @@ container.bind(TYPES.UserMiddleware).to(UserMiddleware);
 
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.EmailService).to(EmailService);
+container.bind<IMediaService>(TYPES.MediaService).to(MediaService);

@@ -185,4 +185,12 @@ export const errors: Record<ErrorType, ErrorObject> = {
     status: "error",
     type: "email-service-error",
   },
+
+  "media-service-error": {
+    code: 500,
+    error: `Something went wrong in the server that's trying to 
+      communicate to the media services, please report it to the devs!`,
+    status: "error",
+    type: "media-service-error",
+  },
 };

@@ -1,20 +1,28 @@
 import multer from "multer";
 import { ErrorType } from "../types";
+import path from "path";
 
-const multerStorage = multer.memoryStorage();
+const multerStorage = multer.diskStorage({
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname));
+  },
+});
 
-const upload: multer.Options = {
+const options: multer.Options = {
   storage: multerStorage,
   limits: {
     fileSize: 3 * 1024 * 1024,
   },
   fileFilter(req, file, cb) {
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-      cb(new Error("invalid-image-upload" as ErrorType));
+      return cb(null, false);
     }
 
     cb(null, true);
   },
 };
+
+const upload = multer(options);
 
 export { upload };

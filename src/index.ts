@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import userRouter from "./routes/user.routes";
+import userProfileRouter from "./routes/user.profile.routes";
 
 dotenv.config();
 
@@ -27,6 +28,9 @@ app.listen(PORT, () => {
 });
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/user-profile", userProfileRouter);
 
 // TODO: UserReport, UserProfile, and other user Related
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
+
+// TODO: Create a different class for the Media class or Cloudinary
