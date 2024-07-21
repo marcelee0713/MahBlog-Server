@@ -53,7 +53,7 @@ export interface IUserProfileRepository {
   delete: (userId: string, type: UserProfileRemoveUseCase) => Promise<void>;
   update: <T extends UserProfileUpdateUseCase>(
     params: UserProfileUpdateType<T>,
-    type: UserProfileUpdateUseCase
+    type: T
   ) => Promise<void>;
 }
 
