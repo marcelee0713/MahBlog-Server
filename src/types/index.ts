@@ -19,6 +19,7 @@ export type ErrorType =
   | "invalid-email"
   | "invalid-password"
   | "invalid-bio"
+  | "invalid-error-description"
   | "wrong-credentials"
   | "authorization-header-missing"
   | "request-expired"
@@ -34,3 +35,7 @@ type FunctionKey<T> = {
 export type ExcludeFunctions<T> = Omit<T, FunctionKey<T>>;
 
 export type ResponseStatus = "success" | "error";
+
+export const SortOrderArr = ["asc", "desc"] as const;
+
+export type SortOrder = (typeof SortOrderArr)[number];

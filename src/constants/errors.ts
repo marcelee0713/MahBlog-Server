@@ -164,6 +164,13 @@ export const errors: Record<ErrorType, ErrorObject> = {
     status: "error",
   },
 
+  "invalid-error-description": {
+    code: 400,
+    error: "Invalid description, maximum of 500 characters only.",
+    type: "invalid-error-description",
+    status: "error",
+  },
+
   "wrong-credentials": {
     code: 400,
     error: "Email or password is not correct, please check your credentials.",

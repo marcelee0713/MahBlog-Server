@@ -20,7 +20,8 @@ model Users {
   notificator             UserNotifications[]     @relation("Sender")
   sessions                UserSessions[]
   blacklistedTokens       UserBlacklistedTokens[]
-  reports                 UserReports[]
+  sentReports             UserReports[]           @relation("Sender")
+  receivedReports         ReportDetails[]
   logs                    UserLogs[]
   blogs                   Blogs[]
   likedBlogs              BlogLikes[]
@@ -92,14 +93,29 @@ model UserBlacklistedTokens {
 }
 
 model UserReports {
-  reportId    String     @id @default(cuid())
-  reporterId  String?
-  reportedId  String?
+  reportId    String         @id @default(cuid())
+  userId      String?
   email       String?
-  description String     @db.VarChar(500)
+  description String         @db.VarChar(500)
   type        ReportType
-  users       Users?     @relation(fields: [reporterId], references: [userId], onDelete: Cascade)
-  createdAt   DateTime   @default(now())
+  category    ReportCategory
+  details     ReportDetails?
+  users       Users?         @relation("Sender", fields: [userId], references: [userId], onDelete: Cascade)
+  createdAt   DateTime       @default(now())
+}
+
+model ReportDetails {
+  reportDetailId    String              @id @default(cuid())
+  reportId          String              @unique
+  reportedUserId    String?
+  reportedBlogId    String?
+  reportedCommentId String?
+  reportedReplyId   String?
+  report            UserReports         @relation(fields: [reportId], references: [reportId])
+  users             Users?              @relation(fields: [reportedUserId], references: [userId])
+  blogs             Blogs?              @relation(fields: [reportedBlogId], references: [blogId])
+  comments          BlogComments?       @relation(fields: [reportedCommentId], references: [commentId])
+  replies           BlogCommentReplies? @relation(fields: [reportedReplyId], references: [replyId])
 }
 
 model UserLogs {
@@ -112,22 +128,23 @@ model UserLogs {
 }
 
 model Blogs {
-  blogId         String               @id @default(cuid())
-  authorId       String?
-  coverImage     String?
-  title          String               @db.VarChar(255)
-  description    String
-  notifications  UserNotifications[]
-  status         BlogStatus           @default(ACTIVE)
-  visiblity      BlogVisibility       @default(PUBLIC)
-  tags           BlogTags[]
-  contents       BlogContents[]
-  likes          BlogLikes[]
-  comments       BlogComments[]
-  commentReplies BlogCommentReplies[]
-  users          Users?               @relation(fields: [authorId], references: [userId], onDelete: Cascade)
-  createdAt      DateTime             @default(now())
-  updatedAt      DateTime             @updatedAt
+  blogId          String               @id @default(cuid())
+  authorId        String?
+  coverImage      String?
+  title           String               @db.VarChar(255)
+  description     String
+  notifications   UserNotifications[]
+  status          BlogStatus           @default(ACTIVE)
+  visiblity       BlogVisibility       @default(PUBLIC)
+  tags            BlogTags[]
+  contents        BlogContents[]
+  likes           BlogLikes[]
+  comments        BlogComments[]
+  commentReplies  BlogCommentReplies[]
+  receivedReports ReportDetails[]
+  users           Users?               @relation(fields: [authorId], references: [userId], onDelete: Cascade)
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
 }
 
 model BlogTags {
@@ -158,17 +175,18 @@ model BlogLikes {
 }
 
 model BlogComments {
-  commentId     String               @id @default(cuid())
-  blogId        String?
-  userId        String?
-  comment       String
-  notifications UserNotifications[]
-  replies       BlogCommentReplies[]
-  likes         BlogCommentLikes[]
-  users         Users?               @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  blog          Blogs?               @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
+  commentId       String               @id @default(cuid())
+  blogId          String?
+  userId          String?
+  comment         String
+  notifications   UserNotifications[]
+  replies         BlogCommentReplies[]
+  likes           BlogCommentLikes[]
+  receivedReports ReportDetails[]
+  users           Users?               @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  blog            Blogs?               @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
 }
 
 model BlogCommentReplies {
@@ -185,6 +203,7 @@ model BlogCommentReplies {
   mentionedReply   BlogCommentReplies?  @relation("MentionedReply", fields: [mentionedReplyId], references: [replyId], onDelete: Cascade)
   mentionedReplies BlogCommentReplies[] @relation("MentionedReply")
   notifications    UserNotifications[]
+  receivedReports  ReportDetails[]
   createdAt        DateTime             @default(now())
   updatedAt        DateTime             @updatedAt
 }
@@ -268,6 +287,14 @@ enum NotificationType {
 }
 
 enum ReportType {
+  ISSUE
+  USER_REPORT
+  BLOG_REPORT
+  COMMENT_REPORT
+  REPLY_REPORT
+}
+
+enum ReportCategory {
   BUG
   INAPPROPRIATE_BLOG
   SPAM

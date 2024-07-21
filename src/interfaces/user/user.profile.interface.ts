@@ -65,5 +65,3 @@ export interface UserProfileUpdateParams {
   mName?: string;
   bio: string;
 }
-
-// Finish the UserProfile's Controller, Services, and Repository. By using multer and cloudinary

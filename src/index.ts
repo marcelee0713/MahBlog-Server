@@ -30,7 +30,5 @@ app.listen(PORT, () => {
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/user-profile", userProfileRouter);
 
-// TODO: UserReport, UserProfile, and other user Related
+// TODO: UserReport, UserConnections, and UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
-
-// TODO: Create a different class for the Media class or Cloudinary
