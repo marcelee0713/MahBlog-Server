@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import userRouter from "./routes/user.routes";
 import userProfileRouter from "./routes/user.profile.routes";
+import userReportsRouter from "./routes/user.reports.routes";
 
 dotenv.config();
 
@@ -29,6 +30,15 @@ app.listen(PORT, () => {
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/user-profile", userProfileRouter);
+app.use("/api/v1/user-reports", userReportsRouter);
 
-// TODO: UserReport, UserConnections, and UserNotifications <--- do this when Blog is done.
+// TODO: UserConnections and UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
+
+// TODO: Make the errors more precise and specific by putting "where" it happened and what's the "caused" of the error.
+// TODO: Remove error duplicates i.e "does-not-exist",
+// Properties to be added are where, cause, message, status (the code)
+
+// TODO: Set the empty values into null instead of undefined
+
+// TODO: Add rate limiters to all of these routes

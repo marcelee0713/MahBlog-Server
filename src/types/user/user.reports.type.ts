@@ -1,4 +1,4 @@
-import { ExcludeFunctions } from "..";
+import { ExcludeFunctions, RequestBody } from "..";
 import {
   CreateReportParams,
   DeleteReport,
@@ -8,17 +8,13 @@ import {
   ReportCommentParams,
   ReportReplyParams,
   ReportUserParams,
+  UserGetReportParams,
+  UserReportDetails,
+  UserReportGetAllData,
 } from "../../interfaces/user/user.reports.interface";
 
 export type UserReportData = ExcludeFunctions<IUserReports> & {
-  details?: {
-    reportDetailId: string;
-    reportId: string;
-    reportedUserId?: string;
-    reportedBlogId?: string;
-    reportedCommentId?: string;
-    reportedReplyId?: string;
-  };
+  details?: UserReportDetails;
 };
 
 export const ReportTypeArr = [
@@ -57,6 +53,18 @@ export type DeleteReportUseCase = "ALL_REPORTS" | "USER_REPORTS" | "ONE_REPORT";
 
 export type DeleteReportType<T extends DeleteReportUseCase> = DeleteParamMapping[T];
 
+export type UserCreateReportIssueBodyReq = RequestBody<CreateReportParams>;
+
+export type UserCreateReportUserBodyReq = RequestBody<ReportUserParams>;
+
+export type UserCreateReportBlogBodyReq = RequestBody<ReportBlogParams>;
+
+export type UserCreateReportCommentBodyReq = RequestBody<ReportCommentParams>;
+
+export type UserCreateReportReplyBodyReq = RequestBody<ReportReplyParams>;
+
+export type UserGetReportBodyReq = RequestBody<UserGetReportParams>;
+
 type DeleteParamMapping = {
   ALL_REPORTS: undefined;
   USER_REPORTS: DeleteReportsParams;
@@ -65,7 +73,7 @@ type DeleteParamMapping = {
 
 type GetParamMapping = {
   ONE: UserReportData;
-  ALL: UserReportData[];
+  ALL: UserReportGetAllData;
 };
 
 type ParamMapping = {

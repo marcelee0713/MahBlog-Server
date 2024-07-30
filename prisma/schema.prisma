@@ -111,7 +111,7 @@ model ReportDetails {
   reportedBlogId    String?
   reportedCommentId String?
   reportedReplyId   String?
-  report            UserReports         @relation(fields: [reportId], references: [reportId])
+  report            UserReports         @relation(fields: [reportId], references: [reportId], onDelete: Cascade)
   users             Users?              @relation(fields: [reportedUserId], references: [userId])
   blogs             Blogs?              @relation(fields: [reportedBlogId], references: [blogId])
   comments          BlogComments?       @relation(fields: [reportedCommentId], references: [commentId])

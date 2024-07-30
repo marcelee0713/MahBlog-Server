@@ -45,6 +45,15 @@ import { MediaService } from "../services/media.service";
 import { UserProfileService } from "../services/user/user.profile.service";
 import { UserProfileRepository } from "../repositories/user.profile.repo";
 import { UserProfileController } from "../controllers/user.profile.controller";
+import {
+  IUserReports,
+  IUserReportsRepository,
+  IUserReportsService,
+} from "../interfaces/user/user.reports.interface";
+import { UserReports } from "../models/user/user.reports.model";
+import { UserReportsService } from "../services/user/user.reports.service";
+import { UserReportsRepository } from "../repositories/user.reports.repo";
+import { UserReportsController } from "../controllers/user.reports.controller";
 
 export const container = new Container();
 
@@ -73,6 +82,11 @@ container
 container.bind<IUserLogs>(TYPES.UserLogs).to(UserLogs);
 container.bind<IUserLogsService>(TYPES.UserLogsService).to(UserLogsService);
 container.bind<IUserLogsRepository>(TYPES.UserLogsRepository).to(UserLogsRepository);
+
+container.bind<IUserReports>(TYPES.UserReportsModel).to(UserReports);
+container.bind<IUserReportsService>(TYPES.UserReportsService).to(UserReportsService);
+container.bind<IUserReportsRepository>(TYPES.UserReportsRepository).to(UserReportsRepository);
+container.bind(TYPES.UserReportsController).to(UserReportsController);
 
 container.bind(TYPES.UserMiddleware).to(UserMiddleware);
 

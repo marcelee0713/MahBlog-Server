@@ -6,8 +6,8 @@ import { ReportCategories, ReportType } from "../../types/user/user.reports.type
 @injectable()
 export class UserReports implements IUserReports {
   reportId!: string;
-  userId?: string | undefined;
-  email?: string | undefined;
+  userId?: string | null;
+  email?: string | null;
   description!: string | undefined;
   type!: ReportType;
   category!: ReportCategories;

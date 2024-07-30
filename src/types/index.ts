@@ -39,3 +39,7 @@ export type ResponseStatus = "success" | "error";
 export const SortOrderArr = ["asc", "desc"] as const;
 
 export type SortOrder = (typeof SortOrderArr)[number];
+
+export type RequestBody<T> = {
+  body: T;
+};

@@ -9,6 +9,7 @@ import {
   ReportReplyParams,
   ReportUserParams,
   UserGetReportParams,
+  UserReportGetAllData,
 } from "../../interfaces/user/user.reports.interface";
 import { UserReportData } from "../../types/user/user.reports.type";
 import { TYPES } from "../../constants";
@@ -56,26 +57,14 @@ export class UserReportsService implements IUserReportsService {
     await this.repo.create(params, "REPLY_REPORT");
   }
 
-  async getAllReports(params: UserGetReportParams): Promise<UserReportData[]> {
-    const reports = await this.repo.get(params, "ALL");
+  async getAllReports(params: UserGetReportParams): Promise<UserReportGetAllData> {
+    const reports = await this.repo.getAll(params);
 
     return reports;
   }
 
-  async getUserReports(userId: string): Promise<UserReportData[]> {
-    const userReports = await this.repo.get({ userId }, "ALL");
-
-    return userReports;
-  }
-
   async getReport(userId: string, reportId: string): Promise<UserReportData> {
-    const report = await this.repo.get(
-      {
-        userId,
-        reportId,
-      },
-      "ONE"
-    );
+    const report = await this.repo.get(userId, reportId);
 
     return report;
   }
