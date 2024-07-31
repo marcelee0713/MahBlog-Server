@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IUserBlacklistedToken } from "../../interfaces/user/user.blacklisted_token.interface";
-import { ErrorType } from "../../types";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserBlacklistedToken implements IUserBlacklistedToken {
@@ -42,7 +42,13 @@ export class UserBlacklistedToken implements IUserBlacklistedToken {
   }
 
   convertNumberToDate = (time?: number) => {
-    if (!time) throw new Error("internal-server-error" as ErrorType);
+    if (!time)
+      throw new CustomError(
+        "internal-server-error",
+        "An iat/exp does not exist in the token payload",
+        500,
+        "UserBlacklistedTokenModel"
+      );
 
     const date = new Date(time * 1000);
 

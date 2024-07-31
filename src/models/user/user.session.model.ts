@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { IUserSession } from "../../interfaces/user/user.session.interface";
 import { UserSessionData } from "../../types/user/user.session.types";
-import { ErrorType } from "../../types";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserSession implements IUserSession {
@@ -69,7 +69,13 @@ export class UserSession implements IUserSession {
   };
 
   convertNumberToDate = (time?: number) => {
-    if (!time) throw new Error("internal-server-error" as ErrorType);
+    if (!time)
+      throw new CustomError(
+        "internal-server-error",
+        "An iat/exp does not exist in the token payload",
+        500,
+        "UserSessionModel"
+      );
 
     const date = new Date(time * 1000);
 

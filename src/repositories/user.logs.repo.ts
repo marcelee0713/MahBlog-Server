@@ -1,9 +1,9 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { IUserLogsRepository } from "../interfaces/user/user.logs.interface";
-import { ErrorType } from "../types";
 import { LogType, UserLogData } from "../types/user/user.logs.types";
 import { db } from "../config/db";
 import { injectable } from "inversify";
+import { CustomError } from "../utils/error_handler";
 
 @injectable()
 export class UserLogsRepository implements IUserLogsRepository {
@@ -13,7 +13,7 @@ export class UserLogsRepository implements IUserLogsRepository {
     this.db = db;
   }
 
-  async add(userId: string, type: LogType, content: string): Promise<void> {
+  async create(userId: string, type: LogType, content: string): Promise<void> {
     try {
       await this.db.userLogs.create({
         data: {
@@ -23,7 +23,13 @@ export class UserLogsRepository implements IUserLogsRepository {
         },
       });
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when creating a user log.",
+        500,
+        "UserLogsRepository",
+        "By creating a user log."
+      );
     }
   }
   async get(userId: string, type?: LogType): Promise<UserLogData | null> {
@@ -44,7 +50,13 @@ export class UserLogsRepository implements IUserLogsRepository {
         ...log,
       };
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when getting a user log.",
+        500,
+        "UserLogsRepository",
+        "By getting a user log."
+      );
     }
   }
 
@@ -59,7 +71,13 @@ export class UserLogsRepository implements IUserLogsRepository {
 
       return logs;
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when getting a user logs.",
+        500,
+        "UserLogsRepository",
+        `By getting a user logs and using the type: ${type}.`
+      );
     }
   }
 
@@ -74,11 +92,17 @@ export class UserLogsRepository implements IUserLogsRepository {
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
-          throw new Error("user-log-does-not-exist" as ErrorType);
+          throw new CustomError("does-not-exist", "User log does not exist.", 404);
         }
       }
 
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when deleting a user log.",
+        500,
+        "UserLogsRepository",
+        `By deleting a user log.`
+      );
     }
   }
 
@@ -92,11 +116,17 @@ export class UserLogsRepository implements IUserLogsRepository {
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
-          throw new Error("user-log-does-not-exist" as ErrorType);
+          throw new CustomError("does-not-exist", "User log does not exist.", 404);
         }
       }
 
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when deleting all user's logs.",
+        500,
+        "UserLogsRepository",
+        `By deleting all user's logs.`
+      );
     }
   }
 }

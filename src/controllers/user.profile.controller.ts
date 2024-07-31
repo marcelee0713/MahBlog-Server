@@ -1,10 +1,9 @@
 import { inject, injectable } from "inversify";
 import { IUserProfileService } from "../interfaces/user/user.profile.interface";
 import { TYPES } from "../constants";
-import { identifyErrors } from "../utils/error_handler";
+import { CustomError, identifyErrors } from "../utils/error_handler";
 import { Request, Response } from "express";
 import { FormatResponse } from "../utils/response_handler";
-import { ErrorType } from "../types";
 import { IMediaService } from "../interfaces/media.interface";
 import { IUserLogsService } from "../interfaces/user/user.logs.interface";
 
@@ -34,7 +33,7 @@ export class UserProfileController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -47,7 +46,7 @@ export class UserProfileController {
 
       const updateable = await this.logs.updateable(userId, "UPDATE_NAME");
 
-      if (!updateable) throw new Error("user-modification-denied" as ErrorType);
+      if (!updateable) throw new CustomError("user-modification-denied");
 
       await this.service.updateName(userId, fName, lName, mName);
 
@@ -56,7 +55,7 @@ export class UserProfileController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -77,7 +76,7 @@ export class UserProfileController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -86,7 +85,7 @@ export class UserProfileController {
       const userId = res.locals.userId as string;
       const file = req.file;
 
-      if (!file) throw new Error("invalid-image-upload" as ErrorType);
+      if (!file) throw new CustomError("invalid-image-upload");
 
       const user = await this.service.getUserProfile(userId);
 
@@ -119,7 +118,7 @@ export class UserProfileController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -128,7 +127,7 @@ export class UserProfileController {
       const userId = res.locals.userId as string;
       const file = req.file;
 
-      if (!file) throw new Error("invalid-image-upload" as ErrorType);
+      if (!file) throw new CustomError("invalid-image-upload");
 
       const user = await this.service.getUserProfile(userId);
 
@@ -158,7 +157,7 @@ export class UserProfileController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -175,7 +174,7 @@ export class UserProfileController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -192,7 +191,7 @@ export class UserProfileController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 }

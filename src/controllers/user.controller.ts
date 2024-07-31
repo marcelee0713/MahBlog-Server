@@ -2,10 +2,9 @@ import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { IUserService, UserUpdateBodyReq } from "../interfaces/user/user.interface";
 import { CLIENT_ROUTES, TYPES } from "../constants";
-import { identifyErrors } from "../utils/error_handler";
+import { CustomError, identifyErrors } from "../utils/error_handler";
 import { FormatResponse } from "../utils/response_handler";
 import { IAuthService } from "../interfaces/auth.interface";
-import { ErrorType } from "../types";
 import { IEmailService } from "../interfaces/email.interface";
 import { IUserBlacklistedTokenService } from "../interfaces/user/user.blacklisted_token.interface";
 import { IUserLogsService } from "../interfaces/user/user.logs.interface";
@@ -47,7 +46,7 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -63,7 +62,7 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -96,7 +95,7 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -111,7 +110,7 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -128,7 +127,7 @@ export class UserController {
         const currentPassword = data.body.currentPassword ?? "";
         const newPassword = data.body.password ?? "";
 
-        if (!currentPassword || !newPassword) throw new Error("missing-inputs" as ErrorType);
+        if (!currentPassword || !newPassword) throw new CustomError("missing-inputs");
 
         await this.service.updatePassword(userId, currentPassword, newPassword);
 
@@ -142,20 +141,19 @@ export class UserController {
         const currentPassword = data.body.currentPassword ?? "";
         const newPassword = data.body.password ?? "";
 
-        if (!currentPassword || !newPassword || !token)
-          throw new Error("missing-inputs" as ErrorType);
+        if (!currentPassword || !newPassword || !token) throw new CustomError("missing-inputs");
 
-        if (!token) throw new Error("missing-inputs" as ErrorType);
+        if (!token) throw new CustomError("missing-inputs");
 
         const payload = this.auth.decodeToken(token, "RESET_PASS");
 
         const onTheList = await this.blacklisted.isBlacklisted(payload.userId, token);
 
-        if (onTheList) throw new Error("request-already-used" as ErrorType);
+        if (onTheList) throw new CustomError("request-already-used");
 
         const isValid = this.auth.verifyToken(token, "RESET_PASS");
 
-        if (!isValid) throw new Error("request-expired" as ErrorType);
+        if (!isValid) throw new CustomError("request-expired");
 
         await this.service.updatePassword(payload.userId, currentPassword, newPassword);
 
@@ -167,17 +165,17 @@ export class UserController {
       if (data.body.useCase === "VERIFY_EMAIL") {
         const token = data.body.token as string;
 
-        if (!token) throw new Error("missing-inputs" as ErrorType);
+        if (!token) throw new CustomError("missing-inputs");
 
         const payload = this.auth.decodeToken(token, "EMAIL_VERIFY");
 
         const onTheList = await this.blacklisted.isBlacklisted(payload.userId, token);
 
-        if (onTheList) throw new Error("request-already-used" as ErrorType);
+        if (onTheList) throw new CustomError("request-already-used");
 
         const valid = this.auth.verifyToken(token, "EMAIL_VERIFY");
 
-        if (!valid) throw new Error("request-expired" as ErrorType);
+        if (!valid) throw new CustomError("request-expired");
 
         await this.service.verifyEmail(payload.userId, payload.email);
 
@@ -194,11 +192,11 @@ export class UserController {
         const currentEmail = data.body.email;
         const newEmail = data.body.newEmail;
 
-        if (!currentEmail || !newEmail) throw new Error("missing-inputs" as ErrorType);
+        if (!currentEmail || !newEmail) throw new CustomError("missing-inputs");
 
         const updateable = await this.logs.updateable(userId, "UPDATE_EMAIL");
 
-        if (!updateable) throw new Error("user-modification-denied" as ErrorType);
+        if (!updateable) throw new CustomError("user-modification-denied");
 
         const token = this.auth.createToken(
           { userId: userId, oldEmail: currentEmail, newEmail: newEmail },
@@ -216,7 +214,7 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -224,21 +222,21 @@ export class UserController {
     try {
       const token = req.body.token as string;
 
-      if (!token) throw new Error("missing-inputs" as ErrorType);
+      if (!token) throw new CustomError("missing-inputs");
 
       const payload = this.auth.decodeToken(token, "EMAIL_CHANGE");
 
       const onTheList = await this.blacklisted.isBlacklisted(payload.userId, token);
 
-      if (onTheList) throw new Error("request-already-used" as ErrorType);
+      if (onTheList) throw new CustomError("request-already-used");
 
       const isValid = this.auth.verifyToken(token, "EMAIL_CHANGE");
 
-      if (!isValid) throw new Error("request-expired" as ErrorType);
+      if (!isValid) throw new CustomError("request-expired");
 
       const updateable = await this.logs.updateable(payload.userId, "UPDATE_EMAIL");
 
-      if (!updateable) throw new Error("user-modification-denied" as ErrorType);
+      if (!updateable) throw new CustomError("user-modification-denied");
 
       await this.service.updateEmail(payload.userId, payload.oldEmail, payload.newEmail);
 
@@ -264,7 +262,7 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -276,7 +274,7 @@ export class UserController {
       const data = await this.service.getUserByEmail(email);
 
       if (useCase === "VERIFY_EMAIL") {
-        if (data.emailVerifiedAt) throw new Error("user-already-verified" as ErrorType);
+        if (data.emailVerifiedAt) throw new CustomError("user-already-verified");
 
         const emailVerficationToken = this.auth.createToken(
           {
@@ -299,7 +297,7 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -321,7 +319,7 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -335,7 +333,7 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 }

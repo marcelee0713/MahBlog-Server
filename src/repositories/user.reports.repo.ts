@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import {
   IUserReportsRepository,
   UserGetReportParams,
@@ -13,8 +13,8 @@ import {
   UserReportData,
 } from "../types/user/user.reports.type";
 import { db } from "../config/db";
-import { ErrorType } from "../types";
 import { injectable } from "inversify";
+import { CustomError } from "../utils/error_handler";
 
 @injectable()
 export class UserReportsRepository implements IUserReportsRepository {
@@ -179,7 +179,25 @@ export class UserReportsRepository implements IUserReportsRepository {
         }
       }
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === "P2025") {
+          throw new CustomError(
+            "does-not-exist",
+            `An error occured because one of the details no longer exist.`,
+            404,
+            "UserReportsRepository",
+            `By joining/combining tables that no longer exist.`
+          );
+        }
+      }
+
+      throw new CustomError(
+        "internal-server-error",
+        `An error occured when creating a report by using the type: ${type}.`,
+        500,
+        "UserReportsRepository",
+        `By creating a ${type}`
+      );
     }
   }
 
@@ -252,7 +270,12 @@ export class UserReportsRepository implements IUserReportsRepository {
 
       return data;
     } catch (err) {
-      throw new Error("Not implemented");
+      throw new CustomError(
+        "internal-server-error",
+        `An error occured when getting all reports.`,
+        500,
+        "UserReportsRepository"
+      );
     }
   }
 
@@ -268,7 +291,9 @@ export class UserReportsRepository implements IUserReportsRepository {
         },
       });
 
-      if (!data) throw Error("hehe");
+      if (!data) {
+        throw new CustomError("does-not-exist", `User report does not exist`);
+      }
 
       const details: UserReportDetails | undefined = data.details
         ? {
@@ -287,7 +312,12 @@ export class UserReportsRepository implements IUserReportsRepository {
         details: details,
       };
     } catch (err) {
-      throw new Error("Not implemented");
+      throw new CustomError(
+        "internal-server-error",
+        `An error occured when a report.`,
+        500,
+        "UserReportsRepository"
+      );
     }
   }
 
@@ -328,8 +358,25 @@ export class UserReportsRepository implements IUserReportsRepository {
         }
       }
     } catch (err) {
-      console.log(err);
-      throw new Error("internal-server-error" as ErrorType);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === "P2025") {
+          throw new CustomError(
+            "does-not-exist",
+            `User report does not exist.`,
+            404,
+            "UserReportsRepository",
+            `By doing the use case to delete: ${type}`
+          );
+        }
+      }
+
+      throw new CustomError(
+        "internal-server-error",
+        `An internal server error occured when doing the use case to delete ${type}.`,
+        500,
+        "UserReportsRepository",
+        `By doing the use case to delete: ${type}`
+      );
     }
   }
 }

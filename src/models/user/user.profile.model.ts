@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { IUserProfile } from "../../interfaces/user/user.profile.interface";
-import { ErrorType } from "../../types";
 import { UserProfileData } from "../../types/user/user.profile.types";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserProfile implements IUserProfile {
@@ -96,28 +96,28 @@ export class UserProfile implements IUserProfile {
   };
 
   validateFirstname = (firstName: string) => {
-    if (firstName.length < 2) throw new Error("invalid-first-name" as ErrorType);
+    if (firstName.length < 2) throw new CustomError("invalid-first-name");
 
-    if (firstName.length > 50) throw new Error("invalid-first-name" as ErrorType);
+    if (firstName.length > 50) throw new CustomError("invalid-first-name");
   };
 
   validateLastName = (lastName: string) => {
-    if (lastName.length < 2) throw new Error("invalid-last-name" as ErrorType);
+    if (lastName.length < 2) throw new CustomError("invalid-last-name");
 
-    if (lastName.length > 80) throw new Error("invalid-last-name" as ErrorType);
+    if (lastName.length > 80) throw new CustomError("invalid-last-name");
   };
 
   validateMiddleName = (middleName?: string) => {
     if (!middleName) return;
 
-    if (middleName.length < 2) throw new Error("invalid-middle-name" as ErrorType);
+    if (middleName.length < 2) throw new CustomError("invalid-middle-name");
 
-    if (middleName.length > 50) throw new Error("invalid-middle-name" as ErrorType);
+    if (middleName.length > 50) throw new CustomError("invalid-middle-name");
   };
 
   validateBio = (bio?: string) => {
     if (!bio) return;
 
-    if (bio.length > 255) throw new Error("invalid-bio" as ErrorType);
+    if (bio.length > 255) throw new CustomError("invalid-bio");
   };
 }

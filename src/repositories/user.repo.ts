@@ -4,8 +4,7 @@ import { UserData, UserGetType, UserGetUseCase } from "../types/user/user.types"
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../config/db";
 import bcrypt from "bcrypt";
-import { ErrorType } from "../types";
-import { returnError } from "../utils/error_handler";
+import { CustomError } from "../utils/error_handler";
 
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -24,16 +23,16 @@ export class UserRepository implements IUserRepository {
         },
       });
 
-      if (!user) throw new Error("user-does-not-exist" as ErrorType);
+      if (!user) throw new CustomError("does-not-exist", "User does not exist.");
 
       if (params.password) {
         const isMatch = await bcrypt.compare(params.password, user.password);
 
-        if (!isMatch) throw new Error("wrong-credentials" as ErrorType);
+        if (!isMatch) throw new CustomError("wrong-credentials");
       }
 
       if (type === "SIGNING_IN" && !user.emailVerifiedAt) {
-        throw new Error("user-not-verified" as ErrorType);
+        throw new CustomError("user-not-verified");
       }
 
       // I don't know why the password is on the object when I don't even have
@@ -47,7 +46,15 @@ export class UserRepository implements IUserRepository {
         createdAt: user.createdAt,
       };
     } catch (err) {
-      throw new Error(returnError(err));
+      if (err instanceof CustomError) throw err;
+
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when getting a user.",
+        500,
+        "UserRepository",
+        `By getting a user data when using the use case: ${type}`
+      );
     }
   }
 
@@ -72,17 +79,23 @@ export class UserRepository implements IUserRepository {
       };
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2002") throw new Error("user-already-exist" as ErrorType);
+        if (err.code === "P2002") throw new CustomError("user-already-exist");
       }
 
-      throw new Error(returnError(err));
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when creating a user.",
+        500,
+        "UserRepository",
+        `By creating a user.`
+      );
     }
   }
 
   async updateUserData(params: UserUpdateParams): Promise<void> {
     try {
       if (params.useCase === "CHANGE_EMAIL") {
-        if (!params.email || !params.newEmail) throw new Error("missing-inputs" as ErrorType);
+        if (!params.email || !params.newEmail) throw new CustomError("missing-inputs");
 
         await this.db.users.update({
           where: {
@@ -99,7 +112,7 @@ export class UserRepository implements IUserRepository {
       }
 
       if (params.useCase === "CHANGE_PASSWORD") {
-        if (!params.password || !params.newPassword) throw new Error("missing-inputs" as ErrorType);
+        if (!params.password || !params.newPassword) throw new CustomError("missing-inputs");
 
         const user = await this.db.users.findFirst({
           where: {
@@ -107,15 +120,15 @@ export class UserRepository implements IUserRepository {
           },
         });
 
-        if (!user) throw new Error("user-does-not-exist" as ErrorType);
+        if (!user) throw new CustomError("does-not-exist", "User does not exist.");
 
         const matchPassword = await bcrypt.compare(params.password, user.password);
 
         const samePassword = await bcrypt.compare(params.newPassword, user.password);
 
-        if (!matchPassword) throw new Error("user-current-password-does-not-match" as ErrorType);
+        if (!matchPassword) throw new CustomError("user-current-password-does-not-match");
 
-        if (samePassword) throw new Error("user-enters-same-password" as ErrorType);
+        if (samePassword) throw new CustomError("user-enters-same-password");
 
         await this.db.users.update({
           where: {
@@ -130,7 +143,7 @@ export class UserRepository implements IUserRepository {
       }
 
       if (params.useCase === "VERIFY_EMAIL") {
-        if (!params.email) throw new Error("missing-inputs" as ErrorType);
+        if (!params.email) throw new CustomError("missing-inputs");
 
         await this.db.users.update({
           where: {
@@ -144,12 +157,20 @@ export class UserRepository implements IUserRepository {
       }
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2001") {
-          throw new Error("user-does-not-exist" as ErrorType);
+        if (err.code === "P2025") {
+          throw new CustomError("does-not-exist", "User does not exist.");
         }
       }
 
-      throw new Error(returnError(err));
+      if (err instanceof CustomError) throw err;
+
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when updating a user.",
+        500,
+        "UserRepository",
+        `By updating a user data when using the use case: ${params.useCase}`
+      );
     }
   }
 
@@ -162,12 +183,18 @@ export class UserRepository implements IUserRepository {
       });
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2001") {
-          throw new Error("user-does-not-exist" as ErrorType);
+        if (err.code === "P2025") {
+          throw new CustomError("does-not-exist", "User does not exist.");
         }
       }
 
-      throw new Error(returnError(err));
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when deleting a user.",
+        500,
+        "UserRepository",
+        `By deleting a user.`
+      );
     }
   }
 }

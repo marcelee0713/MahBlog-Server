@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { IUserReports } from "../../interfaces/user/user.reports.interface";
-import { ErrorType } from "../../types";
 import { ReportCategories, ReportType } from "../../types/user/user.reports.type";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserReports implements IUserReports {
@@ -12,6 +12,6 @@ export class UserReports implements IUserReports {
   type!: ReportType;
   category!: ReportCategories;
   validateDesc = (desc?: string) => {
-    if (desc && desc.length > 500) throw new Error("invalid-error-description" as ErrorType);
+    if (desc && desc.length > 500) throw new CustomError("invalid-report-description");
   };
 }

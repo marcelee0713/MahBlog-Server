@@ -1,12 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { ErrorType } from "../types";
 import { inject, injectable } from "inversify";
 import { IUserSessionService } from "../interfaces/user/user.session.interface";
 import { TYPES } from "../constants";
 import { IAuthService } from "../interfaces/auth.interface";
-import { bodyError, identifyErrors } from "../utils/error_handler";
+import { bodyError, CustomError, identifyErrors } from "../utils/error_handler";
 import { AnyZodObject, z } from "zod";
-import multer from "multer";
 import { upload } from "../config/multer";
 
 @injectable()
@@ -27,7 +25,7 @@ export class UserMiddleware {
       const authHeader = req.headers["authorization"];
 
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new Error("authorization-header-missing" as ErrorType);
+        throw new CustomError("authorization-header-missing");
       }
 
       const token = authHeader.split(" ")[1];
@@ -48,7 +46,7 @@ export class UserMiddleware {
       if (!isRefreshTokenValid) {
         await this.session.deleteSession(payload.userId, payload.sessionId);
 
-        throw new Error("user-session-expired" as ErrorType);
+        throw new CustomError("user-session-expired");
       }
 
       const rPayload = this.auth.decodeToken(refreshToken, "REFRESH");
@@ -68,7 +66,7 @@ export class UserMiddleware {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -79,8 +77,7 @@ export class UserMiddleware {
           body: req.body,
         });
         return next();
-      } catch (error) {
-        const err = error;
+      } catch (err) {
         if (err instanceof z.ZodError) {
           return res.status(400).json(bodyError(err));
         }
@@ -94,8 +91,8 @@ export class UserMiddleware {
     return (req: Request, res: Response, next: NextFunction) => {
       upload.single(name)(req, res, (err: unknown) => {
         if (err) {
-          const errObj = identifyErrors(new Error("invalid-image-upload"));
-          return res.status(errObj.code).json(errObj);
+          const errObj = identifyErrors(new CustomError("invalid-image-upload"));
+          return res.status(errObj.status).json(errObj);
         }
 
         next();

@@ -1,8 +1,8 @@
 import { injectable } from "inversify";
 import { IMediaService } from "../interfaces/media.interface";
-import { ErrorType } from "../types";
 import cloudinary from "../config/cloudinary";
 import { extractPublicId } from "cloudinary-build-url";
+import { CustomError } from "../utils/error_handler";
 
 @injectable()
 export class MediaService implements IMediaService {
@@ -20,7 +20,7 @@ export class MediaService implements IMediaService {
 
       return image.secure_url;
     } catch (err) {
-      throw new Error("media-service-error" as ErrorType);
+      throw new CustomError("media-service-error");
     }
   }
 
@@ -30,7 +30,7 @@ export class MediaService implements IMediaService {
 
       await this.media.uploader.destroy(publicId);
     } catch (err) {
-      throw new Error("media-service-error" as ErrorType);
+      throw new CustomError("media-service-error");
     }
   }
 }

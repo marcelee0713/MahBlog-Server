@@ -2,9 +2,8 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { IUserSessionRepository } from "../interfaces/user/user.session.interface";
 import { UserSessionData } from "../types/user/user.session.types";
 import { db } from "../config/db";
-import { ErrorType } from "../types";
 import { injectable } from "inversify";
-import { returnError } from "../utils/error_handler";
+import { CustomError } from "../utils/error_handler";
 
 @injectable()
 export class UserSessionRepository implements IUserSessionRepository {
@@ -30,7 +29,25 @@ export class UserSessionRepository implements IUserSessionRepository {
         },
       });
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === "P2025") {
+          throw new CustomError(
+            "does-not-exist",
+            `An error occured because the user no longer exist.`,
+            404,
+            "UserSessionRepository",
+            `By joining/combining tables that no longer exist.`
+          );
+        }
+      }
+
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when creating a user session.",
+        500,
+        "UserSessionRepository",
+        `By creating a user session`
+      );
     }
   }
 
@@ -43,9 +60,9 @@ export class UserSessionRepository implements IUserSessionRepository {
         },
       });
 
-      if (!data) throw new Error("user-session-does-not-exist" as ErrorType);
+      if (!data) throw new CustomError("does-not-exist", "User session does not exist.");
 
-      if (!data.userId) throw new Error("user-does-not-exist" as ErrorType);
+      if (!data.userId) throw new CustomError("does-not-exist", "User does not exist.");
 
       return {
         sessionId: data.sessionId,
@@ -55,7 +72,15 @@ export class UserSessionRepository implements IUserSessionRepository {
         expiresAt: data.expiresAt,
       };
     } catch (err) {
-      throw new Error(returnError(err));
+      if (err instanceof CustomError) throw err;
+
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when getting a user session data.",
+        500,
+        "UserRepository",
+        `By getting user session data.`
+      );
     }
   }
 
@@ -70,11 +95,23 @@ export class UserSessionRepository implements IUserSessionRepository {
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
-          throw new Error("user-session-does-not-exist" as ErrorType);
+          throw new CustomError(
+            "does-not-exist",
+            `An error occured because either the user or session no longer exist.`,
+            404,
+            "UserSessionRepository",
+            `By deleting tables that no longer exist.`
+          );
         }
       }
 
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when deleting a user session data.",
+        500,
+        "UserRepository",
+        `By deleting user session data.`
+      );
     }
   }
 
@@ -88,11 +125,23 @@ export class UserSessionRepository implements IUserSessionRepository {
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
-          throw new Error("user-session-does-not-exist" as ErrorType);
+          throw new CustomError(
+            "does-not-exist",
+            `An error occured because the user or no longer exist.`,
+            404,
+            "UserSessionRepository",
+            `By user's sessions when the user no longer exist.`
+          );
         }
       }
 
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when deleting a user's sessions.",
+        500,
+        "UserRepository",
+        `By deleting user's sessions.`
+      );
     }
   }
 }

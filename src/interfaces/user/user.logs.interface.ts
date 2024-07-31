@@ -29,7 +29,7 @@ export interface IUserLogsService {
 }
 
 export interface IUserLogsRepository {
-  add: (userId: string, type: LogType, content: string) => Promise<void>;
+  create: (userId: string, type: LogType, content: string) => Promise<void>;
   get: (userId: string, type?: LogType) => Promise<UserLogData | null>;
   getAll: (userId: string, type?: LogType) => Promise<UserLogData[]>;
   delete: (logId: string, userId: string) => Promise<void>;

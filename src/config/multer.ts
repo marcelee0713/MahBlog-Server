@@ -1,5 +1,4 @@
 import multer from "multer";
-import { ErrorType } from "../types";
 import path from "path";
 
 const multerStorage = multer.diskStorage({

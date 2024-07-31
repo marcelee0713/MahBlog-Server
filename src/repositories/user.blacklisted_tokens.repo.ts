@@ -1,12 +1,12 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { IUserBlacklistedTokenRepository } from "../interfaces/user/user.blacklisted_token.interface";
-import { ErrorType } from "../types";
 import {
   UserBlackListedAddRepoParams,
   UserBlacklistedTokenData,
 } from "../types/user/user.blacklisted_tokens.types";
 import { db } from "../config/db";
 import { injectable } from "inversify";
+import { CustomError } from "../utils/error_handler";
 
 @injectable()
 export class UserBlacklistedTokenRepository implements IUserBlacklistedTokenRepository {
@@ -16,7 +16,7 @@ export class UserBlacklistedTokenRepository implements IUserBlacklistedTokenRepo
     this.db = db;
   }
 
-  async add(data: UserBlackListedAddRepoParams): Promise<void> {
+  async create(data: UserBlackListedAddRepoParams): Promise<void> {
     try {
       await this.db.userBlacklistedTokens.create({
         data: {
@@ -27,7 +27,13 @@ export class UserBlacklistedTokenRepository implements IUserBlacklistedTokenRepo
         },
       });
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when creating a blacklisted token",
+        500,
+        "UserBlacklistedTokensRepository",
+        "By creating a blacklisted token"
+      );
     }
   }
 
@@ -49,7 +55,13 @@ export class UserBlacklistedTokenRepository implements IUserBlacklistedTokenRepo
         token: data.token,
       };
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when getting a blacklisted token",
+        500,
+        "UserBlacklistedTokensRepository",
+        "By getting a blacklisted token"
+      );
     }
   }
 
@@ -76,7 +88,13 @@ export class UserBlacklistedTokenRepository implements IUserBlacklistedTokenRepo
 
       return newData;
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when getting all the user's blacklisted tokens",
+        500,
+        "UserBlacklistedTokensRepository",
+        "By getting all the user's blacklisted tokens"
+      );
     }
   }
 
@@ -90,11 +108,17 @@ export class UserBlacklistedTokenRepository implements IUserBlacklistedTokenRepo
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
-          throw new Error("user-blacklisted-token-does-not-exist" as ErrorType);
+          throw new CustomError("does-not-exist", "Blacklisted token does not exist", 404);
         }
       }
 
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when deleting a blacklisted token",
+        500,
+        "UserBlacklistedTokensRepository",
+        "By deleting a blacklisted token"
+      );
     }
   }
 
@@ -108,7 +132,13 @@ export class UserBlacklistedTokenRepository implements IUserBlacklistedTokenRepo
         },
       });
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when deleting a expired blacklisted tokens",
+        500,
+        "UserBlacklistedTokensRepository",
+        "By deleting expired blacklisted tokens"
+      );
     }
   }
 }

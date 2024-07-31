@@ -32,7 +32,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -48,7 +48,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -64,7 +64,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -80,7 +80,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -96,7 +96,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -112,7 +112,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -127,7 +127,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -139,7 +139,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -153,7 +153,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 
@@ -168,7 +168,7 @@ export class UserReportsController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
-      return res.status(errObj.code).json(errObj);
+      return res.status(errObj.status).json(errObj);
     }
   }
 }

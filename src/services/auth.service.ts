@@ -3,7 +3,7 @@ import { IAuthService } from "../interfaces/auth.interface";
 import { PayloadType, SessionType } from "../types/user/user.session.types";
 import { injectable } from "inversify";
 import { TOKENS_LIFESPAN } from "../constants";
-import { ErrorType } from "../types";
+import { CustomError } from "../utils/error_handler";
 
 @injectable()
 export class AuthService implements IAuthService {
@@ -66,7 +66,13 @@ export class AuthService implements IAuthService {
       }
 
       default:
-        throw new Error("internal-server-error" as ErrorType);
+        throw new CustomError(
+          "internal-server-error",
+          "An internal server error occured when creating a token.",
+          500,
+          "AuthService",
+          `By creating a token when using the use case: ${type}`
+        );
     }
   }
 
@@ -94,7 +100,13 @@ export class AuthService implements IAuthService {
           break;
 
         default:
-          throw new Error("internal-server-error" as ErrorType);
+          throw new CustomError(
+            "internal-server-error",
+            "An internal server error occured when verifying a token.",
+            500,
+            "AuthService",
+            `By verifying a token when using the use case: ${type}`
+          );
       }
 
       return true;
@@ -121,7 +133,13 @@ export class AuthService implements IAuthService {
         return this.jwtClient.decode(token) as PayloadType<T>;
 
       default:
-        throw new Error("internal-server-error" as ErrorType);
+        throw new CustomError(
+          "internal-server-error",
+          "An internal server error occured when decoding a token.",
+          500,
+          "AuthService",
+          `By decoding a token when using the use case: ${type}`
+        );
     }
   }
 }

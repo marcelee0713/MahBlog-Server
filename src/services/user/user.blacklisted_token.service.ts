@@ -24,7 +24,7 @@ export class UserBlacklistedTokenService implements IUserBlacklistedTokenService
     const createdAt = this.entity.convertNumberToDate(params.iat);
     const expiresAt = this.entity.convertNumberToDate(params.exp);
 
-    await this.repo.add({
+    await this.repo.create({
       ...params,
       createdAt,
       expiresAt,

@@ -1,18 +1,51 @@
 import { z } from "zod";
-import { errors } from "../constants/errors";
-import { ErrorObject, ErrorReqBody, ErrorReqStack } from "../interfaces/error.interface";
+import { KNOWN_ERRORS } from "../constants/errors";
+import { ErrorReqBody, ErrorReqStack, ErrorResponse } from "../interfaces/error.interface";
 import { ErrorType } from "../types";
 
-const identifyErrors = (err: unknown): ErrorObject => {
-  if (err instanceof Error) return errors[err.message as ErrorType];
+class CustomError extends Error {
+  type: ErrorType;
+  where?: string;
+  cause?: string;
+  status?: number;
 
-  return errors["internal-server-error"];
-};
+  constructor(type: ErrorType, message?: string, status?: number, where?: string, cause?: string) {
+    super(message);
+    this.type = type;
+    this.where = where;
+    this.cause = cause;
+    this.status = status;
 
-const returnError = (err: unknown): ErrorType => {
-  if (err instanceof Error) return err.message as ErrorType;
+    Object.setPrototypeOf(this, CustomError.prototype);
+  }
+}
 
-  return "internal-server-error" as ErrorType;
+const identifyErrors = (err: unknown | CustomError): ErrorResponse => {
+  let res: ErrorResponse = {
+    status: 500,
+    error: {
+      code: "internal-server-error",
+      message: "Unknown internal server error",
+    },
+    timestamp: new Date().toISOString(),
+  };
+
+  if (err instanceof CustomError) {
+    const knownError = KNOWN_ERRORS[err.type];
+
+    res = {
+      status: err.status ?? knownError.status,
+      error: {
+        code: err.type,
+        message: err.message ?? knownError.message,
+        cause: err.cause ?? undefined,
+        where: err.where ?? undefined,
+      },
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  return res;
 };
 
 export const bodyError = (err: z.ZodError): ErrorReqStack => {
@@ -25,7 +58,7 @@ export const bodyError = (err: z.ZodError): ErrorReqStack => {
     const error: ErrorReqBody = {
       message: val.message,
       type: val.code,
-      at: val.path,
+      where: val.path,
     };
 
     errorReqStack.errors.push(error);
@@ -34,4 +67,4 @@ export const bodyError = (err: z.ZodError): ErrorReqStack => {
   return errorReqStack;
 };
 
-export { identifyErrors, returnError };
+export { identifyErrors, CustomError };

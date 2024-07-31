@@ -6,9 +6,9 @@ import {
   UserProfileUpdateUseCase,
   UserProfileUpdateType,
 } from "../types/user/user.profile.types";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../config/db";
-import { ErrorType } from "../types";
+import { CustomError } from "../utils/error_handler";
 
 @injectable()
 export class UserProfileRepository implements IUserProfileRepository {
@@ -26,7 +26,7 @@ export class UserProfileRepository implements IUserProfileRepository {
         },
       });
 
-      if (!data) throw new Error("user-does-not-exist" as ErrorType);
+      if (!data) throw new CustomError("does-not-exist", "User does not exist.");
 
       return {
         ...data,
@@ -36,7 +36,13 @@ export class UserProfileRepository implements IUserProfileRepository {
         profileCover: data.profileCover ?? undefined,
       };
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when getting the user's profile data.",
+        500,
+        "UserProfileRepository",
+        `By getting a user profile data.`
+      );
     }
   }
 
@@ -79,7 +85,19 @@ export class UserProfileRepository implements IUserProfileRepository {
         });
       }
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === "P2025") {
+          throw new CustomError("does-not-exist", "User does not exist.");
+        }
+      }
+
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when updating the user's profile data.",
+        500,
+        "UserProfileRepository",
+        `By updating a user profile data by using the use case: ${type}`
+      );
     }
   }
 
@@ -148,7 +166,19 @@ export class UserProfileRepository implements IUserProfileRepository {
         }
       }
     } catch (err) {
-      throw new Error("internal-server-error" as ErrorType);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === "P2025") {
+          throw new CustomError("does-not-exist", "User does not exist.");
+        }
+      }
+
+      throw new CustomError(
+        "internal-server-error",
+        "An internal server error occured when updating the user's profile data.",
+        500,
+        "UserProfileRepository",
+        `By updating a user profile data by using the use case: ${type}`
+      );
     }
   }
 }

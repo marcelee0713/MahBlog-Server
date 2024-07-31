@@ -2,8 +2,8 @@ import { Transporter, createTransport } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { EmailParams, IEmailService } from "../interfaces/email.interface";
 import { injectable } from "inversify";
-import { ErrorType } from "../types";
 import { EMAIL_CHANGE_CONTENT, EMAIL_RESET_PASSWORD, EMAIL_VERIFY_CONTENT } from "../constants";
+import { CustomError } from "../utils/error_handler";
 
 @injectable()
 export class EmailService implements IEmailService {
@@ -39,7 +39,7 @@ export class EmailService implements IEmailService {
         html: `<h1>Email Verification</h1><br><a href=${link}>Confirm Email and Sign in</a><br><p>This will expire in one day. <strong>DO NOT SHARE THIS LINK!</strong></p>`,
       });
     } catch (err) {
-      throw new Error("email-service-error" as ErrorType);
+      throw new CustomError("email-service-error");
     }
   }
 
@@ -57,7 +57,7 @@ export class EmailService implements IEmailService {
         html: `<h1>Email Change Confirmation</h1><br><a href=${link}>Click and confirm</a><br><p>This will expire in one day. <strong>DO NOT SHARE THIS LINK!</strong></p>`,
       });
     } catch (err) {
-      throw new Error("email-service-error" as ErrorType);
+      throw new CustomError("email-service-error");
     }
   }
 
@@ -75,7 +75,7 @@ export class EmailService implements IEmailService {
         html: `<h1>Password Reset</h1><br><a href=${link}>Reset your password</a><br><p>This will expire in one day. <strong>DO NOT SHARE THIS LINK!</strong></p>`,
       });
     } catch (err) {
-      throw new Error("email-service-error" as ErrorType);
+      throw new CustomError("email-service-error");
     }
   }
 }

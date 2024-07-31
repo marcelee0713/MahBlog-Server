@@ -30,7 +30,7 @@ export interface IUserBlacklistedTokenService {
 }
 
 export interface IUserBlacklistedTokenRepository {
-  add(data: UserBlackListedAddRepoParams): Promise<void>;
+  create(data: UserBlackListedAddRepoParams): Promise<void>;
   get(userId: string, token: string): Promise<UserBlacklistedTokenData | null>;
   getAll(userId?: string): Promise<UserBlacklistedTokenData[]>;
   deleteToken(token: string): Promise<void>;

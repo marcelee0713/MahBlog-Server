@@ -6,7 +6,7 @@ import {
 } from "../../interfaces/user/user.logs.interface";
 import { LogType, UserLogData } from "../../types/user/user.logs.types";
 import { TYPES } from "../../constants";
-import { ErrorType } from "../../types";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserLogsService implements IUserLogsService {
@@ -24,7 +24,7 @@ export class UserLogsService implements IUserLogsService {
   async addLog(userId: string, type: LogType): Promise<void> {
     const content = this.entity.getDefaultContent(type);
 
-    await this.repo.add(userId, type, content);
+    await this.repo.create(userId, type, content);
   }
 
   async updateable(userId: string, type: LogType): Promise<boolean> {
@@ -42,7 +42,7 @@ export class UserLogsService implements IUserLogsService {
   async getLog(userId: string, type?: LogType): Promise<UserLogData> {
     const log = await this.repo.get(userId, type);
 
-    if (!log) throw new Error("user-log-does-not-exist" as ErrorType);
+    if (!log) throw new CustomError("does-not-exist", "User log does not exist.");
 
     return log;
   }
