@@ -7,13 +7,13 @@ export interface ErrorObject {
 
 export interface ErrorReqStack {
   errors: ErrorReqBody[];
-  code?: "400";
+  code: number;
 }
 
 export interface ErrorReqBody {
   message: string;
-  type: string;
-  where: (string | number)[];
+  code: string;
+  where: string;
 }
 
 export interface ErrorResponse {
@@ -21,8 +21,8 @@ export interface ErrorResponse {
   error: {
     code: ErrorType;
     message: string;
-    where?: string;
-    cause?: string;
+    where: string | null;
+    cause: string | null;
   };
   timestamp: string;
 }

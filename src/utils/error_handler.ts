@@ -26,6 +26,8 @@ const identifyErrors = (err: unknown | CustomError): ErrorResponse => {
     error: {
       code: "internal-server-error",
       message: "Unknown internal server error",
+      cause: null,
+      where: null,
     },
     timestamp: new Date().toISOString(),
   };
@@ -37,9 +39,9 @@ const identifyErrors = (err: unknown | CustomError): ErrorResponse => {
       status: err.status ?? knownError.status,
       error: {
         code: err.type,
-        message: err.message ?? knownError.message,
-        cause: err.cause ?? undefined,
-        where: err.where ?? undefined,
+        message: !err.message || err.message === "" ? knownError.message : err.message,
+        cause: err.cause ?? null,
+        where: err.where ?? null,
       },
       timestamp: new Date().toISOString(),
     };
@@ -51,14 +53,14 @@ const identifyErrors = (err: unknown | CustomError): ErrorResponse => {
 export const bodyError = (err: z.ZodError): ErrorReqStack => {
   const errorReqStack: ErrorReqStack = {
     errors: [],
-    code: "400",
+    code: 400,
   };
 
   err.issues.forEach((val) => {
     const error: ErrorReqBody = {
       message: val.message,
-      type: val.code,
-      where: val.path,
+      code: val.code,
+      where: val.path[1].toString(),
     };
 
     errorReqStack.errors.push(error);

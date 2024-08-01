@@ -8,7 +8,7 @@ import { CustomError } from "../../utils/error_handler";
 export class User implements IUser {
   userId!: string;
   email!: string;
-  emailVerifiedAt!: Date | undefined;
+  emailVerifiedAt?: Date | null;
   createdAt!: Date;
   role!: UserRoles;
   status!: UserStatus;
@@ -46,7 +46,7 @@ export class User implements IUser {
     this.email = email;
   };
 
-  setEmailVerified = (date: Date | undefined) => {
+  setEmailVerified = (date?: Date | null) => {
     this.emailVerifiedAt = date;
   };
 

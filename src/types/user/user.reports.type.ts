@@ -14,7 +14,7 @@ import {
 } from "../../interfaces/user/user.reports.interface";
 
 export type UserReportData = ExcludeFunctions<IUserReports> & {
-  details?: UserReportDetails;
+  details: UserReportDetails | null;
 };
 
 export const ReportTypeArr = [

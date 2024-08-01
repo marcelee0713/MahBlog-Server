@@ -30,10 +30,6 @@ export class UserProfileRepository implements IUserProfileRepository {
 
       return {
         ...data,
-        bio: data.middleName ?? undefined,
-        middleName: data.middleName ?? undefined,
-        profilePicture: data.profilePicture ?? undefined,
-        profileCover: data.profileCover ?? undefined,
       };
     } catch (err) {
       throw new CustomError(

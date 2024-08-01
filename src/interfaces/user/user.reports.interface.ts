@@ -76,10 +76,10 @@ export interface UserGetReportParams {
 export interface UserReportDetails {
   reportDetailId: string;
   reportId: string;
-  reportedUserId?: string | null;
-  reportedBlogId?: string | null;
-  reportedCommentId?: string | null;
-  reportedReplyId?: string | null;
+  reportedUserId: string | null;
+  reportedBlogId: string | null;
+  reportedCommentId: string | null;
+  reportedReplyId: string | null;
 }
 
 export interface UserReportGetAllData {

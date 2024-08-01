@@ -35,6 +35,4 @@ app.use("/api/v1/user-reports", userReportsRouter);
 // TODO: UserConnections and UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
 
-// TODO: Set the empty values into null instead of undefined
-
 // TODO: Add rate limiters to all of these routes

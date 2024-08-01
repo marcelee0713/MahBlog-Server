@@ -10,21 +10,21 @@ import {
 export interface IUser {
   userId: string;
   email: string;
-  emailVerifiedAt?: Date;
+  emailVerifiedAt?: Date | null;
   createdAt: Date;
   role: UserRoles;
   status: UserStatus;
   getUser: () => UserData;
   getUserId: () => string;
   getEmail: () => string;
-  getEmailVerified: () => Date | undefined;
+  getEmailVerified: () => Date | undefined | null;
   getCreatedAt: () => Date;
   getRole: () => UserRoles;
   getStatus: () => UserStatus;
   setUser: (data: UserData) => void;
   setUserId: (userId: string) => void;
   setEmail: (email: string) => void;
-  setEmailVerified: (date: Date | undefined) => void;
+  setEmailVerified: (date?: Date | null) => void;
   setCreatedAt: (date: Date) => void;
   setRole: (role: UserRoles) => void;
   setStatus: (status: UserStatus) => void;

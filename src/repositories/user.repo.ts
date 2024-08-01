@@ -42,7 +42,7 @@ export class UserRepository implements IUserRepository {
         email: user.email,
         role: user.role,
         status: user.status,
-        emailVerifiedAt: user.emailVerifiedAt ?? undefined,
+        emailVerifiedAt: user.emailVerifiedAt,
         createdAt: user.createdAt,
       };
     } catch (err) {
@@ -75,7 +75,7 @@ export class UserRepository implements IUserRepository {
 
       return {
         ...user,
-        emailVerifiedAt: user.emailVerifiedAt ?? undefined,
+        emailVerifiedAt: user.emailVerifiedAt,
       };
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {

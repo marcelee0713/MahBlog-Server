@@ -10,33 +10,38 @@ export interface IUserProfile {
   userId: string;
   firstName: string;
   lastName: string;
-  middleName?: string;
-  profilePicture?: string;
-  profileCover?: string;
-  bio?: string;
+  middleName?: string | null;
+  profilePicture?: string | null;
+  profileCover?: string | null;
+  bio?: string | null;
   getProfile: () => UserProfileData;
   getProfileId: () => string;
   getUserId: () => string;
   getFirstName: () => string;
-  getMiddleName: () => string | undefined;
-  getLastName: () => string | undefined;
-  getProfilePicture: () => string | undefined;
-  getCover: () => string | undefined;
-  getBio: () => string | undefined;
+  getMiddleName: () => string | null | undefined;
+  getLastName: () => string | null;
+  getProfilePicture: () => string | null | undefined;
+  getCover: () => string | null | undefined;
+  getBio: () => string | null | undefined;
   setProfile: (data: UserProfileData) => void;
   setProfileId: (profileId: string) => void;
   setUserId: (userId: string) => void;
   setFirstName: (firstName: string) => void;
-  setMiddleName: (middleName?: string) => void;
+  setMiddleName: (middleName?: string | null) => void;
   setLastName: (lastName: string) => void;
-  setPfp: (pfp?: string) => void;
-  setCover: (cover?: string) => void;
-  setBio: (bio?: string) => void;
-  validate: (firstName: string, lastName: string, middleName?: string, bio?: string) => void;
+  setPfp: (pfp?: string | null) => void;
+  setCover: (cover?: string | null) => void;
+  setBio: (bio?: string | null) => void;
+  validate: (
+    firstName: string,
+    lastName: string,
+    middleName?: string | null,
+    bio?: string | null
+  ) => void;
   validateFirstname: (firstName: string) => void;
   validateLastName: (lastName: string) => void;
-  validateMiddleName: (middleName?: string) => void;
-  validateBio: (bio?: string) => void;
+  validateMiddleName: (middleName?: string | null) => void;
+  validateBio: (bio?: string | null) => void;
 }
 
 export interface IUserProfileService {

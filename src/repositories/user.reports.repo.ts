@@ -244,22 +244,7 @@ export class UserReportsRepository implements IUserReportsRepository {
       const reports: UserReportData[] = [];
 
       tempData.forEach((val) => {
-        const details: UserReportDetails | undefined = val.details
-          ? {
-              ...val.details,
-              reportedUserId: val.details.reportedUserId ?? undefined,
-              reportedBlogId: val.details.reportedBlogId ?? undefined,
-              reportedCommentId: val.details.reportedCommentId ?? undefined,
-              reportedReplyId: val.details.reportedReplyId ?? undefined,
-            }
-          : undefined;
-
-        reports.push({
-          ...val,
-          userId: val.userId ?? undefined,
-          email: val.email ?? undefined,
-          details: details,
-        });
+        reports.push(val);
       });
 
       const data: UserReportGetAllData = {
@@ -295,23 +280,10 @@ export class UserReportsRepository implements IUserReportsRepository {
         throw new CustomError("does-not-exist", `User report does not exist`);
       }
 
-      const details: UserReportDetails | undefined = data.details
-        ? {
-            ...data.details,
-            reportedUserId: data.details.reportedUserId ?? undefined,
-            reportedBlogId: data.details.reportedBlogId ?? undefined,
-            reportedCommentId: data.details.reportedCommentId ?? undefined,
-            reportedReplyId: data.details.reportedReplyId ?? undefined,
-          }
-        : undefined;
-
-      return {
-        ...data,
-        userId: data.userId ?? undefined,
-        email: data.email ?? undefined,
-        details: details,
-      };
+      return data;
     } catch (err) {
+      if (err instanceof CustomError) throw err;
+
       throw new CustomError(
         "internal-server-error",
         `An error occured when a report.`,

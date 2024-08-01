@@ -9,10 +9,10 @@ export class UserProfile implements IUserProfile {
   userId!: string;
   firstName!: string;
   lastName!: string;
-  middleName?: string;
-  profilePicture?: string;
-  profileCover?: string;
-  bio?: string;
+  middleName?: string | null;
+  profilePicture?: string | null;
+  profileCover?: string | null;
+  bio?: string | null;
 
   getProfile = () => {
     const obj: UserProfileData = {
@@ -68,7 +68,7 @@ export class UserProfile implements IUserProfile {
     this.firstName = firstName;
   };
 
-  setMiddleName = (middleName?: string) => {
+  setMiddleName = (middleName?: string | null) => {
     this.middleName = middleName;
   };
 
@@ -76,19 +76,24 @@ export class UserProfile implements IUserProfile {
     this.lastName = lastName;
   };
 
-  setPfp = (pfp?: string) => {
+  setPfp = (pfp?: string | null) => {
     this.profilePicture = pfp;
   };
 
-  setCover = (cover?: string) => {
+  setCover = (cover?: string | null) => {
     this.profileCover = cover;
   };
 
-  setBio = (bio?: string) => {
+  setBio = (bio?: string | null) => {
     this.bio = bio;
   };
 
-  validate = (firstName: string, lastName: string, middleName?: string, bio?: string) => {
+  validate = (
+    firstName: string,
+    lastName: string,
+    middleName?: string | null,
+    bio?: string | null
+  ) => {
     this.validateFirstname(firstName);
     this.validateLastName(lastName);
     this.validateMiddleName(middleName);
@@ -107,7 +112,7 @@ export class UserProfile implements IUserProfile {
     if (lastName.length > 80) throw new CustomError("invalid-last-name");
   };
 
-  validateMiddleName = (middleName?: string) => {
+  validateMiddleName = (middleName?: string | null) => {
     if (!middleName) return;
 
     if (middleName.length < 2) throw new CustomError("invalid-middle-name");
@@ -115,7 +120,7 @@ export class UserProfile implements IUserProfile {
     if (middleName.length > 50) throw new CustomError("invalid-middle-name");
   };
 
-  validateBio = (bio?: string) => {
+  validateBio = (bio?: string | null) => {
     if (!bio) return;
 
     if (bio.length > 255) throw new CustomError("invalid-bio");
