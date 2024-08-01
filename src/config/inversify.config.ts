@@ -79,7 +79,7 @@ container
   .bind<IUserBlacklistedTokenRepository>(TYPES.UserBlacklistedTokenRepository)
   .to(UserBlacklistedTokenRepository);
 
-container.bind<IUserLogs>(TYPES.UserLogs).to(UserLogs);
+container.bind<IUserLogs>(TYPES.UserLogsModel).to(UserLogs);
 container.bind<IUserLogsService>(TYPES.UserLogsService).to(UserLogsService);
 container.bind<IUserLogsRepository>(TYPES.UserLogsRepository).to(UserLogsRepository);
 

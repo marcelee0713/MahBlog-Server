@@ -14,7 +14,7 @@ export class UserLogsService implements IUserLogsService {
   private repo: IUserLogsRepository;
 
   constructor(
-    @inject(TYPES.UserLogs) entity: IUserLogs,
+    @inject(TYPES.UserLogsModel) entity: IUserLogs,
     @inject(TYPES.UserLogsRepository) repo: IUserLogsRepository
   ) {
     this.entity = entity;

@@ -2,7 +2,6 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import {
   IUserReportsRepository,
   UserGetReportParams,
-  UserReportDetails,
   UserReportGetAllData,
 } from "../interfaces/user/user.reports.interface";
 import {
