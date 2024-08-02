@@ -18,8 +18,8 @@ export type GetConnectionsParamsType<T extends GetConnectionsUseCase> = ParamMap
 export type GetConnectionReturnType<T extends GetConnectionsUseCase> = ReturnMapping[T];
 
 type ParamMapping = {
-  GET_CONNECTIONS: UserTotalConnectionsParams[];
-  GET_PENDING_CONNECTIONS: UserTotalPendingConnectionsParams[];
+  GET_CONNECTIONS: UserTotalConnectionsParams;
+  GET_PENDING_CONNECTIONS: UserTotalPendingConnectionsParams;
   GET_COUNT: UserConnectionsCountParams;
 };
 

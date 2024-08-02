@@ -36,7 +36,12 @@ export interface IUserConnectionRepository {
     params: GetConnectionsParamsType<T>,
     type: T
   ) => Promise<GetConnectionReturnType<T>>;
-  update: (sourceUserId: string, targetUserId: string, status: ConnectionStatus) => Promise<void>;
+  update: (
+    connectionId: string,
+    sourceUserId: string,
+    targetUserId: string,
+    status: ConnectionStatus
+  ) => Promise<void>;
 }
 
 export interface UserConnectionsCount {
@@ -45,8 +50,9 @@ export interface UserConnectionsCount {
 }
 
 export interface UserConnections {
+  userId: string;
   name: string;
-  profilePicture: string;
+  profilePicture: string | null;
 }
 
 export interface UserPendingConnections extends UserConnections {
