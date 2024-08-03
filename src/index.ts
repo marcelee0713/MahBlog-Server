@@ -6,6 +6,7 @@ import cors from "cors";
 import userRouter from "./routes/user.routes";
 import userProfileRouter from "./routes/user.profile.routes";
 import userReportsRouter from "./routes/user.reports.routes";
+import userConnectionsRouter from "./routes/user.connections.routes";
 
 dotenv.config();
 
@@ -31,8 +32,9 @@ app.listen(PORT, () => {
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/user-profile", userProfileRouter);
 app.use("/api/v1/user-reports", userReportsRouter);
+app.use("/api/v1/user-connect", userConnectionsRouter);
 
-// TODO: UserConnections and UserNotifications <--- do this when Blog is done.
+// TODO: UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
 
 // TODO: Add rate limiters to all of these routes

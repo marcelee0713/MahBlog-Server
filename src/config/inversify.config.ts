@@ -54,6 +54,13 @@ import { UserReports } from "../models/user/user.reports.model";
 import { UserReportsService } from "../services/user/user.reports.service";
 import { UserReportsRepository } from "../repositories/user.reports.repo";
 import { UserReportsController } from "../controllers/user.reports.controller";
+import {
+  IUserConnectionRepository,
+  IUserConnectionsService,
+} from "../interfaces/user/user.connections.interface";
+import { UserConnectionsService } from "../services/user/user.connections.service";
+import { UserConnectionsRepository } from "../repositories/user.connections.repo";
+import { UserConnectionsController } from "../controllers/user.connections.controller";
 
 export const container = new Container();
 
@@ -78,6 +85,12 @@ container
 container
   .bind<IUserBlacklistedTokenRepository>(TYPES.UserBlacklistedTokenRepository)
   .to(UserBlacklistedTokenRepository);
+
+container.bind<IUserConnectionsService>(TYPES.UserConnectionsService).to(UserConnectionsService);
+container
+  .bind<IUserConnectionRepository>(TYPES.UserConnectionsRepository)
+  .to(UserConnectionsRepository);
+container.bind(TYPES.UserConnectionsController).to(UserConnectionsController);
 
 container.bind<IUserLogs>(TYPES.UserLogsModel).to(UserLogs);
 container.bind<IUserLogsService>(TYPES.UserLogsService).to(UserLogsService);

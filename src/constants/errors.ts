@@ -7,6 +7,10 @@ export const KNOWN_ERRORS: Record<ErrorType, ErrorObject> = {
     status: 404,
     message: "This data does not exist.",
   },
+  "already-exist": {
+    status: 409,
+    message: "This data already exist.",
+  },
   "internal-server-error": {
     status: 500,
     message: "Something went wrong to the server, please report it to the devs.",

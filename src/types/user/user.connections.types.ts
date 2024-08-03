@@ -1,3 +1,4 @@
+import { RequestBody } from "..";
 import {
   UserConnections,
   UserConnectionsCount,
@@ -5,6 +6,7 @@ import {
   UserPendingConnections,
   UserTotalConnectionsParams,
   UserTotalPendingConnectionsParams,
+  UserUpdateConnectionParams,
 } from "../../interfaces/user/user.connections.interface";
 
 export const ConnectionStatusArr = ["PENDING", "ACCEPTED", "REJECTED", "BLOCKED"] as const;
@@ -28,3 +30,5 @@ type ReturnMapping = {
   GET_PENDING_CONNECTIONS: UserPendingConnections[];
   GET_COUNT: UserConnectionsCount;
 };
+
+export type UserConnectionUpdateReqBody = RequestBody<UserUpdateConnectionParams>;

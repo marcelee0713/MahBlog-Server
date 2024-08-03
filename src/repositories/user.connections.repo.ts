@@ -1,10 +1,14 @@
 import { injectable } from "inversify";
-import { IUserConnectionRepository } from "../interfaces/user/user.connections.interface";
+import {
+  IUserConnectionRepository,
+  UserConnections,
+  UserPendingConnections,
+  UserUpdateConnectionParams,
+} from "../interfaces/user/user.connections.interface";
 import {
   GetConnectionsUseCase,
   GetConnectionsParamsType,
   GetConnectionReturnType,
-  ConnectionStatus,
 } from "../types/user/user.connections.types";
 import { PrismaClient } from "@prisma/client";
 import { db } from "../config/db";
@@ -21,6 +25,17 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
 
   async create(sourceId: string, targetUserId: string): Promise<void> {
     try {
+      const data = await this.db.userConnections.findFirst({
+        where: {
+          sourceUserId: sourceId,
+          targetUserId: targetUserId,
+        },
+      });
+
+      if (data) {
+        throw new CustomError("already-exist", "This user connection already exist.");
+      }
+
       await this.db.userConnections.create({
         data: {
           sourceUser: {
@@ -36,6 +51,8 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
         },
       });
     } catch (err) {
+      if (err instanceof CustomError) throw err;
+
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2025")
           throw new CustomError(
@@ -68,7 +85,14 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
 
           const count = await this.db.userConnections.count({
             where: {
-              sourceUserId: param.userId,
+              OR: [
+                {
+                  sourceUserId: param.userId,
+                },
+                {
+                  targetUserId: param.userId,
+                },
+              ],
             },
           });
 
@@ -81,13 +105,12 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
         }
 
         case "GET_CONNECTIONS": {
-          const targetUsers = [] as GetConnectionReturnType<"GET_CONNECTIONS">;
+          const targetUsers: UserConnections[] = [];
 
           const param = params as GetConnectionsParamsType<"GET_CONNECTIONS">;
 
           const data = await this.db.userConnections.findMany({
             where: {
-              status: "ACCEPTED",
               OR: [
                 {
                   sourceUserId: param.userId,
@@ -96,16 +119,21 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
                   targetUserId: param.userId,
                 },
               ],
+              AND: [
+                {
+                  status: "ACCEPTED",
+                },
+              ],
             },
             orderBy: {
               createdAt: "desc",
             },
           });
 
-          data.forEach(async (val) => {
+          for (let i = 0; i < data.length; i++) {
             const targetUser = await this.db.userProfile.findFirst({
               where: {
-                userId: val.targetUserId,
+                userId: data[i].targetUserId,
               },
               select: {
                 userId: true,
@@ -117,7 +145,7 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
             });
 
             if (targetUser) {
-              const name = `${targetUser.firstName} ${targetUser.middleName ?? ""} ${targetUser.lastName}`;
+              const name = `${targetUser.firstName} ${targetUser.middleName ? targetUser.middleName + " " : ""}${targetUser.lastName}`;
 
               const nameLowCaseVer = name.toLowerCase();
 
@@ -127,20 +155,21 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
 
               if (searchingCondition) {
                 targetUsers.push({
+                  connectionId: data[i].connectionId,
                   userId: targetUser.userId,
                   name: name,
                   profilePicture: targetUser.profilePicture,
                 });
               } else {
                 targetUsers.push({
+                  connectionId: data[i].connectionId,
                   userId: targetUser.userId,
-
                   name: name,
                   profilePicture: targetUser.profilePicture,
                 });
               }
             }
-          });
+          }
 
           const res = targetUsers as GetConnectionReturnType<T>;
 
@@ -148,7 +177,7 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
         }
 
         case "GET_PENDING_CONNECTIONS": {
-          const pendingConnectors = [] as GetConnectionReturnType<"GET_PENDING_CONNECTIONS">;
+          const pendingConnectors: UserPendingConnections[] = [];
 
           const param = params as GetConnectionsParamsType<"GET_PENDING_CONNECTIONS">;
 
@@ -162,10 +191,10 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
             },
           });
 
-          data.forEach(async (val) => {
+          for (let i = 0; i < data.length; i++) {
             const targetUser = await this.db.userProfile.findFirst({
               where: {
-                userId: val.sourceUserId,
+                userId: data[i].sourceUserId,
               },
               select: {
                 userId: true,
@@ -180,17 +209,16 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
               const name = `${targetUser.firstName} ${targetUser.middleName ?? ""} ${targetUser.lastName}`;
 
               pendingConnectors.push({
+                connectionId: data[i].connectionId,
                 userId: targetUser.userId,
                 name: name,
                 profilePicture: targetUser.profilePicture,
-                createdAt: val.createdAt,
+                createdAt: data[i].createdAt,
               });
             }
-          });
+          }
 
-          const res = pendingConnectors as GetConnectionReturnType<T>;
-
-          return res;
+          return pendingConnectors as GetConnectionReturnType<T>;
         }
 
         default:
@@ -207,24 +235,19 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
     }
   }
 
-  async update(
-    connectionId: string,
-    sourceUserId: string,
-    targetUserId: string,
-    status: ConnectionStatus
-  ): Promise<void> {
+  async update(params: UserUpdateConnectionParams): Promise<void> {
     try {
-      switch (status) {
+      switch (params.status) {
         case "ACCEPTED": {
           await db.userConnections.update({
             data: {
               updatedAt: new Date(),
-              status: status,
+              status: params.status,
             },
             where: {
-              connectionId,
-              sourceUserId,
-              targetUserId,
+              connectionId: params.connectionId,
+              sourceUserId: params.sourceUserId,
+              targetUserId: params.targetUserId,
             },
           });
 
@@ -237,9 +260,9 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
         case "REJECTED": {
           await db.userConnections.delete({
             where: {
-              connectionId,
-              sourceUserId,
-              targetUserId,
+              connectionId: params.connectionId,
+              sourceUserId: params.sourceUserId,
+              targetUserId: params.targetUserId,
             },
           });
 
@@ -253,12 +276,12 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
           await db.userConnections.update({
             data: {
               updatedAt: new Date(),
-              status: status,
+              status: params.status,
             },
             where: {
-              connectionId,
-              sourceUserId,
-              targetUserId,
+              connectionId: params.connectionId,
+              sourceUserId: params.sourceUserId,
+              targetUserId: params.targetUserId,
             },
           });
         }

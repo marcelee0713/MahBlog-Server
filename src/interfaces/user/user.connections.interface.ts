@@ -23,11 +23,7 @@ export interface IUserConnectionsService {
     userId: string,
     dateOrder: SortOrder
   ) => Promise<UserPendingConnections[]>;
-  updateConnection: (
-    sourceUserId: string,
-    targetUserId: string,
-    status: ConnectionStatus
-  ) => Promise<void>;
+  updateConnection: (params: UserUpdateConnectionParams) => Promise<void>;
 }
 
 export interface IUserConnectionRepository {
@@ -36,12 +32,7 @@ export interface IUserConnectionRepository {
     params: GetConnectionsParamsType<T>,
     type: T
   ) => Promise<GetConnectionReturnType<T>>;
-  update: (
-    connectionId: string,
-    sourceUserId: string,
-    targetUserId: string,
-    status: ConnectionStatus
-  ) => Promise<void>;
+  update: (params: UserUpdateConnectionParams) => Promise<void>;
 }
 
 export interface UserConnectionsCount {
@@ -50,12 +41,17 @@ export interface UserConnectionsCount {
 }
 
 export interface UserConnections {
+  connectionId: string;
   userId: string;
   name: string;
   profilePicture: string | null;
 }
 
-export interface UserPendingConnections extends UserConnections {
+export interface UserPendingConnections {
+  connectionId: string;
+  userId: string;
+  name: string;
+  profilePicture: string | null;
   createdAt: Date;
 }
 
@@ -69,4 +65,11 @@ export interface UserTotalConnectionsParams extends UserConnectionsCountParams {
 
 export interface UserTotalPendingConnectionsParams extends UserConnectionsCountParams {
   dateOrder: SortOrder;
+}
+
+export interface UserUpdateConnectionParams {
+  connectionId: string;
+  sourceUserId: string;
+  targetUserId: string;
+  status: ConnectionStatus;
 }
