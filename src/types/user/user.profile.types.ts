@@ -1,32 +1,32 @@
 import { ExcludeFunctions } from "..";
 import {
   IUserProfile,
-  UserProfileUpdateParams,
+  UpdateUserProfileParams,
 } from "../../interfaces/user/user.profile.interface";
 
 export type UserProfileData = ExcludeFunctions<IUserProfile>;
 
-export type UserProfileRemoveUseCase = "BIO" | "PROFILE_IMAGE" | "COVER_IMAGE";
+export type DeleteUserProfileUseCase = "BIO" | "PROFILE_IMAGE" | "COVER_IMAGE";
 
-export type UserProfileUpdateUseCase = "BIO" | "NAME" | "PROFILE_IMAGE" | "COVER_IMAGE";
+export type UpdateUserProfileUseCase = "BIO" | "NAME" | "PROFILE_IMAGE" | "COVER_IMAGE";
 
-export type UserProfileUpdateByBio = Omit<
-  UserProfileUpdateParams,
+export type UpdateUserProfileByBio = Omit<
+  UpdateUserProfileParams,
   "fName" | "lName" | "mName" | "imageUrl"
 >;
 
-export type UserProfileUpdateByName = Omit<UserProfileUpdateParams, "bio" | "imageUrl">;
+export type UpdateUserProfileByName = Omit<UpdateUserProfileParams, "bio" | "imageUrl">;
 
-export type UserProfileUpdateByImage = Omit<
-  UserProfileUpdateParams,
+export type UpdateUserProfileByImage = Omit<
+  UpdateUserProfileParams,
   "fName" | "lName" | "mName" | "bio"
 >;
 
-export type UserProfileUpdateType<T extends UserProfileUpdateUseCase> = ParamMapping[T];
+export type UpdateUserProfileParamsType<T extends UpdateUserProfileUseCase> = ParamMapping[T];
 
 type ParamMapping = {
-  BIO: UserProfileUpdateByBio;
-  NAME: UserProfileUpdateByName;
-  PROFILE_IMAGE: UserProfileUpdateByImage;
-  COVER_IMAGE: UserProfileUpdateByImage;
+  BIO: UpdateUserProfileByBio;
+  NAME: UpdateUserProfileByName;
+  PROFILE_IMAGE: UpdateUserProfileByImage;
+  COVER_IMAGE: UpdateUserProfileByImage;
 };

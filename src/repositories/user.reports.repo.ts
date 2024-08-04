@@ -1,12 +1,12 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import {
   IUserReportsRepository,
-  UserGetReportParams,
-  UserReportGetAllData,
+  GetUserReportParams,
+  UserReportsData,
 } from "../interfaces/user/user.reports.interface";
 import {
   ReportType,
-  CreateReportType,
+  CreateReportParamsType,
   DeleteReportUseCase,
   DeleteReportType,
   UserReportData,
@@ -23,11 +23,11 @@ export class UserReportsRepository implements IUserReportsRepository {
     this.db = db;
   }
 
-  async create<T extends ReportType>(params: CreateReportType<T>, type: T): Promise<void> {
+  async create<T extends ReportType>(params: CreateReportParamsType<T>, type: T): Promise<void> {
     try {
       switch (type) {
         case "ISSUE": {
-          const data = params as CreateReportType<"ISSUE">;
+          const data = params as CreateReportParamsType<"ISSUE">;
 
           await this.db.userReports.create({
             data: data,
@@ -37,7 +37,7 @@ export class UserReportsRepository implements IUserReportsRepository {
         }
 
         case "USER_REPORT": {
-          const data = params as CreateReportType<"USER_REPORT">;
+          const data = params as CreateReportParamsType<"USER_REPORT">;
 
           await this.db.userReports.create({
             data: {
@@ -65,7 +65,7 @@ export class UserReportsRepository implements IUserReportsRepository {
         }
 
         case "BLOG_REPORT": {
-          const data = params as CreateReportType<"BLOG_REPORT">;
+          const data = params as CreateReportParamsType<"BLOG_REPORT">;
 
           await this.db.userReports.create({
             data: {
@@ -97,7 +97,7 @@ export class UserReportsRepository implements IUserReportsRepository {
         }
 
         case "COMMENT_REPORT": {
-          const data = params as CreateReportType<"COMMENT_REPORT">;
+          const data = params as CreateReportParamsType<"COMMENT_REPORT">;
 
           await this.db.userReports.create({
             data: {
@@ -135,7 +135,7 @@ export class UserReportsRepository implements IUserReportsRepository {
         }
 
         case "REPLY_REPORT": {
-          const data = params as CreateReportType<"REPLY_REPORT">;
+          const data = params as CreateReportParamsType<"REPLY_REPORT">;
 
           await this.db.userReports.create({
             data: {
@@ -200,7 +200,7 @@ export class UserReportsRepository implements IUserReportsRepository {
     }
   }
 
-  async getAll(params: UserGetReportParams): Promise<UserReportGetAllData> {
+  async getAll(params: GetUserReportParams): Promise<UserReportsData> {
     try {
       let filteredLength = 0;
       let length = 0;
@@ -246,7 +246,7 @@ export class UserReportsRepository implements IUserReportsRepository {
         reports.push(val);
       });
 
-      const data: UserReportGetAllData = {
+      const data: UserReportsData = {
         reports: reports,
         filteredLength,
         length,

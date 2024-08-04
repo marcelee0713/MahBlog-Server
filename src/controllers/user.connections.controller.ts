@@ -5,7 +5,7 @@ import { TYPES } from "../constants";
 import { CustomError, identifyErrors } from "../utils/error_handler";
 import { FormatResponse, FormatResponseArray } from "../utils/response_handler";
 import { SortOrder } from "../types";
-import { UserConnectionUpdateReqBody } from "../types/user/user.connections.types";
+import { UpdateUserConnectionReqBody } from "../types/user/user.connections.types";
 
 @injectable()
 export class UserConnectionsController {
@@ -83,7 +83,7 @@ export class UserConnectionsController {
 
   async onUpdateConnections(req: Request, res: Response) {
     try {
-      const data: UserConnectionUpdateReqBody = {
+      const data: UpdateUserConnectionReqBody = {
         body: {
           ...req.body,
           targetUserId: res.locals.userId as string,

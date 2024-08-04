@@ -22,7 +22,7 @@ export const TYPES = {
   UserConnectionsService: Symbol.for("UserConnectionsService"),
   UserConnectionsRepository: Symbol.for("UserConnectionsRepository"),
   UserConnectionsController: Symbol.for("UserConnectionsController"),
-  UserBlacklistedToken: Symbol.for("UserBlacklistedToken"),
+  UserBlacklistedTokenModel: Symbol.for("UserBlacklistedTokenModel"),
   UserBlacklistedTokenService: Symbol.for("UserBlacklistedTokenService"),
   UserBlacklistedTokenRepository: Symbol.for("UserBlacklistedTokenRepository"),
   MediaService: Symbol.for("MediaService"),

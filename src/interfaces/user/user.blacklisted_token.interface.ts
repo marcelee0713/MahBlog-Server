@@ -1,5 +1,5 @@
 import {
-  UserBlackListedAddRepoParams,
+  CreateUserBlackListedRepoParams,
   UserBlacklistedTokenData,
 } from "../../types/user/user.blacklisted_tokens.types";
 
@@ -23,21 +23,21 @@ export interface IUserBlacklistedToken {
 }
 
 export interface IUserBlacklistedTokenService {
-  addTokenToBlacklist(params: AddBlacklistedTokenParams): Promise<void>;
+  addTokenToBlacklist(params: CreateBlacklistedTokenParams): Promise<void>;
   isBlacklisted(userId: string, tokenToCheck: string): Promise<boolean>;
   deletedBlacklistedToken(tokenId: string): Promise<void>;
   clearExpiredTokens(): Promise<void>;
 }
 
 export interface IUserBlacklistedTokenRepository {
-  create(data: UserBlackListedAddRepoParams): Promise<void>;
+  create(data: CreateUserBlackListedRepoParams): Promise<void>;
   get(userId: string, token: string): Promise<UserBlacklistedTokenData | null>;
   getAll(userId?: string): Promise<UserBlacklistedTokenData[]>;
   deleteToken(token: string): Promise<void>;
   deleteExpiredTokens(tokens: string[]): Promise<void>;
 }
 
-export interface AddBlacklistedTokenParams {
+export interface CreateBlacklistedTokenParams {
   userId: string;
   token: string;
   iat?: number;

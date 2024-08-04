@@ -4,7 +4,7 @@ import {
   IUserProfileRepository,
   IUserProfileService,
 } from "../../interfaces/user/user.profile.interface";
-import { UserProfileData, UserProfileRemoveUseCase } from "../../types/user/user.profile.types";
+import { UserProfileData, DeleteUserProfileUseCase } from "../../types/user/user.profile.types";
 import { TYPES } from "../../constants";
 
 @injectable()
@@ -44,7 +44,7 @@ export class UserProfileService implements IUserProfileService {
     return await this.repo.update({ userId, imageUrl }, "COVER_IMAGE");
   }
 
-  async remove(userId: string, type: UserProfileRemoveUseCase): Promise<void> {
+  async remove(userId: string, type: DeleteUserProfileUseCase): Promise<void> {
     return await this.repo.delete(userId, type);
   }
 }

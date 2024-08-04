@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
-import { IUserRepository, SignInParams, UserUpdateParams } from "../interfaces/user/user.interface";
-import { UserData, UserGetType, UserGetUseCase } from "../types/user/user.types";
+import { IUserRepository, SignInParams, UpdateUserParams } from "../interfaces/user/user.interface";
+import { UserData, GetUserParamsType, GetUserUseCase } from "../types/user/user.types";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../config/db";
 import bcrypt from "bcrypt";
@@ -14,7 +14,7 @@ export class UserRepository implements IUserRepository {
     this.db = db;
   }
 
-  async getUserData<T extends UserGetUseCase>(params: UserGetType<T>, type: T): Promise<UserData> {
+  async get<T extends GetUserUseCase>(params: GetUserParamsType<T>, type: T): Promise<UserData> {
     try {
       const user = await this.db.users.findFirst({
         where: {
@@ -58,7 +58,7 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async createUser(params: SignInParams): Promise<UserData> {
+  async create(params: SignInParams): Promise<UserData> {
     try {
       const user = await this.db.users.create({
         data: {
@@ -92,7 +92,7 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async updateUserData(params: UserUpdateParams): Promise<void> {
+  async update(params: UpdateUserParams): Promise<void> {
     try {
       if (params.useCase === "CHANGE_EMAIL") {
         if (!params.email || !params.newEmail) throw new CustomError("missing-inputs");
@@ -174,7 +174,7 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async deleteUser(userId: string): Promise<void> {
+  async delete(userId: string): Promise<void> {
     try {
       await this.db.users.delete({
         where: {

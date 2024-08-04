@@ -1,16 +1,16 @@
 import { ExcludeFunctions, RequestBody } from "..";
 import {
+  IUserReports,
   CreateReportParams,
   DeleteReport,
   DeleteReportsParams,
-  IUserReports,
-  ReportBlogParams,
-  ReportCommentParams,
-  ReportReplyParams,
-  ReportUserParams,
-  UserGetReportParams,
+  CreateReportBlogParams,
+  CreateReportCommentParams,
+  CreateReportReplyParams,
+  CreateReportUserParams,
+  GetUserReportParams,
   UserReportDetails,
-  UserReportGetAllData,
+  UserReportsData,
 } from "../../interfaces/user/user.reports.interface";
 
 export type UserReportData = ExcludeFunctions<IUserReports> & {
@@ -43,7 +43,19 @@ export type ReportType = (typeof ReportTypeArr)[number];
 
 export type ReportCategories = (typeof ReportCategoriesArr)[number];
 
-export type CreateReportType<T extends ReportType> = ParamMapping[T];
+export type CreateReportParamsType<T extends ReportType> = ParamMapping[T];
+
+export type CreateUserReportIssueBodyReq = RequestBody<CreateReportParams>;
+
+export type CreateUserReportUserBodyReq = RequestBody<CreateReportUserParams>;
+
+export type CreateUserReportBlogBodyReq = RequestBody<CreateReportBlogParams>;
+
+export type CreateUserReportCommentBodyReq = RequestBody<CreateReportCommentParams>;
+
+export type CreateUserReportReplyBodyReq = RequestBody<CreateReportReplyParams>;
+
+export type GetUserReportBodyReq = RequestBody<GetUserReportParams>;
 
 export type GetReportUseCase = "ONE" | "ALL";
 
@@ -53,18 +65,6 @@ export type DeleteReportUseCase = "ALL_REPORTS" | "USER_REPORTS" | "ONE_REPORT";
 
 export type DeleteReportType<T extends DeleteReportUseCase> = DeleteParamMapping[T];
 
-export type UserCreateReportIssueBodyReq = RequestBody<CreateReportParams>;
-
-export type UserCreateReportUserBodyReq = RequestBody<ReportUserParams>;
-
-export type UserCreateReportBlogBodyReq = RequestBody<ReportBlogParams>;
-
-export type UserCreateReportCommentBodyReq = RequestBody<ReportCommentParams>;
-
-export type UserCreateReportReplyBodyReq = RequestBody<ReportReplyParams>;
-
-export type UserGetReportBodyReq = RequestBody<UserGetReportParams>;
-
 type DeleteParamMapping = {
   ALL_REPORTS: undefined;
   USER_REPORTS: DeleteReportsParams;
@@ -73,13 +73,13 @@ type DeleteParamMapping = {
 
 type GetParamMapping = {
   ONE: UserReportData;
-  ALL: UserReportGetAllData;
+  ALL: UserReportsData;
 };
 
 type ParamMapping = {
   ISSUE: CreateReportParams;
-  USER_REPORT: ReportUserParams;
-  BLOG_REPORT: ReportBlogParams;
-  COMMENT_REPORT: ReportCommentParams;
-  REPLY_REPORT: ReportReplyParams;
+  USER_REPORT: CreateReportUserParams;
+  BLOG_REPORT: CreateReportBlogParams;
+  COMMENT_REPORT: CreateReportCommentParams;
+  REPLY_REPORT: CreateReportReplyParams;
 };

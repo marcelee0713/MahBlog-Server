@@ -14,7 +14,7 @@ export const updateProfileBioSchema = z.object({
   }),
 });
 
-export const removeProfileImageSchema = z.object({
+export const deleteProfileImageSchema = z.object({
   body: z.object({
     image: z.string().trim(),
   }),

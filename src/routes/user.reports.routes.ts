@@ -11,7 +11,7 @@ import {
   createReportUserSchema,
   deleteReportSchema,
   deleteReportsSchema,
-  getAllReportsSchema,
+  getReportsSchema,
   getReportSchema,
 } from "../middlewares/schemas/user.reports.schema";
 
@@ -29,7 +29,7 @@ userReportsRouter.post(
 
 userReportsRouter.post(
   "/get-all",
-  middleware.validateBody(getAllReportsSchema),
+  middleware.validateBody(getReportsSchema),
   controller.onGetAllReports.bind(controller)
 );
 

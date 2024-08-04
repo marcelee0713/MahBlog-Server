@@ -4,11 +4,11 @@ import { IUserReportsService } from "../interfaces/user/user.reports.interface";
 import { TYPES } from "../constants";
 import { identifyErrors } from "../utils/error_handler";
 import {
-  UserCreateReportBlogBodyReq,
-  UserCreateReportCommentBodyReq,
-  UserCreateReportIssueBodyReq,
-  UserCreateReportUserBodyReq,
-  UserGetReportBodyReq,
+  CreateUserReportBlogBodyReq,
+  CreateUserReportCommentBodyReq,
+  CreateUserReportIssueBodyReq,
+  CreateUserReportUserBodyReq,
+  GetUserReportBodyReq,
 } from "../types/user/user.reports.type";
 import { FormatResponse } from "../utils/response_handler";
 
@@ -22,7 +22,7 @@ export class UserReportsController {
 
   async onReportIssue(req: Request, res: Response) {
     try {
-      const data: UserCreateReportIssueBodyReq = {
+      const data: CreateUserReportIssueBodyReq = {
         body: { ...req.body },
       };
 
@@ -38,7 +38,7 @@ export class UserReportsController {
 
   async onReportUser(req: Request, res: Response) {
     try {
-      const data: UserCreateReportUserBodyReq = {
+      const data: CreateUserReportUserBodyReq = {
         body: { ...req.body },
       };
 
@@ -54,7 +54,7 @@ export class UserReportsController {
 
   async onReportBlog(req: Request, res: Response) {
     try {
-      const data: UserCreateReportBlogBodyReq = {
+      const data: CreateUserReportBlogBodyReq = {
         body: { ...req.body },
       };
 
@@ -70,7 +70,7 @@ export class UserReportsController {
 
   async onReportComment(req: Request, res: Response) {
     try {
-      const data: UserCreateReportCommentBodyReq = {
+      const data: CreateUserReportCommentBodyReq = {
         body: { ...req.body },
       };
 
@@ -86,7 +86,7 @@ export class UserReportsController {
 
   async onReportReply(req: Request, res: Response) {
     try {
-      const data: UserCreateReportCommentBodyReq = {
+      const data: CreateUserReportCommentBodyReq = {
         body: { ...req.body },
       };
 
@@ -102,7 +102,7 @@ export class UserReportsController {
 
   async onGetAllReports(req: Request, res: Response) {
     try {
-      const data: UserGetReportBodyReq = {
+      const data: GetUserReportBodyReq = {
         body: { ...req.body },
       };
 

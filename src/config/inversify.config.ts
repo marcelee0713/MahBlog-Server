@@ -78,7 +78,7 @@ container.bind<IUserSession>(TYPES.UserSessionModel).to(UserSession);
 container.bind<IUserSessionService>(TYPES.UserSessionService).to(UserSessionService);
 container.bind<IUserSessionRepository>(TYPES.UserSessionRepository).to(UserSessionRepository);
 
-container.bind<IUserBlacklistedToken>(TYPES.UserBlacklistedToken).to(UserBlacklistedToken);
+container.bind<IUserBlacklistedToken>(TYPES.UserBlacklistedTokenModel).to(UserBlacklistedToken);
 container
   .bind<IUserBlacklistedTokenService>(TYPES.UserBlacklistedTokenService)
   .to(UserBlacklistedTokenService);

@@ -1,10 +1,10 @@
 import {
   UserData,
-  UserGetType,
-  UserGetUseCase,
+  GetUserParamsType,
+  GetUserUseCase,
   UserRoles,
   UserStatus,
-  UserUpdateUseCase,
+  UpdateUserUseCase,
 } from "../../types/user/user.types";
 
 export interface IUser {
@@ -47,13 +47,13 @@ export interface IUserService {
 }
 
 export interface IUserRepository {
-  createUser: (params: SignInParams) => Promise<UserData>;
-  getUserData: <T extends UserGetUseCase>(params: UserGetType<T>, type: T) => Promise<UserData>;
-  updateUserData: (params: UserUpdateParams) => Promise<void>;
-  deleteUser: (userId: string) => Promise<void>;
+  create: (params: SignInParams) => Promise<UserData>;
+  get: <T extends GetUserUseCase>(params: GetUserParamsType<T>, type: T) => Promise<UserData>;
+  update: (params: UpdateUserParams) => Promise<void>;
+  delete: (userId: string) => Promise<void>;
 }
 
-export interface UserGetParams {
+export interface GetUserParams {
   userId: string;
   email: string;
   password?: string;
@@ -66,7 +66,7 @@ export interface SignInParams {
   password: string;
 }
 
-export interface UserUpdateBodyReq {
+export interface UpdateUserBodyReq {
   body: {
     userId?: string;
     email?: string;
@@ -75,15 +75,15 @@ export interface UserUpdateBodyReq {
     password?: string;
     token?: string;
     removeSessions?: boolean;
-    useCase: UserUpdateUseCase;
+    useCase: UpdateUserUseCase;
   };
 }
 
-export interface UserUpdateParams {
+export interface UpdateUserParams {
   userId: string;
   email?: string;
   newEmail?: string;
   password?: string;
   newPassword?: string;
-  useCase: UserUpdateUseCase;
+  useCase: UpdateUserUseCase;
 }

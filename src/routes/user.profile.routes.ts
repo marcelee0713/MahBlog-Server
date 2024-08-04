@@ -4,7 +4,7 @@ import { TYPES } from "../constants";
 import { UserProfileController } from "../controllers/user.profile.controller";
 import { middleware } from "./user.routes";
 import {
-  removeProfileImageSchema,
+  deleteProfileImageSchema,
   updateProfileBioSchema,
   updateProfileNameSchema,
 } from "../middlewares/schemas/user.profile.schema";
@@ -43,13 +43,13 @@ userProfileRouter.put(
 
 userProfileRouter.delete(
   "/remove-pic",
-  middleware.validateBody(removeProfileImageSchema),
+  middleware.validateBody(deleteProfileImageSchema),
   controller.onRemoveProfilePicture.bind(controller)
 );
 
 userProfileRouter.delete(
   "/remove-cover",
-  middleware.validateBody(removeProfileImageSchema),
+  middleware.validateBody(deleteProfileImageSchema),
   controller.onRemoveProfileCover.bind(controller)
 );
 

@@ -32,7 +32,7 @@ export class UserService implements IUserService {
   async signIn(email: string, password: string): Promise<string> {
     this.entity.validate(email, password);
 
-    const user = await this.repo.getUserData({ email: email, password: password }, "SIGNING_IN");
+    const user = await this.repo.get({ email: email, password: password }, "SIGNING_IN");
 
     const token = await this.session.createSession(user.userId);
 
@@ -52,19 +52,19 @@ export class UserService implements IUserService {
 
     this.profile.validate(params.firstName, params.lastName);
 
-    const user = await this.repo.createUser(params);
+    const user = await this.repo.create(params);
 
     return user;
   }
 
   async getUser(userId: string): Promise<UserData> {
-    const user = await this.repo.getUserData({ userId: userId }, "USER_ID");
+    const user = await this.repo.get({ userId: userId }, "USER_ID");
 
     return user;
   }
 
   async getUserByEmail(email: string): Promise<UserData> {
-    const user = await this.repo.getUserData({ email: email }, "EMAIL");
+    const user = await this.repo.get({ email: email }, "EMAIL");
 
     return user;
   }
@@ -72,7 +72,7 @@ export class UserService implements IUserService {
   async updateEmail(userId: string, oldEmail: string, newEmail: string): Promise<void> {
     this.entity.validateEmail(newEmail);
 
-    await this.repo.updateUserData({
+    await this.repo.update({
       useCase: "CHANGE_EMAIL",
       userId: userId,
       email: oldEmail,
@@ -87,7 +87,7 @@ export class UserService implements IUserService {
   ): Promise<void> {
     this.entity.validatePassword(newPassword);
 
-    await this.repo.updateUserData({
+    await this.repo.update({
       useCase: "CHANGE_PASSWORD",
       userId: userId,
       password: currentPassword,
@@ -98,7 +98,7 @@ export class UserService implements IUserService {
   async verifyEmail(userId: string, email: string): Promise<void> {
     this.entity.validateEmail(email);
 
-    await this.repo.updateUserData({
+    await this.repo.update({
       useCase: "VERIFY_EMAIL",
       userId: userId,
       email: email,
@@ -106,6 +106,6 @@ export class UserService implements IUserService {
   }
 
   async deleteUser(userId: string): Promise<void> {
-    await this.repo.deleteUser(userId);
+    await this.repo.delete(userId);
   }
 }

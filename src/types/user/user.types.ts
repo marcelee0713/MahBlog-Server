@@ -1,5 +1,5 @@
 import { ExcludeFunctions } from "..";
-import { IUser, UserGetParams } from "../../interfaces/user/user.interface";
+import { IUser, GetUserParams } from "../../interfaces/user/user.interface";
 
 export type UserRoles = "USER" | "ADMIN";
 
@@ -7,30 +7,30 @@ export type UserStatus = "ACTIVE" | "SUSPENDED" | "BANNED";
 
 export type UserData = ExcludeFunctions<IUser>;
 
-export const UserUpdateUseCaseArr = [
+export const UpdateUserUseCaseArr = [
   "CHANGE_PASSWORD",
   "CHANGE_EMAIL",
   "VERIFY_EMAIL",
   "RESET_PASSWORD",
 ] as const;
 
-export type UserUpdateUseCase = (typeof UserUpdateUseCaseArr)[number];
+export type UpdateUserUseCase = (typeof UpdateUserUseCaseArr)[number];
 
-export type UserGetUseCase = "EMAIL" | "USER_ID" | "BOTH" | "SIGNING_IN";
+export type GetUserUseCase = "EMAIL" | "USER_ID" | "BOTH" | "SIGNING_IN";
 
-export type UserGetByEmail = Omit<UserGetParams, "userId">;
+export type GetUserByEmail = Omit<GetUserParams, "userId">;
 
-export type UserGetById = Omit<UserGetParams, "email">;
+export type GetUserById = Omit<GetUserParams, "email">;
 
-export type UserGetType<T extends UserGetUseCase> = ParamMapping[T];
+export type GetUserParamsType<T extends GetUserUseCase> = ParamMapping[T];
 
-export const UserGetByEmailUseCaseArr = ["VERIFY_EMAIL", "GET_USER_DATA"] as const;
+export const GetUserByEmailUseCaseArr = ["VERIFY_EMAIL", "GET_USER_DATA"] as const;
 
-export type UserGetByEmailUseCase = (typeof UserGetByEmailUseCaseArr)[number];
+export type GetUserByEmailUseCase = (typeof GetUserByEmailUseCaseArr)[number];
 
 type ParamMapping = {
-  BOTH: UserGetParams;
-  USER_ID: UserGetById;
-  EMAIL: UserGetByEmail;
-  SIGNING_IN: UserGetByEmail;
+  BOTH: GetUserParams;
+  USER_ID: GetUserById;
+  EMAIL: GetUserByEmail;
+  SIGNING_IN: GetUserByEmail;
 };

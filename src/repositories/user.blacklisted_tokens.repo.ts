@@ -1,7 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { IUserBlacklistedTokenRepository } from "../interfaces/user/user.blacklisted_token.interface";
 import {
-  UserBlackListedAddRepoParams,
+  CreateUserBlackListedRepoParams,
   UserBlacklistedTokenData,
 } from "../types/user/user.blacklisted_tokens.types";
 import { db } from "../config/db";
@@ -16,7 +16,7 @@ export class UserBlacklistedTokenRepository implements IUserBlacklistedTokenRepo
     this.db = db;
   }
 
-  async create(data: UserBlackListedAddRepoParams): Promise<void> {
+  async create(data: CreateUserBlackListedRepoParams): Promise<void> {
     try {
       await this.db.userBlacklistedTokens.create({
         data: {

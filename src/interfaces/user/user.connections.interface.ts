@@ -55,15 +55,15 @@ export interface UserPendingConnections {
   createdAt: Date;
 }
 
-export interface UserConnectionsCountParams {
+export interface GetUserConnectionsCountParams {
   userId: string;
 }
 
-export interface UserTotalConnectionsParams extends UserConnectionsCountParams {
+export interface GetUserTotalConnectionsParams extends GetUserConnectionsCountParams {
   searchNameInput?: string;
 }
 
-export interface UserTotalPendingConnectionsParams extends UserConnectionsCountParams {
+export interface GetUserTotalPendingConnectionsParams extends GetUserConnectionsCountParams {
   dateOrder: SortOrder;
 }
 

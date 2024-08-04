@@ -1,6 +1,6 @@
 import { SortOrder } from "../../types";
 import {
-  CreateReportType,
+  CreateReportParamsType,
   DeleteReportType,
   DeleteReportUseCase,
   ReportCategories,
@@ -20,11 +20,11 @@ export interface IUserReports {
 
 export interface IUserReportsService {
   reportIssue: (params: CreateReportParams) => Promise<void>;
-  reportUser: (params: ReportUserParams) => Promise<void>;
-  reportBlog: (params: ReportBlogParams) => Promise<void>;
-  reportComment: (params: ReportCommentParams) => Promise<void>;
-  reportReply: (params: ReportReplyParams) => Promise<void>;
-  getAllReports: (params: UserGetReportParams) => Promise<UserReportGetAllData>;
+  reportUser: (params: CreateReportUserParams) => Promise<void>;
+  reportBlog: (params: CreateReportBlogParams) => Promise<void>;
+  reportComment: (params: CreateReportCommentParams) => Promise<void>;
+  reportReply: (params: CreateReportReplyParams) => Promise<void>;
+  getAllReports: (params: GetUserReportParams) => Promise<UserReportsData>;
   getReport: (userId: string, reportId: string) => Promise<UserReportData>;
   deleteAllReports: () => Promise<void>;
   deleteUserReports: (userId: string) => Promise<void>;
@@ -32,9 +32,9 @@ export interface IUserReportsService {
 }
 
 export interface IUserReportsRepository {
-  create: <T extends ReportType>(params: CreateReportType<T>, type: T) => Promise<void>;
+  create: <T extends ReportType>(params: CreateReportParamsType<T>, type: T) => Promise<void>;
   get: (userId: string, reportId: string) => Promise<UserReportData>;
-  getAll: (params: UserGetReportParams) => Promise<UserReportGetAllData>;
+  getAll: (params: GetUserReportParams) => Promise<UserReportsData>;
   delete: <T extends DeleteReportUseCase>(params: DeleteReportType<T>, type: T) => Promise<void>;
 }
 
@@ -46,23 +46,23 @@ export interface CreateReportParams {
   category: ReportCategories;
 }
 
-export interface ReportUserParams extends CreateReportParams {
+export interface CreateReportUserParams extends CreateReportParams {
   reportedUserId: string;
 }
 
-export interface ReportBlogParams extends ReportUserParams {
+export interface CreateReportBlogParams extends CreateReportUserParams {
   reportedBlogId: string;
 }
 
-export interface ReportCommentParams extends ReportBlogParams {
+export interface CreateReportCommentParams extends CreateReportBlogParams {
   reportedCommentId: string;
 }
 
-export interface ReportReplyParams extends ReportCommentParams {
+export interface CreateReportReplyParams extends CreateReportCommentParams {
   reportedReplyId: string;
 }
 
-export interface UserGetReportParams {
+export interface GetUserReportParams {
   userId?: string;
   reportId?: string;
   desc?: string;
@@ -82,7 +82,7 @@ export interface UserReportDetails {
   reportedReplyId: string | null;
 }
 
-export interface UserReportGetAllData {
+export interface UserReportsData {
   reports: UserReportData[];
   length: number;
   filteredLength: number;

@@ -4,12 +4,12 @@ import {
   IUserReports,
   IUserReportsRepository,
   IUserReportsService,
-  ReportBlogParams,
-  ReportCommentParams,
-  ReportReplyParams,
-  ReportUserParams,
-  UserGetReportParams,
-  UserReportGetAllData,
+  CreateReportBlogParams,
+  CreateReportCommentParams,
+  CreateReportReplyParams,
+  CreateReportUserParams,
+  GetUserReportParams,
+  UserReportsData,
 } from "../../interfaces/user/user.reports.interface";
 import { UserReportData } from "../../types/user/user.reports.type";
 import { TYPES } from "../../constants";
@@ -33,31 +33,31 @@ export class UserReportsService implements IUserReportsService {
     await this.repo.create(params, "ISSUE");
   }
 
-  async reportUser(params: ReportUserParams): Promise<void> {
+  async reportUser(params: CreateReportUserParams): Promise<void> {
     this.entity.validateDesc(params.description);
 
     await this.repo.create(params, "USER_REPORT");
   }
 
-  async reportBlog(params: ReportBlogParams): Promise<void> {
+  async reportBlog(params: CreateReportBlogParams): Promise<void> {
     this.entity.validateDesc(params.description);
 
     await this.repo.create(params, "BLOG_REPORT");
   }
 
-  async reportComment(params: ReportCommentParams): Promise<void> {
+  async reportComment(params: CreateReportCommentParams): Promise<void> {
     this.entity.validateDesc(params.description);
 
     await this.repo.create(params, "COMMENT_REPORT");
   }
 
-  async reportReply(params: ReportReplyParams): Promise<void> {
+  async reportReply(params: CreateReportReplyParams): Promise<void> {
     this.entity.validateDesc(params.description);
 
     await this.repo.create(params, "REPLY_REPORT");
   }
 
-  async getAllReports(params: UserGetReportParams): Promise<UserReportGetAllData> {
+  async getAllReports(params: GetUserReportParams): Promise<UserReportsData> {
     const reports = await this.repo.getAll(params);
 
     return reports;

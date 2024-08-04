@@ -2,10 +2,10 @@ import { RequestBody } from "..";
 import {
   UserConnections,
   UserConnectionsCount,
-  UserConnectionsCountParams,
+  GetUserConnectionsCountParams,
   UserPendingConnections,
-  UserTotalConnectionsParams,
-  UserTotalPendingConnectionsParams,
+  GetUserTotalConnectionsParams,
+  GetUserTotalPendingConnectionsParams,
   UserUpdateConnectionParams,
 } from "../../interfaces/user/user.connections.interface";
 
@@ -20,9 +20,9 @@ export type GetConnectionsParamsType<T extends GetConnectionsUseCase> = ParamMap
 export type GetConnectionReturnType<T extends GetConnectionsUseCase> = ReturnMapping[T];
 
 type ParamMapping = {
-  GET_CONNECTIONS: UserTotalConnectionsParams;
-  GET_PENDING_CONNECTIONS: UserTotalPendingConnectionsParams;
-  GET_COUNT: UserConnectionsCountParams;
+  GET_CONNECTIONS: GetUserTotalConnectionsParams;
+  GET_PENDING_CONNECTIONS: GetUserTotalPendingConnectionsParams;
+  GET_COUNT: GetUserConnectionsCountParams;
 };
 
 type ReturnMapping = {
@@ -31,4 +31,4 @@ type ReturnMapping = {
   GET_COUNT: UserConnectionsCount;
 };
 
-export type UserConnectionUpdateReqBody = RequestBody<UserUpdateConnectionParams>;
+export type UpdateUserConnectionReqBody = RequestBody<UserUpdateConnectionParams>;

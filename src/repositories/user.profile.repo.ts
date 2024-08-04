@@ -2,9 +2,9 @@ import { injectable } from "inversify";
 import { IUserProfileRepository } from "../interfaces/user/user.profile.interface";
 import {
   UserProfileData,
-  UserProfileRemoveUseCase,
-  UserProfileUpdateUseCase,
-  UserProfileUpdateType,
+  DeleteUserProfileUseCase,
+  UpdateUserProfileUseCase,
+  UpdateUserProfileParamsType,
 } from "../types/user/user.profile.types";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../config/db";
@@ -42,7 +42,7 @@ export class UserProfileRepository implements IUserProfileRepository {
     }
   }
 
-  async delete(userId: string, type: UserProfileRemoveUseCase): Promise<void> {
+  async delete(userId: string, type: DeleteUserProfileUseCase): Promise<void> {
     try {
       if (type === "BIO") {
         await this.db.userProfile.update({
@@ -97,9 +97,9 @@ export class UserProfileRepository implements IUserProfileRepository {
     }
   }
 
-  async update<T extends UserProfileUpdateUseCase>(
-    params: UserProfileUpdateType<T>,
-    type: UserProfileUpdateUseCase
+  async update<T extends UpdateUserProfileUseCase>(
+    params: UpdateUserProfileParamsType<T>,
+    type: UpdateUserProfileUseCase
   ): Promise<void> {
     try {
       switch (type) {
@@ -116,7 +116,7 @@ export class UserProfileRepository implements IUserProfileRepository {
           break;
         }
         case "NAME": {
-          const data = params as UserProfileUpdateType<"NAME">;
+          const data = params as UpdateUserProfileParamsType<"NAME">;
 
           await this.db.userProfile.update({
             where: {
@@ -132,7 +132,7 @@ export class UserProfileRepository implements IUserProfileRepository {
           break;
         }
         case "COVER_IMAGE": {
-          const data = params as UserProfileUpdateType<"COVER_IMAGE">;
+          const data = params as UpdateUserProfileParamsType<"COVER_IMAGE">;
 
           await this.db.userProfile.update({
             where: {
@@ -147,7 +147,7 @@ export class UserProfileRepository implements IUserProfileRepository {
         }
 
         case "PROFILE_IMAGE": {
-          const data = params as UserProfileUpdateType<"PROFILE_IMAGE">;
+          const data = params as UpdateUserProfileParamsType<"PROFILE_IMAGE">;
 
           await this.db.userProfile.update({
             where: {

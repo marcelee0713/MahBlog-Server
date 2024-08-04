@@ -1,8 +1,8 @@
 import {
   UserProfileData,
-  UserProfileRemoveUseCase,
-  UserProfileUpdateType,
-  UserProfileUpdateUseCase,
+  DeleteUserProfileUseCase,
+  UpdateUserProfileParamsType,
+  UpdateUserProfileUseCase,
 } from "../../types/user/user.profile.types";
 
 export interface IUserProfile {
@@ -50,19 +50,19 @@ export interface IUserProfileService {
   updateBio: (userId: string, bio: string) => Promise<void>;
   updateProfileImage: (userId: string, imageUrl: string) => Promise<void>;
   updateCoverImage: (userId: string, imageUrl: string) => Promise<void>;
-  remove: (userId: string, type: UserProfileRemoveUseCase) => Promise<void>;
+  remove: (userId: string, type: DeleteUserProfileUseCase) => Promise<void>;
 }
 
 export interface IUserProfileRepository {
   get: (userId: string) => Promise<UserProfileData>;
-  delete: (userId: string, type: UserProfileRemoveUseCase) => Promise<void>;
-  update: <T extends UserProfileUpdateUseCase>(
-    params: UserProfileUpdateType<T>,
+  delete: (userId: string, type: DeleteUserProfileUseCase) => Promise<void>;
+  update: <T extends UpdateUserProfileUseCase>(
+    params: UpdateUserProfileParamsType<T>,
     type: T
   ) => Promise<void>;
 }
 
-export interface UserProfileUpdateParams {
+export interface UpdateUserProfileParams {
   userId: string;
   fName: string;
   lName: string;

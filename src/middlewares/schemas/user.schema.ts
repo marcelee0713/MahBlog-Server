@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UserGetByEmailUseCase, UserUpdateUseCaseArr } from "../../types/user/user.types";
+import { GetUserByEmailUseCase, UpdateUserUseCaseArr } from "../../types/user/user.types";
 
 export const updateUserSchema = z.object({
   body: z.object({
@@ -9,7 +9,7 @@ export const updateUserSchema = z.object({
     currentPassword: z.string().min(8).optional(),
     password: z.string().min(8).optional(),
     removeSessions: z.boolean().optional(),
-    useCase: z.enum(UserUpdateUseCaseArr),
+    useCase: z.enum(UpdateUserUseCaseArr),
     token: z.string().optional(),
   }),
 });
@@ -17,14 +17,14 @@ export const updateUserSchema = z.object({
 export const getUserByEmailSchema = z.object({
   body: z.object({
     email: z.string().email().trim(),
-    useCase: z.literal("GET_USER_DATA" as UserGetByEmailUseCase),
+    useCase: z.literal("GET_USER_DATA" as GetUserByEmailUseCase),
   }),
 });
 
 export const emailVerificationReqSchema = z.object({
   body: z.object({
     email: z.string().email().trim(),
-    useCase: z.literal("VERIFY_EMAIL" as UserGetByEmailUseCase),
+    useCase: z.literal("VERIFY_EMAIL" as GetUserByEmailUseCase),
   }),
 });
 

@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import {
-  AddBlacklistedTokenParams,
+  CreateBlacklistedTokenParams,
   IUserBlacklistedToken,
   IUserBlacklistedTokenRepository,
   IUserBlacklistedTokenService,
@@ -13,14 +13,14 @@ export class UserBlacklistedTokenService implements IUserBlacklistedTokenService
   private repo: IUserBlacklistedTokenRepository;
 
   constructor(
-    @inject(TYPES.UserBlacklistedToken) entity: IUserBlacklistedToken,
+    @inject(TYPES.UserBlacklistedTokenModel) entity: IUserBlacklistedToken,
     @inject(TYPES.UserBlacklistedTokenRepository) repo: IUserBlacklistedTokenRepository
   ) {
     this.entity = entity;
     this.repo = repo;
   }
 
-  async addTokenToBlacklist(params: AddBlacklistedTokenParams): Promise<void> {
+  async addTokenToBlacklist(params: CreateBlacklistedTokenParams): Promise<void> {
     const createdAt = this.entity.convertNumberToDate(params.iat);
     const expiresAt = this.entity.convertNumberToDate(params.exp);
 
