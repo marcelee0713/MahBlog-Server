@@ -9,6 +9,11 @@ import {
   getUserTotalConnectionsSchema,
   onUpdateUserConnectionsSchema,
 } from "../middlewares/schemas/user.connections.schema";
+import {
+  createConnectionsRateLimit,
+  updateConnectionsRateLimit,
+  getConnectionsRateLimit,
+} from "../middlewares/rate-limiters/user/user.connection.rate_limiter";
 
 const userConnectionsRouter = express.Router();
 
@@ -21,27 +26,32 @@ userConnectionsRouter.use((req, res, next) => middleware.verifySession(req, res,
 userConnectionsRouter
   .route("/")
   .post(
+    createConnectionsRateLimit,
     middleware.validateBody(createUserConnectionsSchema),
     controller.onCreateConnection.bind(controller)
   )
   .put(
+    updateConnectionsRateLimit,
     middleware.validateBody(onUpdateUserConnectionsSchema),
     controller.onUpdateConnections.bind(controller)
   );
 
 userConnectionsRouter.post(
   "/get-connections",
+  getConnectionsRateLimit,
   middleware.validateBody(getUserTotalConnectionsSchema),
   controller.onGetTotalConnections.bind(controller)
 );
 
 userConnectionsRouter.post(
   "/get-connections-count",
+  getConnectionsRateLimit,
   controller.onGetTotalConnectionsCount.bind(controller)
 );
 
 userConnectionsRouter.post(
   "/get-pending-connections",
+  getConnectionsRateLimit,
   middleware.validateBody(getUserPendingConnectionsSchema),
   controller.onGetPendingConnections.bind(controller)
 );
