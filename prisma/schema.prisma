@@ -129,22 +129,23 @@ model UserLogs {
 
 model Blogs {
   blogId          String               @id @default(cuid())
-  authorId        String?
+  authorId        String
   coverImage      String?
-  title           String               @db.VarChar(255)
-  description     String
+  title           String?              @db.VarChar(80)
+  description     String?              @db.VarChar(150)
+  scores          Scores?
   notifications   UserNotifications[]
   status          BlogStatus           @default(ACTIVE)
-  visiblity       BlogVisibility       @default(PUBLIC)
+  visiblity       BlogVisibility       @default(DRAFTED)
   tags            BlogTags[]
   contents        BlogContents[]
   likes           BlogLikes[]
   comments        BlogComments[]
   commentReplies  BlogCommentReplies[]
   receivedReports ReportDetails[]
-  users           Users?               @relation(fields: [authorId], references: [userId], onDelete: Cascade)
+  users           Users                @relation(fields: [authorId], references: [userId], onDelete: Cascade)
   createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
+  updatedAt       DateTime?
 }
 
 model BlogTags {
@@ -156,12 +157,12 @@ model BlogTags {
 
 model BlogContents {
   blogContentId String   @id @default(cuid())
-  blogId        String?
+  blogId        String
   index         Int
-  title         String?  @db.VarChar(255)
+  title         String?  @db.VarChar(80)
   description   String?
   contentImage  String?
-  blog          Blogs?   @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+  blog          Blogs    @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
   createdAt     DateTime @default(now())
 }
 
@@ -183,6 +184,7 @@ model BlogComments {
   replies         BlogCommentReplies[]
   likes           BlogCommentLikes[]
   receivedReports ReportDetails[]
+  scores          Scores?
   users           Users?               @relation(fields: [userId], references: [userId], onDelete: Cascade)
   blog            Blogs?               @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
   createdAt       DateTime             @default(now())
@@ -191,14 +193,14 @@ model BlogComments {
 
 model BlogCommentReplies {
   replyId          String               @id @default(cuid())
-  commentId        String?
-  blogId           String?
-  userId           String?
+  commentId        String
+  blogId           String
+  userId           String
   mentionedReplyId String?
   reply            String
-  users            Users?               @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  blog             Blogs?               @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
-  comment          BlogComments?        @relation(fields: [commentId], references: [commentId], onDelete: Cascade)
+  users            Users                @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  blog             Blogs                @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+  comment          BlogComments         @relation(fields: [commentId], references: [commentId], onDelete: Cascade)
   likes            BlogCommentLikes[]
   mentionedReply   BlogCommentReplies?  @relation("MentionedReply", fields: [mentionedReplyId], references: [replyId], onDelete: Cascade)
   mentionedReplies BlogCommentReplies[] @relation("MentionedReply")
@@ -219,11 +221,21 @@ model BlogCommentLikes {
   createdAt     DateTime            @default(now())
 }
 
+model Scores {
+  scoresId           String        @id @default(cuid())
+  bestScore          Float
+  controversialScore Float
+  blogId             String?       @unique
+  commentId          String?       @unique
+  commentScores      BlogComments? @relation(fields: [commentId], references: [commentId], onDelete: Cascade)
+  blogScores         Blogs?        @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+}
+
 model Draft {
   draftId     String          @id @default(cuid())
   authorId    String?
   coverImage  String?
-  title       String?         @db.VarChar(255)
+  title       String?         @db.VarChar(80)
   description String?
   tags        DraftTags[]
   contents    DraftContents[]
@@ -236,7 +248,7 @@ model DraftContents {
   draftContentId String  @id @default(cuid())
   draftId        String?
   index          Int
-  title          String? @db.VarChar(255)
+  title          String? @db.VarChar(80)
   description    String?
   contentImage   String?
   Draft          Draft?  @relation(fields: [draftId], references: [draftId], onDelete: Cascade)
@@ -317,4 +329,5 @@ enum BlogVisibility {
   PRIVATE
   PUBLIC
   CONNECTIONS
+  DRAFTED
 }
