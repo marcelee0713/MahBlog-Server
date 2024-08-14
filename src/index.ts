@@ -36,5 +36,3 @@ app.use("/api/v1/user-connect", userConnectionsRouter);
 
 // TODO: UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
-
-// TODO: Add rate limiters to all of these routes

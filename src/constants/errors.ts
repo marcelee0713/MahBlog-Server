@@ -81,6 +81,11 @@ export const KNOWN_ERRORS: Record<ErrorType, ErrorObject> = {
     message: "Invalid email.",
   },
 
+  invalid: {
+    status: 400,
+    message: "Invalid data.",
+  },
+
   "invalid-password": {
     status: 400,
     message: "Invalid password, please follow the format.",
