@@ -12,10 +12,12 @@ export class Blog implements IBlog {
       throw new CustomError("invalid", "Invalid description, maximum of 150 characters only.");
   }
 
-  validateTag(tags: string[]) {
+  validateTags(tags: string[]) {
     for (let i = 0; i < tags.length; i++) {
       if (tags[i].length > 150)
         throw new CustomError("invalid", `Invalid tag ${tags[i]} , maximum of 50 characters only.`);
     }
+
+    return Array.from(new Set(tags));
   }
 }

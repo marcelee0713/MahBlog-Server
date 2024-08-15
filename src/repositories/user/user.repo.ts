@@ -1,10 +1,14 @@
 import { injectable } from "inversify";
-import { IUserRepository, SignInParams, UpdateUserParams } from "../interfaces/user/user.interface";
-import { UserData, GetUserParamsType, GetUserUseCase } from "../types/user/user.types";
+import {
+  IUserRepository,
+  SignInParams,
+  UpdateUserParams,
+} from "../../interfaces/user/user.interface";
+import { UserData, GetUserParamsType, GetUserUseCase } from "../../types/user/user.types";
 import { Prisma, PrismaClient } from "@prisma/client";
-import { db } from "../config/db";
+import { db } from "../../config/db";
 import bcrypt from "bcrypt";
-import { CustomError } from "../utils/error_handler";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserRepository implements IUserRepository {

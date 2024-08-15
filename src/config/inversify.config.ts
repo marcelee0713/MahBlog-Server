@@ -3,7 +3,7 @@ import { IUser, IUserRepository, IUserService } from "../interfaces/user/user.in
 import { TYPES } from "../constants";
 import { User } from "../models/user/user.model";
 import { UserService } from "../services/user/user.service";
-import { UserRepository } from "../repositories/user.repo";
+import { UserRepository } from "../repositories/user/user.repo";
 import { UserController } from "../controllers/user.controller";
 import {
   IUserProfile,
@@ -18,7 +18,7 @@ import {
 } from "../interfaces/user/user.session.interface";
 import { UserSession } from "../models/user/user.session.model";
 import { UserSessionService } from "../services/user/user.session.service";
-import { UserSessionRepository } from "../repositories/user.session.repo";
+import { UserSessionRepository } from "../repositories/user/user.session.repo";
 import { IAuthService } from "../interfaces/auth.interface";
 import { AuthService } from "../services/auth.service";
 import { UserMiddleware } from "../middlewares/user.middleware";
@@ -31,7 +31,7 @@ import {
 } from "../interfaces/user/user.blacklisted_token.interface";
 import { UserBlacklistedToken } from "../models/user/user.blacklisted_token.model";
 import { UserBlacklistedTokenService } from "../services/user/user.blacklisted_token.service";
-import { UserBlacklistedTokenRepository } from "../repositories/user.blacklisted_tokens.repo";
+import { UserBlacklistedTokenRepository } from "../repositories/user/user.blacklisted_tokens.repo";
 import {
   IUserLogs,
   IUserLogsRepository,
@@ -39,11 +39,11 @@ import {
 } from "../interfaces/user/user.logs.interface";
 import { UserLogs } from "../models/user/user.logs.model";
 import { UserLogsService } from "../services/user/user.logs.service";
-import { UserLogsRepository } from "../repositories/user.logs.repo";
+import { UserLogsRepository } from "../repositories/user/user.logs.repo";
 import { IMediaService } from "../interfaces/media.interface";
 import { MediaService } from "../services/media.service";
 import { UserProfileService } from "../services/user/user.profile.service";
-import { UserProfileRepository } from "../repositories/user.profile.repo";
+import { UserProfileRepository } from "../repositories/user/user.profile.repo";
 import { UserProfileController } from "../controllers/user.profile.controller";
 import {
   IUserReports,
@@ -52,14 +52,14 @@ import {
 } from "../interfaces/user/user.reports.interface";
 import { UserReports } from "../models/user/user.reports.model";
 import { UserReportsService } from "../services/user/user.reports.service";
-import { UserReportsRepository } from "../repositories/user.reports.repo";
+import { UserReportsRepository } from "../repositories/user/user.reports.repo";
 import { UserReportsController } from "../controllers/user.reports.controller";
 import {
   IUserConnectionRepository,
   IUserConnectionsService,
 } from "../interfaces/user/user.connections.interface";
 import { UserConnectionsService } from "../services/user/user.connections.service";
-import { UserConnectionsRepository } from "../repositories/user.connections.repo";
+import { UserConnectionsRepository } from "../repositories/user/user.connections.repo";
 import { UserConnectionsController } from "../controllers/user.connections.controller";
 
 export const container = new Container();

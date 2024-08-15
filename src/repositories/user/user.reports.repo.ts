@@ -3,17 +3,17 @@ import {
   IUserReportsRepository,
   GetUserReportParams,
   UserReportsData,
-} from "../interfaces/user/user.reports.interface";
+} from "../../interfaces/user/user.reports.interface";
 import {
   ReportType,
   CreateReportParamsType,
   DeleteReportUseCase,
   DeleteReportType,
   UserReportData,
-} from "../types/user/user.reports.type";
-import { db } from "../config/db";
+} from "../../types/user/user.reports.type";
+import { db } from "../../config/db";
 import { injectable } from "inversify";
-import { CustomError } from "../utils/error_handler";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserReportsRepository implements IUserReportsRepository {

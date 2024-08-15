@@ -4,16 +4,16 @@ import {
   UserConnections,
   UserPendingConnections,
   UserUpdateConnectionParams,
-} from "../interfaces/user/user.connections.interface";
+} from "../../interfaces/user/user.connections.interface";
 import {
   GetConnectionsUseCase,
   GetConnectionsParamsType,
   GetConnectionReturnType,
-} from "../types/user/user.connections.types";
+} from "../../types/user/user.connections.types";
 import { PrismaClient } from "@prisma/client";
-import { db } from "../config/db";
+import { db } from "../../config/db";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { CustomError } from "../utils/error_handler";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserConnectionsRepository implements IUserConnectionRepository {

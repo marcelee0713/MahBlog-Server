@@ -1,9 +1,9 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { IUserSessionRepository } from "../interfaces/user/user.session.interface";
-import { UserSessionData } from "../types/user/user.session.types";
-import { db } from "../config/db";
+import { IUserSessionRepository } from "../../interfaces/user/user.session.interface";
+import { UserSessionData } from "../../types/user/user.session.types";
+import { db } from "../../config/db";
 import { injectable } from "inversify";
-import { CustomError } from "../utils/error_handler";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserSessionRepository implements IUserSessionRepository {
