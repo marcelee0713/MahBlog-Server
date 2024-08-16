@@ -328,6 +328,5 @@ enum BlogStatus {
 enum BlogVisibility {
   PRIVATE
   PUBLIC
-  CONNECTIONS
   DRAFTED
 }

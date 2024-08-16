@@ -40,8 +40,8 @@ export interface IBlogService {
 
 export interface IBlogRepository {
   create: (userId: string) => Promise<CreateBlogResponse>;
-  get: (userId: string, blogId: string) => Promise<BlogInfo>;
-  // TODO: Create a getAlL function here also.
+  get: (userId: string, authorId: string, blogId: string) => Promise<BlogInfo>;
+  getAll: (params: GetBlogsParams) => Promise<BlogInfo[]>;
   update: (params: UpdateBlogParams) => Promise<BlogInfo>;
   delete: (userId: string, blogId: string) => Promise<void>;
 }
@@ -57,11 +57,13 @@ export interface GetBlogsParams {
     take: number;
   };
   filters: {
+    authorId?: string;
     searchQuery?: string;
     tags?: string[];
     sortBy: BlogSortingOptions;
+    visibility: BlogVisibility;
   };
-  userId?: string;
+  userId: string;
 }
 
 export interface UpdateBlogParams extends CreateBlogResponse {

@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   BlogInfo,
   CreateBlogResponse,
+  GetBlogsParams,
   IBlogRepository,
   UpdateBlogParams,
 } from "../../interfaces/blog/blog.interface";
@@ -9,6 +10,7 @@ import { db } from "../../config/db";
 import { CustomError } from "../../utils/error_handler";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { arraysEqual } from "../../utils";
+import { BlogSortingOptions } from "../../types/blog/blog.types";
 
 export class BlogRepository implements IBlogRepository {
   private db: PrismaClient;
@@ -54,11 +56,11 @@ export class BlogRepository implements IBlogRepository {
     }
   }
 
-  async get(userId: string, blogId: string): Promise<BlogInfo> {
+  async get(userId: string, authorId: string, blogId: string): Promise<BlogInfo> {
     try {
       const data = await this.db.blogs.findFirst({
         where: {
-          authorId: userId,
+          authorId,
           blogId,
         },
         include: {
@@ -90,7 +92,7 @@ export class BlogRepository implements IBlogRepository {
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
         },
-        editable: false,
+        editable: userId === authorId,
       };
     } catch (err) {
       if (err instanceof CustomError) throw err;
@@ -105,6 +107,79 @@ export class BlogRepository implements IBlogRepository {
         500,
         "BlogRepository",
         "By getting a blog's info."
+      );
+    }
+  }
+
+  async getAll(params: GetBlogsParams): Promise<BlogInfo[]> {
+    const orderByOptions: Record<BlogSortingOptions, object> = {
+      BEST: [{ bestScore: "desc" }, { createdAt: "desc" }],
+      CONTROVERSIAL: [{ controversialScore: "desc" }, { createdAt: "desc" }],
+      LATEST: { createdAt: "desc" },
+      OLDEST: { createdAt: "asc" },
+    };
+
+    try {
+      const data = await this.db.blogs.findMany({
+        skip: params.pagination.skip,
+        take: params.pagination.take,
+        where: {
+          authorId: params.filters.authorId,
+          title: {
+            contains: params.filters.searchQuery,
+            mode: "insensitive",
+          },
+          tags: {
+            some: {
+              tag: {
+                in: params.filters.tags,
+              },
+            },
+          },
+          visiblity: params.filters.visibility,
+        },
+        orderBy: orderByOptions[params.filters.sortBy],
+        include: {
+          likes: true,
+          comments: true,
+          commentReplies: true,
+          tags: true,
+        },
+      });
+
+      const blogs: BlogInfo[] = [];
+
+      for (let i = 0; i < data.length; i++) {
+        const blog = data[i];
+        const tags: string[] = blog.tags.map((val) => val.tag);
+        const comments = blog.commentReplies.length + blog.comments.length;
+
+        blogs.push({
+          ...blog,
+          tags: tags,
+          engagement: {
+            comments,
+            likes: blog.likes.length,
+          },
+          publicationDetails: {
+            status: blog.status,
+            visibility: blog.visiblity,
+          },
+          timestamps: {
+            createdAt: blog.createdAt,
+            updatedAt: blog.updatedAt,
+          },
+          editable: params.userId === params.filters.authorId,
+        });
+      }
+
+      return blogs;
+    } catch (err) {
+      throw new CustomError(
+        "internal-server-error",
+        `An error occured when getting all blog info.`,
+        500,
+        "BlogRepository"
       );
     }
   }

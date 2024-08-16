@@ -1,6 +1,6 @@
 export const BlogStatusArr = ["ACTIVE", "FLAGGED"] as const;
 
-export const BlogVisibilityArr = ["PRIVATE", "PUBLIC", "CONNECTIONS", "DRAFTED"] as const;
+export const BlogVisibilityArr = ["PRIVATE", "PUBLIC", "DRAFTED"] as const;
 
 export const BlogSortingOptionsArr = ["BEST", "CONTROVERSIAL", "LATEST", "OLDEST"] as const;
 
