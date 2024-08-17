@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { GetUserByEmailUseCase, UpdateUserUseCaseArr } from "../../types/user/user.types";
+import { GetUserByEmailUseCase, UpdateUserUseCaseArr } from "../../../types/user/user.types";
 
 export const updateUserSchema = z.object({
   body: z.object({

@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { IUserService, UpdateUserBodyReq } from "../interfaces/user/user.interface";
-import { CLIENT_ROUTES, TYPES } from "../constants";
-import { CustomError, identifyErrors } from "../utils/error_handler";
-import { FormatResponse } from "../utils/response_handler";
-import { IAuthService } from "../interfaces/auth.interface";
-import { IEmailService } from "../interfaces/email.interface";
-import { IUserBlacklistedTokenService } from "../interfaces/user/user.blacklisted_token.interface";
-import { IUserLogsService } from "../interfaces/user/user.logs.interface";
-import { GetUserByEmailUseCase } from "../types/user/user.types";
+import { IUserService, UpdateUserBodyReq } from "../../interfaces/user/user.interface";
+import { CLIENT_ROUTES, TYPES } from "../../constants";
+import { CustomError, identifyErrors } from "../../utils/error_handler";
+import { FormatResponse } from "../../utils/response_handler";
+import { IAuthService } from "../../interfaces/auth.interface";
+import { IEmailService } from "../../interfaces/email.interface";
+import { IUserBlacklistedTokenService } from "../../interfaces/user/user.blacklisted_token.interface";
+import { IUserLogsService } from "../../interfaces/user/user.logs.interface";
+import { GetUserByEmailUseCase } from "../../types/user/user.types";
 
 @injectable()
 export class UserController {

@@ -3,10 +3,11 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import userRouter from "./routes/user.routes";
-import userProfileRouter from "./routes/user.profile.routes";
-import userReportsRouter from "./routes/user.reports.routes";
-import userConnectionsRouter from "./routes/user.connections.routes";
+import userRouter from "./routes/users/user.routes";
+import userProfileRouter from "./routes/users/user.profile.routes";
+import userReportsRouter from "./routes/users/user.reports.routes";
+import userConnectionsRouter from "./routes/users/user.connections.routes";
+import blogRouter from "./routes/blogs/blog.routes";
 
 dotenv.config();
 
@@ -33,6 +34,8 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/user-profile", userProfileRouter);
 app.use("/api/v1/user-reports", userReportsRouter);
 app.use("/api/v1/user-connect", userConnectionsRouter);
+
+app.use("/api/v1/blog", blogRouter);
 
 // TODO: UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)

@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { IUserReportsService } from "../interfaces/user/user.reports.interface";
-import { TYPES } from "../constants";
-import { identifyErrors } from "../utils/error_handler";
+import { IUserReportsService } from "../../interfaces/user/user.reports.interface";
+import { TYPES } from "../../constants";
+import { identifyErrors } from "../../utils/error_handler";
 import {
   CreateUserReportBlogBodyReq,
   CreateUserReportCommentBodyReq,
   CreateUserReportIssueBodyReq,
   CreateUserReportUserBodyReq,
   GetUserReportBodyReq,
-} from "../types/user/user.reports.type";
-import { FormatResponse } from "../utils/response_handler";
+} from "../../types/user/user.reports.type";
+import { FormatResponse } from "../../utils/response_handler";
 
 @injectable()
 export class UserReportsController {

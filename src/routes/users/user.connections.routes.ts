@@ -1,19 +1,19 @@
 import express from "express";
-import { UserConnectionsController } from "../controllers/user.connections.controller";
-import * as userContainer from "../config/inversify.config";
-import { TYPES } from "../constants";
+import { UserConnectionsController } from "../../controllers/user/user.connections.controller";
+import * as userContainer from "../../config/inversify.config";
+import { TYPES } from "../../constants";
 import { middleware } from "./user.routes";
 import {
   createUserConnectionsSchema,
   getUserPendingConnectionsSchema,
   getUserTotalConnectionsSchema,
   onUpdateUserConnectionsSchema,
-} from "../middlewares/schemas/user.connections.schema";
+} from "../../middlewares/schemas/user/user.connections.schema";
 import {
   createConnectionsRateLimit,
   updateConnectionsRateLimit,
   getConnectionsRateLimit,
-} from "../middlewares/rate-limiters/user/user.connection.rate_limiter";
+} from "../../middlewares/rate-limiters/user/user.connection.rate_limiter";
 
 const userConnectionsRouter = express.Router();
 

@@ -11,10 +11,11 @@ export class MediaService implements IMediaService {
   constructor() {
     this.media = cloudinary;
   }
-  async uploadImage(userId: string, path: string): Promise<string> {
+  async uploadImage(userId: string, path: string, folderPath: string = `/`): Promise<string> {
+    const defaultFolderPath = `/mahblog/user_media/${userId}${folderPath}`;
     try {
       const image = await this.media.uploader.upload(path, {
-        folder: `/mahblog/user_media/${userId}/profile/`,
+        folder: defaultFolderPath,
         resource_type: "image",
       });
 

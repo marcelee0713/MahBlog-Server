@@ -149,10 +149,10 @@ model Blogs {
 }
 
 model BlogTags {
-  tagId  String  @id @default(cuid())
-  blogId String?
-  tag    String  @db.VarChar(50)
-  Blogs  Blogs?  @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+  tagId  String @id @default(cuid())
+  blogId String
+  tag    String @db.VarChar(50)
+  Blogs  Blogs  @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
 }
 
 model BlogContents {

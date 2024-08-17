@@ -4,7 +4,7 @@ import { TYPES } from "../constants";
 import { User } from "../models/user/user.model";
 import { UserService } from "../services/user/user.service";
 import { UserRepository } from "../repositories/user/user.repo";
-import { UserController } from "../controllers/user.controller";
+import { UserController } from "../controllers/user/user.controller";
 import {
   IUserProfile,
   IUserProfileRepository,
@@ -44,7 +44,7 @@ import { IMediaService } from "../interfaces/media.interface";
 import { MediaService } from "../services/media.service";
 import { UserProfileService } from "../services/user/user.profile.service";
 import { UserProfileRepository } from "../repositories/user/user.profile.repo";
-import { UserProfileController } from "../controllers/user.profile.controller";
+import { UserProfileController } from "../controllers/user/user.profile.controller";
 import {
   IUserReports,
   IUserReportsRepository,
@@ -53,14 +53,19 @@ import {
 import { UserReports } from "../models/user/user.reports.model";
 import { UserReportsService } from "../services/user/user.reports.service";
 import { UserReportsRepository } from "../repositories/user/user.reports.repo";
-import { UserReportsController } from "../controllers/user.reports.controller";
+import { UserReportsController } from "../controllers/user/user.reports.controller";
 import {
   IUserConnectionRepository,
   IUserConnectionsService,
 } from "../interfaces/user/user.connections.interface";
 import { UserConnectionsService } from "../services/user/user.connections.service";
 import { UserConnectionsRepository } from "../repositories/user/user.connections.repo";
-import { UserConnectionsController } from "../controllers/user.connections.controller";
+import { UserConnectionsController } from "../controllers/user/user.connections.controller";
+import { Blog } from "../models/blog/blog.model";
+import { IBlog, IBlogRepository, IBlogService } from "../interfaces/blog/blog.interface";
+import { BlogService } from "../services/blog/blog.service";
+import { BlogRepository } from "../repositories/blog/blog.repo";
+import { BlogController } from "../controllers/blog/blog.controller";
 
 export const container = new Container();
 
@@ -102,6 +107,11 @@ container.bind<IUserReportsRepository>(TYPES.UserReportsRepository).to(UserRepor
 container.bind(TYPES.UserReportsController).to(UserReportsController);
 
 container.bind(TYPES.UserMiddleware).to(UserMiddleware);
+
+container.bind<IBlog>(TYPES.BlogModel).to(Blog);
+container.bind<IBlogService>(TYPES.BlogService).to(BlogService);
+container.bind<IBlogRepository>(TYPES.BlogRepository).to(BlogRepository);
+container.bind(TYPES.BlogController).to(BlogController);
 
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.EmailService).to(EmailService);

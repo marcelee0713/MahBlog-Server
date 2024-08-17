@@ -1,18 +1,18 @@
 import express from "express";
-import * as userContainer from "../config/inversify.config";
-import { TYPES } from "../constants";
-import { UserProfileController } from "../controllers/user.profile.controller";
+import * as userContainer from "../../config/inversify.config";
+import { TYPES } from "../../constants";
+import { UserProfileController } from "../../controllers/user/user.profile.controller";
 import { middleware } from "./user.routes";
 import {
   deleteProfileImageSchema,
   updateProfileBioSchema,
   updateProfileNameSchema,
-} from "../middlewares/schemas/user.profile.schema";
+} from "../../middlewares/schemas/user/user.profile.schema";
 import {
   getProfileRateLimit,
   updateProfileRateLimit,
   removeProfileRateLimit,
-} from "../middlewares/rate-limiters/user/user.profile.rate_limiter";
+} from "../../middlewares/rate-limiters/user/user.profile.rate_limiter";
 
 const userProfileRouter = express.Router();
 

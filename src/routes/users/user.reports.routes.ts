@@ -1,7 +1,7 @@
 import express from "express";
-import * as userContainer from "../config/inversify.config";
-import { TYPES } from "../constants";
-import { UserReportsController } from "../controllers/user.reports.controller";
+import * as userContainer from "../../config/inversify.config";
+import { TYPES } from "../../constants";
+import { UserReportsController } from "../../controllers/user/user.reports.controller";
 import { middleware } from "./user.routes";
 import {
   createReportBlogSchema,
@@ -13,14 +13,14 @@ import {
   deleteReportsSchema,
   getReportsSchema,
   getReportSchema,
-} from "../middlewares/schemas/user.reports.schema";
+} from "../../middlewares/schemas/user/user.reports.schema";
 import {
   getReportRateLimit,
   getReportsRateLimit,
   createReportRateLimit,
   deleteReportsRateLimit,
   deleteReportRateLimit,
-} from "../middlewares/rate-limiters/user/user.reports.rate_limiter";
+} from "../../middlewares/rate-limiters/user/user.reports.rate_limiter";
 
 const userReportsRouter = express.Router();
 

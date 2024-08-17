@@ -1,15 +1,15 @@
 import express from "express";
-import * as userContainer from "../config/inversify.config";
-import { UserController } from "../controllers/user.controller";
-import { TYPES } from "../constants";
-import { UserMiddleware } from "../middlewares/user.middleware";
+import * as userContainer from "../../config/inversify.config";
+import { UserController } from "../../controllers/user/user.controller";
+import { TYPES } from "../../constants";
+import { UserMiddleware } from "../../middlewares/user.middleware";
 import {
   emailVerificationReqSchema,
   getUserByEmailSchema,
   resetPasswordReqSchema,
   tokenSchema,
   updateUserSchema,
-} from "../middlewares/schemas/user.schema";
+} from "../../middlewares/schemas/user/user.schema";
 import {
   createUserRateLimit,
   deleteUserRateLimit,
@@ -17,7 +17,7 @@ import {
   getUserRateLimit,
   signInAndOutRateLimit,
   updateUserRateLimit,
-} from "../middlewares/rate-limiters/user/user.rate_limiter";
+} from "../../middlewares/rate-limiters/user/user.rate_limiter";
 
 const userRouter = express.Router();
 

@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { IUserConnectionsService } from "../interfaces/user/user.connections.interface";
-import { TYPES } from "../constants";
-import { CustomError, identifyErrors } from "../utils/error_handler";
-import { FormatResponse, FormatResponseArray } from "../utils/response_handler";
-import { SortOrder } from "../types";
-import { UpdateUserConnectionReqBody } from "../types/user/user.connections.types";
+import { IUserConnectionsService } from "../../interfaces/user/user.connections.interface";
+import { TYPES } from "../../constants";
+import { CustomError, identifyErrors } from "../../utils/error_handler";
+import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
+import { SortOrder } from "../../types";
+import { UpdateUserConnectionReqBody } from "../../types/user/user.connections.types";
 
 @injectable()
 export class UserConnectionsController {

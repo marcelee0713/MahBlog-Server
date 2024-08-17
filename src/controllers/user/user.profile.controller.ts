@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
-import { IUserProfileService } from "../interfaces/user/user.profile.interface";
-import { TYPES } from "../constants";
-import { CustomError, identifyErrors } from "../utils/error_handler";
+import { IUserProfileService } from "../../interfaces/user/user.profile.interface";
+import { TYPES } from "../../constants";
+import { CustomError, identifyErrors } from "../../utils/error_handler";
 import { Request, Response } from "express";
-import { FormatResponse } from "../utils/response_handler";
-import { IMediaService } from "../interfaces/media.interface";
-import { IUserLogsService } from "../interfaces/user/user.logs.interface";
+import { FormatResponse } from "../../utils/response_handler";
+import { IMediaService } from "../../interfaces/media.interface";
+import { IUserLogsService } from "../../interfaces/user/user.logs.interface";
 
 @injectable()
 export class UserProfileController {
@@ -90,7 +90,7 @@ export class UserProfileController {
       const user = await this.service.getUserProfile(userId);
 
       if (!user.profilePicture) {
-        const url = await this.media.uploadImage(user.userId, file.path);
+        const url = await this.media.uploadImage(user.userId, file.path, "/profile");
 
         await this.service.updateProfileImage(userId, url);
 
@@ -103,7 +103,7 @@ export class UserProfileController {
 
       await this.media.removeImage(user.profilePicture);
 
-      const url = await this.media.uploadImage(user.userId, file.path);
+      const url = await this.media.uploadImage(user.userId, file.path, "/profile");
 
       await this.service.updateProfileImage(user.userId, url);
 
@@ -132,7 +132,7 @@ export class UserProfileController {
       const user = await this.service.getUserProfile(userId);
 
       if (!user.profileCover) {
-        const url = await this.media.uploadImage(user.userId, file.path);
+        const url = await this.media.uploadImage(user.userId, file.path, "/profile");
 
         await this.service.updateCoverImage(userId, url);
 
@@ -145,7 +145,7 @@ export class UserProfileController {
 
       await this.media.removeImage(user.profileCover);
 
-      const url = await this.media.uploadImage(user.userId, file.path);
+      const url = await this.media.uploadImage(user.userId, file.path, "/profile");
 
       await this.service.updateCoverImage(user.userId, url);
 

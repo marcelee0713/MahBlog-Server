@@ -9,9 +9,10 @@ import {
 import { db } from "../../config/db";
 import { CustomError } from "../../utils/error_handler";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { arraysEqual } from "../../utils";
 import { BlogSortingOptions } from "../../types/blog/blog.types";
+import { injectable } from "inversify";
 
+@injectable()
 export class BlogRepository implements IBlogRepository {
   private db: PrismaClient;
 
@@ -192,15 +193,18 @@ export class BlogRepository implements IBlogRepository {
         },
       });
 
-      const tags: string[] = tagsData.map((val) => val.tag);
+      const tagsToIgnore: string[] = [];
 
       const tagIdsToRemove: string[] = [];
 
-      if (!arraysEqual(params.tags, tags)) {
+      if (params.tags) {
         for (let i = 0; i < tagsData.length; i++) {
-          const element = tagsData[i];
+          if (!params.tags.includes(tagsData[i].tag)) {
+            tagIdsToRemove.push(tagsData[i].tagId);
+            continue;
+          }
 
-          if (!params.tags.includes(element.tag)) tagIdsToRemove.push(element.tagId);
+          tagsToIgnore.push(tagsData[i].tag);
         }
 
         await this.db.blogTags.deleteMany({
@@ -210,6 +214,23 @@ export class BlogRepository implements IBlogRepository {
               in: tagIdsToRemove,
             },
           },
+        });
+
+        const tagsToBeAdded: { blogId: string; tag: string }[] = [];
+
+        for (let i = 0; i < params.tags.length; i++) {
+          const element = params.tags[i];
+
+          if (tagsToIgnore.includes(element)) continue;
+
+          tagsToBeAdded.push({
+            blogId: params.blogId,
+            tag: element,
+          });
+        }
+
+        await this.db.blogTags.createMany({
+          data: tagsToBeAdded,
         });
       }
 
@@ -222,7 +243,8 @@ export class BlogRepository implements IBlogRepository {
           title: params.title,
           description: params.desc,
           visiblity: params.visibility,
-          coverImage: params.coverImage ?? undefined,
+          coverImage: params.coverImage,
+          updatedAt: new Date(),
         },
         include: {
           comments: true,
@@ -232,10 +254,16 @@ export class BlogRepository implements IBlogRepository {
         },
       });
 
+      const tags: string[] = data.tags.map((val) => val.tag);
+
       const comments = data.commentReplies.length + data.comments.length;
 
       return {
-        ...data,
+        authorId: data.authorId,
+        blogId: data.blogId,
+        coverImage: data.coverImage,
+        description: data.description,
+        title: data.title,
         tags: tags,
         engagement: {
           comments,
@@ -249,7 +277,7 @@ export class BlogRepository implements IBlogRepository {
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
         },
-        editable: false,
+        editable: true,
       };
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
@@ -267,14 +295,28 @@ export class BlogRepository implements IBlogRepository {
     }
   }
 
-  async delete(userId: string, blogId: string): Promise<void> {
+  async delete(userId: string, blogId: string): Promise<string[]> {
     try {
-      await this.db.blogs.delete({
+      const images: string[] = [];
+      const blog = await this.db.blogs.delete({
         where: {
           blogId: blogId,
           authorId: userId,
         },
+        include: {
+          contents: true,
+        },
       });
+
+      if (blog.coverImage) images.push(blog.coverImage);
+
+      for (let i = 0; i < blog.contents.length; i++) {
+        const image = blog.contents[i].contentImage;
+
+        if (image) images.push(image);
+      }
+
+      return images;
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2025")

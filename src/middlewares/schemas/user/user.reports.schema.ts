@@ -1,6 +1,10 @@
 import { z } from "zod";
-import { ReportCategoriesArr, ReportTypeArr, ReportType } from "../../types/user/user.reports.type";
-import { SortOrderArr } from "../../types";
+import {
+  ReportCategoriesArr,
+  ReportTypeArr,
+  ReportType,
+} from "../../../types/user/user.reports.type";
+import { SortOrderArr } from "../../../types";
 
 export const getReportsSchema = z.object({
   body: z

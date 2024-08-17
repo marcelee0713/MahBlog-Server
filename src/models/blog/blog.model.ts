@@ -1,6 +1,8 @@
+import { injectable } from "inversify";
 import { IBlog } from "../../interfaces/blog/blog.interface";
 import { CustomError } from "../../utils/error_handler";
 
+@injectable()
 export class Blog implements IBlog {
   validateBlogTitle(title: string) {
     if (title.length > 80)
@@ -12,7 +14,9 @@ export class Blog implements IBlog {
       throw new CustomError("invalid", "Invalid description, maximum of 150 characters only.");
   }
 
-  validateTags(tags: string[]) {
+  validateTags(tags?: string[]) {
+    if (!tags) return tags;
+
     for (let i = 0; i < tags.length; i++) {
       if (tags[i].length > 150)
         throw new CustomError("invalid", `Invalid tag ${tags[i]} , maximum of 50 characters only.`);
