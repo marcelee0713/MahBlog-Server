@@ -13,7 +13,7 @@ export interface ErrorReqStack {
 export interface ErrorReqBody {
   message: string;
   code: string;
-  where: string;
+  where: (string | number)[];
 }
 
 export interface ErrorResponse {

@@ -18,7 +18,6 @@ export interface IBlogService {
 
   // TODO: Relocate it to Blog Content Interface
   // getBlogContents: (userId: string, blogId: string) => Promise<BlogContent[]>;
-
   editBlog: (params: UpdateBlogParams) => Promise<BlogInfo>;
 
   // TODO: Relocate it to Blog Content Interface
@@ -28,7 +27,6 @@ export interface IBlogService {
   // TODO: After this method make sure to also remove the image in the MediaService
   // deleteContent: (params: DeleteBlogContentParams) => Promise<void>;
 
-  // TODO An Array of imageUrls that is gathered through the Blog's Cover Image, and Blog's contentImages
   deleteBlog: (userId: string, blogId: string) => Promise<string[]>;
 
   // TODO: After liking or unliking the blog, update the score of the blog.
@@ -36,8 +34,6 @@ export interface IBlogService {
   // TODO: Create a Blog Like Repository instead.
   toggleLike: (userId: string, blogId: string) => Promise<void>;
 }
-
-// TODO: Do the full functionality of Blogs with its routers, controllers, and repository
 
 export interface IBlogRepository {
   create: (userId: string) => Promise<CreateBlogResponse>;

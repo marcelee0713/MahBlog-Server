@@ -79,7 +79,11 @@ export class BlogRepository implements IBlogRepository {
       const comments = data.commentReplies.length + data.comments.length;
 
       return {
-        ...data,
+        authorId: data.authorId,
+        blogId: data.blogId,
+        coverImage: data.coverImage,
+        description: data.description,
+        title: data.title,
         tags: tags,
         engagement: {
           comments,
@@ -114,8 +118,8 @@ export class BlogRepository implements IBlogRepository {
 
   async getAll(params: GetBlogsParams): Promise<BlogInfo[]> {
     const orderByOptions: Record<BlogSortingOptions, object> = {
-      BEST: [{ bestScore: "desc" }, { createdAt: "desc" }],
-      CONTROVERSIAL: [{ controversialScore: "desc" }, { createdAt: "desc" }],
+      BEST: [{ scores: { bestScore: "desc" } }, { createdAt: "desc" }],
+      CONTROVERSIAL: [{ scores: { controversialScore: "desc" } }, { createdAt: "desc" }],
       LATEST: { createdAt: "desc" },
       OLDEST: { createdAt: "asc" },
     };
@@ -130,13 +134,15 @@ export class BlogRepository implements IBlogRepository {
             contains: params.filters.searchQuery,
             mode: "insensitive",
           },
-          tags: {
-            some: {
-              tag: {
-                in: params.filters.tags,
-              },
-            },
-          },
+          tags: params.filters.tags
+            ? {
+                some: {
+                  tag: {
+                    in: params.filters.tags,
+                  },
+                },
+              }
+            : undefined,
           visiblity: params.filters.visibility,
         },
         orderBy: orderByOptions[params.filters.sortBy],
@@ -156,7 +162,11 @@ export class BlogRepository implements IBlogRepository {
         const comments = blog.commentReplies.length + blog.comments.length;
 
         blogs.push({
-          ...blog,
+          authorId: blog.authorId,
+          blogId: blog.blogId,
+          coverImage: blog.coverImage,
+          description: blog.description,
+          title: blog.title,
           tags: tags,
           engagement: {
             comments,

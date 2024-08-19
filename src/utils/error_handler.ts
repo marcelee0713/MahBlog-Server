@@ -60,7 +60,7 @@ export const bodyError = (err: z.ZodError): ErrorReqStack => {
     const error: ErrorReqBody = {
       message: val.message,
       code: val.code,
-      where: val.path[1].toString(),
+      where: val.path,
     };
 
     errorReqStack.errors.push(error);

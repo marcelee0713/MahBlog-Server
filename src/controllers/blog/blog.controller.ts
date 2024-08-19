@@ -28,9 +28,9 @@ export class BlogController {
     try {
       const userId = res.locals.userId as string;
 
-      const data = this.service.createBlog(userId);
+      const data = await this.service.createBlog(userId);
 
-      return res.status(200).json(FormatResponse(data));
+      return res.status(200).json(FormatResponse(data, "Created a blog."));
     } catch (err) {
       const errObj = identifyErrors(err);
 
@@ -45,6 +45,19 @@ export class BlogController {
       const body: GetBlogsBodyReq = {
         body: { ...req.body, userId },
       };
+
+      const visibility = body.body.filters.visibility;
+
+      const secludedVisibility = visibility === "PRIVATE" || visibility === "DRAFTED";
+
+      const sameUser = userId === body.body.filters.authorId;
+
+      if (secludedVisibility && !sameUser) {
+        throw new CustomError(
+          "user-not-authorized",
+          "You are not authorized to view someone else's blogs that are private and drafted."
+        );
+      }
 
       const data = await this.service.getBlogs(body.body);
 
@@ -64,6 +77,19 @@ export class BlogController {
 
       const data = await this.service.getBlogInfo(userId, authorId, blogId);
 
+      const visibility = data.publicationDetails.visibility;
+
+      const secludedVisibility = visibility === "PRIVATE" || visibility === "DRAFTED";
+
+      const sameUser = userId === authorId;
+
+      if (secludedVisibility && !sameUser) {
+        throw new CustomError(
+          "user-not-authorized",
+          "You are not authorized to view someone else's blogs that are private and drafted."
+        );
+      }
+
       return res.status(200).json(FormatResponse(data));
     } catch (err) {
       const errObj = identifyErrors(err);
@@ -73,7 +99,6 @@ export class BlogController {
   }
 
   async onEditBlog(req: Request, res: Response) {
-    // TODO: If the inputs are null, it is meant for it to be removed.
     try {
       const updateImageMode = req.body.updateImageMode as UpdateBlogImageUseCase;
       const blogId = req.body.blogId;
@@ -131,7 +156,7 @@ export class BlogController {
   async onDeleteBlog(req: Request, res: Response) {
     try {
       const userId = res.locals.userId as string;
-      const blogId = req.body.blogId as string;
+      const blogId = req.query.blogId as string;
 
       const data = await this.service.deleteBlog(userId, blogId);
 
