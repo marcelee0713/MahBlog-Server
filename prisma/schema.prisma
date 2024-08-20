@@ -158,7 +158,7 @@ model BlogTags {
 model BlogContents {
   blogContentId String   @id @default(cuid())
   blogId        String
-  index         Int
+  index         Int      @default(autoincrement())
   title         String?  @db.VarChar(80)
   description   String?
   contentImage  String?
