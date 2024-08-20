@@ -1,4 +1,9 @@
-import { BlogSortingOptions, BlogStatus, BlogVisibility } from "../../types/blog/blog.types";
+import {
+  BlogSortingOptions,
+  BlogStatus,
+  BlogVisibility,
+  LikeType,
+} from "../../types/blog/blog.types";
 
 export interface IBlog {
   validateBlogTitle: (title: string) => void;
@@ -32,7 +37,7 @@ export interface IBlogService {
   // TODO: After liking or unliking the blog, update the score of the blog.
   // Think of something that we could return here. but probably we are not returning something.
   // TODO: Create a Blog Like Repository instead.
-  toggleLike: (userId: string, blogId: string) => Promise<void>;
+  toggleLike: (userId: string, blogId: string) => Promise<LikeType>;
 }
 
 export interface IBlogRepository {
@@ -99,7 +104,7 @@ export interface BlogInfo {
     status: BlogStatus;
   };
   engagement: {
-    likes: number;
+    likes: string[];
     comments: number;
   };
   editable: boolean;

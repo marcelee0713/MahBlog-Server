@@ -18,8 +18,13 @@ blogRouter.use((req, res, next) => middleware.verifySession(req, res, next));
 blogRouter
   .route("/")
   .post(controller.onCreateBlog.bind(controller))
-  .delete(controller.onDeleteBlog.bind(controller))
-  .get(middleware.validateBody(getBlogsSchema), controller.onGetBlogs.bind(controller));
+  .get(middleware.validateBody(getBlogsSchema), controller.onGetBlogs.bind(controller))
+  .put(
+    middleware.validateMulter("coverImage"),
+    middleware.validateBody(updateBlogSchema),
+    controller.onEditBlog.bind(controller)
+  )
+  .delete(controller.onDeleteBlog.bind(controller));
 
 blogRouter.post(
   "/info",
@@ -27,11 +32,6 @@ blogRouter.post(
   controller.onGetBlog.bind(controller)
 );
 
-blogRouter.put(
-  "/edit",
-  middleware.validateMulter("coverImage"),
-  middleware.validateBody(updateBlogSchema),
-  controller.onEditBlog.bind(controller)
-);
+blogRouter.post("/like", controller.onToggleLike.bind(controller));
 
 export default blogRouter;

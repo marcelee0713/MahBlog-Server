@@ -20,3 +20,5 @@ export type BlogVisibility = (typeof BlogVisibilityArr)[number];
 export type GetBlogsBodyReq = RequestBody<GetBlogsParams>;
 
 export type UpdateBlogBodyReq = RequestBody<UpdateBlogParams>;
+
+export type LikeType = "LIKED" | "UNLIKED";

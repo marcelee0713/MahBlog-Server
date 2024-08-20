@@ -44,7 +44,7 @@ export class BlogRepository implements IBlogRepository {
       };
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
-        if (err.code === "P2025") throw new CustomError("does-not-exist", "User does not exist!");
+        if (err.code === "P2025") throw new CustomError("does-not-exist", "User does not exist.");
       }
 
       throw new CustomError(
@@ -72,11 +72,17 @@ export class BlogRepository implements IBlogRepository {
         },
       });
 
-      if (!data) throw new CustomError("does-not-exist", "Blog does not exist!");
+      if (!data) throw new CustomError("does-not-exist", "Blog does not exist.");
 
       const tags: string[] = data.tags.map((val) => val.tag);
 
       const comments = data.commentReplies.length + data.comments.length;
+
+      const likes: string[] = [];
+
+      data.likes.forEach((val) => {
+        if (val.userId) likes.push(val.userId);
+      });
 
       return {
         authorId: data.authorId,
@@ -87,7 +93,7 @@ export class BlogRepository implements IBlogRepository {
         tags: tags,
         engagement: {
           comments,
-          likes: data.likes.length,
+          likes: likes,
         },
         publicationDetails: {
           status: data.status,
@@ -103,7 +109,8 @@ export class BlogRepository implements IBlogRepository {
       if (err instanceof CustomError) throw err;
 
       if (err instanceof PrismaClientKnownRequestError) {
-        if (err.code === "P2025") throw new CustomError("does-not-exist", "User does not exist!");
+        if (err.code === "P2025")
+          throw new CustomError("does-not-exist", "User or blog does not exist.");
       }
 
       throw new CustomError(
@@ -160,6 +167,11 @@ export class BlogRepository implements IBlogRepository {
         const blog = data[i];
         const tags: string[] = blog.tags.map((val) => val.tag);
         const comments = blog.commentReplies.length + blog.comments.length;
+        const likes: string[] = [];
+
+        blog.likes.forEach((val) => {
+          if (val.userId) likes.push(val.userId);
+        });
 
         blogs.push({
           authorId: blog.authorId,
@@ -170,7 +182,7 @@ export class BlogRepository implements IBlogRepository {
           tags: tags,
           engagement: {
             comments,
-            likes: blog.likes.length,
+            likes: likes,
           },
           publicationDetails: {
             status: blog.status,
@@ -268,6 +280,12 @@ export class BlogRepository implements IBlogRepository {
 
       const comments = data.commentReplies.length + data.comments.length;
 
+      const likes: string[] = [];
+
+      data.likes.forEach((val) => {
+        if (val.userId) likes.push(val.userId);
+      });
+
       return {
         authorId: data.authorId,
         blogId: data.blogId,
@@ -277,7 +295,7 @@ export class BlogRepository implements IBlogRepository {
         tags: tags,
         engagement: {
           comments,
-          likes: data.likes.length,
+          likes: likes,
         },
         publicationDetails: {
           status: data.status,
@@ -292,7 +310,7 @@ export class BlogRepository implements IBlogRepository {
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2025")
-          throw new CustomError("does-not-exist", "User or blog does not exist!");
+          throw new CustomError("does-not-exist", "User or blog does not exist.");
       }
 
       throw new CustomError(
@@ -330,7 +348,7 @@ export class BlogRepository implements IBlogRepository {
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2025")
-          throw new CustomError("does-not-exist", "User or blog does not exist!");
+          throw new CustomError("does-not-exist", "User or blog does not exist.");
       }
 
       throw new CustomError(

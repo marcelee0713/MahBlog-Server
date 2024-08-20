@@ -156,7 +156,13 @@ export class BlogController {
   async onDeleteBlog(req: Request, res: Response) {
     try {
       const userId = res.locals.userId as string;
-      const blogId = req.query.blogId as string;
+      const blogId = req.query.blogId as string | undefined;
+
+      if (!blogId)
+        throw new CustomError(
+          "missing-inputs",
+          "Missing blogId, it needs to be put as a URL query."
+        );
 
       const data = await this.service.deleteBlog(userId, blogId);
 
@@ -167,6 +173,27 @@ export class BlogController {
       }
 
       return res.status(200).json(FormatResponse({}, "Blog have been deleted and its images."));
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.status).json(errObj);
+    }
+  }
+
+  async onToggleLike(req: Request, res: Response) {
+    try {
+      const userId = res.locals.userId as string;
+      const blogId = req.query.blogId as string | undefined;
+
+      if (!blogId)
+        throw new CustomError(
+          "missing-inputs",
+          "Missing blogId, it needs to be put as a URL query."
+        );
+
+      const type = await this.service.toggleLike(userId, blogId);
+
+      return res.status(200).json(FormatResponse({}, type));
     } catch (err) {
       const errObj = identifyErrors(err);
 

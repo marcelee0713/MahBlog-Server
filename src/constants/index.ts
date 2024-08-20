@@ -29,6 +29,7 @@ export const TYPES = {
   BlogService: Symbol.for("BlogService"),
   BlogRepository: Symbol.for("BlogRepository"),
   BlogController: Symbol.for("BlogController"),
+  BlogLikesRepository: Symbol.for("BlogLikesRepository"),
   MediaService: Symbol.for("MediaService"),
   AuthService: Symbol.for("AuthService"),
   EmailService: Symbol.for("EmailService"),

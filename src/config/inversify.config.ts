@@ -66,6 +66,8 @@ import { IBlog, IBlogRepository, IBlogService } from "../interfaces/blog/blog.in
 import { BlogService } from "../services/blog/blog.service";
 import { BlogRepository } from "../repositories/blog/blog.repo";
 import { BlogController } from "../controllers/blog/blog.controller";
+import { IBlogLikesRepository } from "../interfaces/blog/blog.likes.interface";
+import { BlogLikesRepository } from "../repositories/blog/blog.likes.repo";
 
 export const container = new Container();
 
@@ -111,6 +113,7 @@ container.bind(TYPES.UserMiddleware).to(UserMiddleware);
 container.bind<IBlog>(TYPES.BlogModel).to(Blog);
 container.bind<IBlogService>(TYPES.BlogService).to(BlogService);
 container.bind<IBlogRepository>(TYPES.BlogRepository).to(BlogRepository);
+container.bind<IBlogLikesRepository>(TYPES.BlogLikesRepository).to(BlogLikesRepository);
 container.bind(TYPES.BlogController).to(BlogController);
 
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);

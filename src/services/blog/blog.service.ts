@@ -9,18 +9,23 @@ import {
   UpdateBlogParams,
 } from "../../interfaces/blog/blog.interface";
 import { TYPES } from "../../constants";
+import { IBlogLikesRepository } from "../../interfaces/blog/blog.likes.interface";
+import { LikeType } from "../../types/blog/blog.types";
 
 @injectable()
 export class BlogService implements IBlogService {
   private entity: IBlog;
   private repo: IBlogRepository;
+  private blogLikes: IBlogLikesRepository;
 
   constructor(
     @inject(TYPES.BlogModel) entity: IBlog,
-    @inject(TYPES.BlogRepository) repo: IBlogRepository
+    @inject(TYPES.BlogRepository) repo: IBlogRepository,
+    @inject(TYPES.BlogLikesRepository) blogLikes: IBlogLikesRepository
   ) {
     this.entity = entity;
     this.repo = repo;
+    this.blogLikes = blogLikes;
   }
 
   async createBlog(userId: string): Promise<CreateBlogResponse> {
@@ -62,5 +67,11 @@ export class BlogService implements IBlogService {
     return await this.repo.delete(userId, blogId);
   }
 
-  async toggleLike(userId: string, blogId: string): Promise<void> {}
+  async toggleLike(userId: string, blogId: string): Promise<LikeType> {
+    const blogLikeId = await this.blogLikes.get(userId, blogId);
+
+    if (blogLikeId) return await this.blogLikes.delete(blogLikeId);
+
+    return await this.blogLikes.create(userId, blogId);
+  }
 }
