@@ -68,6 +68,15 @@ import { BlogRepository } from "../repositories/blog/blog.repo";
 import { BlogController } from "../controllers/blog/blog.controller";
 import { IBlogLikesRepository } from "../interfaces/blog/blog.likes.interface";
 import { BlogLikesRepository } from "../repositories/blog/blog.likes.repo";
+import {
+  IBlogContents,
+  IBlogContentsRepository,
+  IBlogContentsService,
+} from "../interfaces/blog/blog.contents.interface";
+import { BlogContents } from "../models/blog/blog.contents.model";
+import { BlogContentsService } from "../services/blog/blog.contents.service";
+import { BlogContentsRepository } from "../repositories/blog/blog.contents.repo";
+import { BlogContentsController } from "../controllers/blog/blog.contents.controller";
 
 export const container = new Container();
 
@@ -115,6 +124,11 @@ container.bind<IBlogService>(TYPES.BlogService).to(BlogService);
 container.bind<IBlogRepository>(TYPES.BlogRepository).to(BlogRepository);
 container.bind<IBlogLikesRepository>(TYPES.BlogLikesRepository).to(BlogLikesRepository);
 container.bind(TYPES.BlogController).to(BlogController);
+
+container.bind<IBlogContents>(TYPES.BlogContentsModel).to(BlogContents);
+container.bind<IBlogContentsService>(TYPES.BlogContentsService).to(BlogContentsService);
+container.bind<IBlogContentsRepository>(TYPES.BlogContentsRepository).to(BlogContentsRepository);
+container.bind(TYPES.BlogContentsController).to(BlogContentsController);
 
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.EmailService).to(EmailService);

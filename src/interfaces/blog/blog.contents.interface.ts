@@ -1,12 +1,13 @@
 export interface IBlogContents {
-  validateBlogContentTitle: (title?: string) => void;
-  validateBlogContentDesc: (description?: string) => void;
+  validateBlogContentTitle: (title: string) => void;
 }
 
 export interface IBlogContentsService {
   createBlogContent: (userId: string, blogId: string) => Promise<CreateBlogContentResponse>;
 
-  getBlogContents: (userId: string, blogId: string) => Promise<BlogContent[]>;
+  getBlogContent: (blogId: string, blogContentId: string) => Promise<BlogContent>;
+
+  getBlogContents: (blogId: string) => Promise<BlogContent[]>;
 
   editBlogContent: (params: UpdateBlogContentParams) => Promise<BlogContent>;
 
@@ -16,11 +17,11 @@ export interface IBlogContentsService {
 export interface IBlogContentsRepository {
   create: (userId: string, blogId: string) => Promise<CreateBlogContentResponse>;
 
-  getAll: (userId: string, blogId: string) => Promise<BlogContent[]>;
+  get: (blogId: string, blogContentId: string) => Promise<BlogContent>;
+
+  getAll: (blogId: string) => Promise<BlogContent[]>;
 
   update: (params: UpdateBlogContentParams) => Promise<BlogContent>;
-
-  updateAll: (params: UpdateBlogContentParams[]) => Promise<BlogContent[]>;
 
   delete: (params: DeleteBlogContentParams) => Promise<string | null>;
 }
@@ -47,7 +48,7 @@ export interface UpdateBlogContentParams {
   userId: string;
   blogId: string;
   blogContentId: string;
-  index: number;
+  index?: number;
   title?: string | null;
   description?: string | null;
   contentImage?: string | null;

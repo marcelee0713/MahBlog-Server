@@ -70,6 +70,7 @@ export class BlogService implements IBlogService {
   async toggleLike(userId: string, blogId: string): Promise<LikeType> {
     const blogLikeId = await this.blogLikes.get(userId, blogId);
 
+    // TODO: Create a function for "BlogScores" in order for the best and controversial order by engagement
     if (blogLikeId) return await this.blogLikes.delete(blogLikeId);
 
     return await this.blogLikes.create(userId, blogId);
