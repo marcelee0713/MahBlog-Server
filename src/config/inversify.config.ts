@@ -77,6 +77,9 @@ import { BlogContents } from "../models/blog/blog.contents.model";
 import { BlogContentsService } from "../services/blog/blog.contents.service";
 import { BlogContentsRepository } from "../repositories/blog/blog.contents.repo";
 import { BlogContentsController } from "../controllers/blog/blog.contents.controller";
+import { IBlogScores, IBlogScoresRepository } from "../interfaces/blog/blog.scores.interface";
+import { BlogScores } from "../models/blog/blog.scores.model";
+import { BlogScoresRepository } from "../repositories/blog/blog.scores.repo";
 
 export const container = new Container();
 
@@ -129,6 +132,9 @@ container.bind<IBlogContents>(TYPES.BlogContentsModel).to(BlogContents);
 container.bind<IBlogContentsService>(TYPES.BlogContentsService).to(BlogContentsService);
 container.bind<IBlogContentsRepository>(TYPES.BlogContentsRepository).to(BlogContentsRepository);
 container.bind(TYPES.BlogContentsController).to(BlogContentsController);
+
+container.bind<IBlogScores>(TYPES.BlogScores).to(BlogScores);
+container.bind<IBlogScoresRepository>(TYPES.BlogScoresRepository).to(BlogScoresRepository);
 
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.EmailService).to(EmailService);

@@ -183,13 +183,7 @@ export class BlogController {
   async onToggleLike(req: Request, res: Response) {
     try {
       const userId = res.locals.userId as string;
-      const blogId = req.query.blogId as string | undefined;
-
-      if (!blogId)
-        throw new CustomError(
-          "missing-inputs",
-          "Missing blogId, it needs to be put as a URL query."
-        );
+      const blogId = req.body.blogId as string;
 
       const type = await this.service.toggleLike(userId, blogId);
 

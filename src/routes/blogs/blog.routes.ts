@@ -6,6 +6,7 @@ import { BlogController } from "../../controllers/blog/blog.controller";
 import {
   getBlogSchema,
   getBlogsSchema,
+  likeBlogSchema,
   updateBlogSchema,
 } from "../../middlewares/schemas/blog/blog.schema";
 
@@ -32,6 +33,10 @@ blogRouter.post(
   controller.onGetBlog.bind(controller)
 );
 
-blogRouter.post("/like", controller.onToggleLike.bind(controller));
+blogRouter.post(
+  "/like",
+  middleware.validateBody(likeBlogSchema),
+  controller.onToggleLike.bind(controller)
+);
 
 export default blogRouter;

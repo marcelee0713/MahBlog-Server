@@ -26,8 +26,6 @@ export interface IBlogContentsRepository {
   delete: (params: DeleteBlogContentParams) => Promise<string | null>;
 }
 
-// TODO: Do the routers, controllers, services, repo, and model of this.
-
 export interface BlogContent {
   blogContentId: string;
   blogId: string;
