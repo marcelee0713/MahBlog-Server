@@ -125,8 +125,8 @@ export class BlogRepository implements IBlogRepository {
 
   async getAll(params: GetBlogsParams): Promise<BlogInfo[]> {
     const orderByOptions: Record<BlogSortingOptions, object> = {
-      BEST: [{ scores: { bestScore: "desc" } }, { createdAt: "desc" }],
-      CONTROVERSIAL: [{ scores: { controversialScore: "desc" } }, { createdAt: "desc" }],
+      BEST: { scores: { bestScore: "desc" } },
+      CONTROVERSIAL: { scores: { controversialScore: "desc" } },
       LATEST: { createdAt: "desc" },
       OLDEST: { createdAt: "asc" },
     };

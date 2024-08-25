@@ -133,7 +133,7 @@ container.bind<IBlogContentsService>(TYPES.BlogContentsService).to(BlogContentsS
 container.bind<IBlogContentsRepository>(TYPES.BlogContentsRepository).to(BlogContentsRepository);
 container.bind(TYPES.BlogContentsController).to(BlogContentsController);
 
-container.bind<IBlogScores>(TYPES.BlogScores).to(BlogScores);
+container.bind<IBlogScores>(TYPES.BlogScoresModel).to(BlogScores);
 container.bind<IBlogScoresRepository>(TYPES.BlogScoresRepository).to(BlogScoresRepository);
 
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);

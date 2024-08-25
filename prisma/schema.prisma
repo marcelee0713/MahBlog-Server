@@ -177,18 +177,18 @@ model BlogLikes {
 
 model BlogComments {
   commentId       String               @id @default(cuid())
-  blogId          String?
-  userId          String?
+  blogId          String
+  userId          String
   comment         String
   notifications   UserNotifications[]
   replies         BlogCommentReplies[]
   likes           BlogCommentLikes[]
   receivedReports ReportDetails[]
   scores          Scores?
-  users           Users?               @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  blog            Blogs?               @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
+  users           Users                @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  blog            Blogs                @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
   createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
+  updatedAt       DateTime?
 }
 
 model BlogCommentReplies {
@@ -207,16 +207,16 @@ model BlogCommentReplies {
   notifications    UserNotifications[]
   receivedReports  ReportDetails[]
   createdAt        DateTime             @default(now())
-  updatedAt        DateTime             @updatedAt
+  updatedAt        DateTime?
 }
 
 model BlogCommentLikes {
   commentLikeId String              @id @default(cuid())
-  userId        String?
-  commentId     String?
+  userId        String
+  commentId     String
   replyId       String?
-  users         Users?              @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  comment       BlogComments?       @relation(fields: [commentId], references: [commentId], onDelete: Cascade)
+  users         Users               @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  comment       BlogComments        @relation(fields: [commentId], references: [commentId], onDelete: Cascade)
   reply         BlogCommentReplies? @relation(fields: [replyId], references: [replyId], onDelete: Cascade)
   createdAt     DateTime            @default(now())
 }

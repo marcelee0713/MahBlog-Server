@@ -25,7 +25,7 @@ export class BlogService implements IBlogService {
     @inject(TYPES.BlogModel) entity: IBlog,
     @inject(TYPES.BlogRepository) repo: IBlogRepository,
     @inject(TYPES.BlogLikesRepository) blogLikes: IBlogLikesRepository,
-    @inject(TYPES.BlogScores) scoresEntity: IBlogScores,
+    @inject(TYPES.BlogScoresModel) scoresEntity: IBlogScores,
     @inject(TYPES.BlogScoresRepository) scoresRepo: IBlogScoresRepository
   ) {
     this.entity = entity;

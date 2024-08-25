@@ -41,3 +41,5 @@ app.use("/api/v1/blog-contents", blogContentsRouter);
 
 // TODO: UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
+
+// TODO: Do the BlogComments
