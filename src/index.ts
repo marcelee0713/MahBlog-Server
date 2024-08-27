@@ -9,6 +9,7 @@ import userReportsRouter from "./routes/users/user.reports.routes";
 import userConnectionsRouter from "./routes/users/user.connections.routes";
 import blogRouter from "./routes/blogs/blog.routes";
 import blogContentsRouter from "./routes/blogs/blog.contents.routes";
+import blogCommentsRouter from "./routes/blogs/blog.comments.routes";
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use("/api/v1/user-connect", userConnectionsRouter);
 
 app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/blog-contents", blogContentsRouter);
+app.use("/api/v1/blog-comment", blogCommentsRouter);
 
 // TODO: UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)

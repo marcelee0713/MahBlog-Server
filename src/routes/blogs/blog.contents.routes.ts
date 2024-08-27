@@ -23,10 +23,6 @@ blogContentsRouter
     middleware.validateBody(createAndGetBlogContentSchema),
     controller.onCreateBlogContent.bind(controller)
   )
-  .get(
-    middleware.validateBody(createAndGetBlogContentSchema),
-    controller.onGetBlogContents.bind(controller)
-  )
   .put(
     middleware.validateMulter("contentImage"),
     middleware.validateBody(updateBlogContentSchema),
@@ -36,5 +32,11 @@ blogContentsRouter
     middleware.validateBody(deleteBlogContentSchema),
     controller.onDeleteContent.bind(controller)
   );
+
+blogContentsRouter.post(
+  "/get-all",
+  middleware.validateBody(createAndGetBlogContentSchema),
+  controller.onGetBlogContents.bind(controller)
+);
 
 export default blogContentsRouter;

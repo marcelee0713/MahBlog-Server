@@ -14,6 +14,7 @@ export interface IBlogCommentsRepository {
   getAll: (params: GetBlogCommentsParams) => Promise<BlogCommentsData[]>;
   update: (params: UpdateBlogCommentsParams) => Promise<BlogCommentsData>;
   delete: (commentId: string, userId: string) => Promise<void>;
+  // TODO: Add a BlogCommentLikes
 }
 
 export interface RawBlogCommentData {
@@ -28,6 +29,7 @@ export interface RawBlogCommentData {
 }
 
 // Note: Maybe put this somewhere else?
+// TODO: Put this on a BlogCommentLikesInterface
 export interface RawBlogCommentLikeData {
   commentLikeId: string;
   userId: string;
@@ -37,6 +39,7 @@ export interface RawBlogCommentLikeData {
 }
 
 // Note: Maybe put this somewhere else also?
+// TODO: Put this on a BlogCommentRepliesInterface
 export interface RawBlogCommentReplyData {
   replyId: string;
   commentId: string;

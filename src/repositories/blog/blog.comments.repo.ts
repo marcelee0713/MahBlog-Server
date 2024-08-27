@@ -36,6 +36,12 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
               userId: params.userId,
             },
           },
+          scores: {
+            create: {
+              bestScore: 0,
+              controversialScore: 0,
+            },
+          },
         },
         include: {
           likes: true,
@@ -207,7 +213,7 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2025")
-          throw new CustomError("does-not-exist", "This blog no longer exist.");
+          throw new CustomError("does-not-exist", "This blog comment may no longer exist.");
       }
 
       throw new CustomError(
@@ -222,7 +228,7 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
 
   async delete(commentId: string, userId: string): Promise<void> {
     try {
-      await this.db.blogComments.findFirst({
+      await this.db.blogComments.delete({
         where: {
           commentId,
           userId,

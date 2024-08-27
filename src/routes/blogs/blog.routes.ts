@@ -19,7 +19,6 @@ blogRouter.use((req, res, next) => middleware.verifySession(req, res, next));
 blogRouter
   .route("/")
   .post(controller.onCreateBlog.bind(controller))
-  .get(middleware.validateBody(getBlogsSchema), controller.onGetBlogs.bind(controller))
   .put(
     middleware.validateMulter("coverImage"),
     middleware.validateBody(updateBlogSchema),
@@ -28,7 +27,13 @@ blogRouter
   .delete(controller.onDeleteBlog.bind(controller));
 
 blogRouter.post(
-  "/info",
+  "/get-all",
+  middleware.validateBody(getBlogsSchema),
+  controller.onGetBlogs.bind(controller)
+);
+
+blogRouter.post(
+  "/get",
   middleware.validateBody(getBlogSchema),
   controller.onGetBlog.bind(controller)
 );
