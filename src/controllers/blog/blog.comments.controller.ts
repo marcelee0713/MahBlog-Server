@@ -71,9 +71,24 @@ export class BlogCommentsController {
       const userId = res.locals.userId as string;
       const commentId = req.body.commentId as string;
 
-      const data = await this.service.deleteBlogComment(commentId, userId);
+      const data = await this.service.deleteBlogComment(userId, commentId);
 
       return res.status(200).json(FormatResponse(data));
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.status).json(errObj);
+    }
+  }
+
+  async onToggleLike(req: Request, res: Response) {
+    try {
+      const userId = res.locals.userId as string;
+      const commentId = req.body.commentId as string;
+
+      const type = await this.service.toggleLike(userId, commentId);
+
+      return res.status(200).json(FormatResponse({}, type));
     } catch (err) {
       const errObj = identifyErrors(err);
 

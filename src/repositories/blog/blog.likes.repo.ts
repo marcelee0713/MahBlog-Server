@@ -71,10 +71,11 @@ export class BlogLikesRepository implements IBlogLikesRepository {
     }
   }
 
-  async delete(blogLikeId: string): Promise<LikeType> {
+  async delete(userId: string, blogLikeId: string): Promise<LikeType> {
     try {
       await this.db.blogLikes.delete({
         where: {
+          userId,
           blogLikeId,
         },
       });
@@ -88,10 +89,10 @@ export class BlogLikesRepository implements IBlogLikesRepository {
 
       throw new CustomError(
         "internal-server-error",
-        "An internal server error occured when liking a blog.",
+        "An internal server error occured when unliking a blog.",
         500,
         "BlogLikesRepository",
-        "By liking a blog."
+        "By unliking a blog."
       );
     }
   }

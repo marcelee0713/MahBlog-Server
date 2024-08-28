@@ -27,7 +27,7 @@ export const updateBlogCommentSchema = z.object({
   }),
 });
 
-export const deleteBlogCommentSchema = z.object({
+export const deleteOrLikeBlogCommentSchema = z.object({
   body: z.object({
     commentId: z.string().trim(),
   }),

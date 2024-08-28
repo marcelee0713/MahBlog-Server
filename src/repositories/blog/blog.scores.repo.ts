@@ -48,7 +48,7 @@ export class BlogScoresRepository implements IBlogScoresRepository {
         case "COMMENT": {
           const data = await this.db.blogComments.findFirst({
             where: {
-              blogId: id,
+              commentId: id,
             },
             include: {
               scores: true,
@@ -60,7 +60,7 @@ export class BlogScoresRepository implements IBlogScoresRepository {
           if (!data) throw new CustomError("does-not-exist", `This comment no longer exist.`);
 
           if (!data.scores)
-            throw new CustomError("does-not-exist", `This blog's score no longer exist.`);
+            throw new CustomError("does-not-exist", `This comment's score no longer exist.`);
 
           return {
             scoresId: data.scores.scoresId,

@@ -5,7 +5,7 @@ import { middleware } from "../users/user.routes";
 import { BlogCommentsController } from "../../controllers/blog/blog.comments.controller";
 import {
   createBlogCommentSchema,
-  deleteBlogCommentSchema,
+  deleteOrLikeBlogCommentSchema,
   getBlogCommentSchema,
   updateBlogCommentSchema,
 } from "../../middlewares/schemas/blog/blog.comments.schema";
@@ -29,7 +29,7 @@ blogCommentsRouter
     controller.onUpdateBlogComment.bind(controller)
   )
   .delete(
-    middleware.validateBody(deleteBlogCommentSchema),
+    middleware.validateBody(deleteOrLikeBlogCommentSchema),
     controller.onDeleteBlogComment.bind(controller)
   );
 
@@ -37,6 +37,12 @@ blogCommentsRouter.post(
   "/get-all",
   middleware.validateBody(getBlogCommentSchema),
   controller.onGetBlogComments.bind(controller)
+);
+
+blogCommentsRouter.post(
+  "/like",
+  middleware.validateBody(deleteOrLikeBlogCommentSchema),
+  controller.onToggleLike.bind(controller)
 );
 
 export default blogCommentsRouter;

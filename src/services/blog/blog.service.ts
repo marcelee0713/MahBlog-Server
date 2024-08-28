@@ -78,7 +78,7 @@ export class BlogService implements IBlogService {
     let type: LikeType = "UNLIKED";
     const blogLikeId = await this.blogLikes.get(userId, blogId);
 
-    if (blogLikeId) type = await this.blogLikes.delete(blogLikeId);
+    if (blogLikeId) type = await this.blogLikes.delete(userId, blogLikeId);
     else type = await this.blogLikes.create(userId, blogId);
 
     const scoreData = await this.scoresRepo.get("BLOG", blogId);

@@ -1,10 +1,11 @@
-import { BlogSortingOptions } from "../../types/blog/blog.types";
+import { BlogSortingOptions, LikeType } from "../../types/blog/blog.types";
 
 export interface IBlogCommentsService {
   createBlogComment: (params: CreateBlogCommentParams) => Promise<BlogCommentsData>;
   getBlogComments: (params: GetBlogCommentsParams) => Promise<BlogCommentsData[]>;
   updateBlogComment: (params: UpdateBlogCommentsParams) => Promise<BlogCommentsData>;
-  deleteBlogComment: (commentId: string, userId: string) => Promise<void>;
+  deleteBlogComment: (userId: string, commentId: string) => Promise<void>;
+  toggleLike: (userId: string, commentId: string) => Promise<LikeType>;
 }
 
 export interface IBlogCommentsRepository {
@@ -13,8 +14,7 @@ export interface IBlogCommentsRepository {
   getRaw: (params: CreateBlogCommentParams) => Promise<RawBlogCommentData>;
   getAll: (params: GetBlogCommentsParams) => Promise<BlogCommentsData[]>;
   update: (params: UpdateBlogCommentsParams) => Promise<BlogCommentsData>;
-  delete: (commentId: string, userId: string) => Promise<void>;
-  // TODO: Add a BlogCommentLikes
+  delete: (userId: string, commentId: string) => Promise<void>;
 }
 
 export interface RawBlogCommentData {
