@@ -1,11 +1,12 @@
-import { BlogSortingOptions, LikeType } from "../../types/blog/blog.types";
+import { BlogSortingOptions, LikeStatus } from "../../types/blog/blog.types";
+import { RawBlogCommentReplyData } from "./blog.comments.replies.interface";
 
 export interface IBlogCommentsService {
   createBlogComment: (params: CreateBlogCommentParams) => Promise<BlogCommentsData>;
   getBlogComments: (params: GetBlogCommentsParams) => Promise<BlogCommentsData[]>;
   updateBlogComment: (params: UpdateBlogCommentsParams) => Promise<BlogCommentsData>;
   deleteBlogComment: (userId: string, commentId: string) => Promise<void>;
-  toggleLike: (userId: string, commentId: string) => Promise<LikeType>;
+  toggleLike: (userId: string, commentId: string) => Promise<LikeStatus>;
 }
 
 export interface IBlogCommentsRepository {
@@ -36,19 +37,6 @@ export interface RawBlogCommentLikeData {
   commentId: string;
   replyId: string | null;
   createdAt: Date;
-}
-
-// Note: Maybe put this somewhere else also?
-// TODO: Put this on a BlogCommentRepliesInterface
-export interface RawBlogCommentReplyData {
-  replyId: string;
-  commentId: string;
-  blogId: string;
-  userId: string;
-  mentionedReplyId: string | null;
-  reply: string;
-  createdAt: Date;
-  updatedAt: Date | null;
 }
 
 export interface BlogCommentsData {

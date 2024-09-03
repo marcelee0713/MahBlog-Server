@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IBlogCommentLikesRepository } from "../../interfaces/blog/blog.likes.interface";
-import { LikeType } from "../../types/blog/blog.types";
+import { LikeStatus } from "../../types/blog/blog.types";
 import { PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
@@ -37,7 +37,7 @@ export class BlogCommentLikesRepository implements IBlogCommentLikesRepository {
     }
   }
 
-  async create(userId: string, commentId: string): Promise<LikeType> {
+  async create(userId: string, commentId: string): Promise<LikeStatus> {
     try {
       await this.db.blogCommentLikes.create({
         data: {
@@ -71,7 +71,7 @@ export class BlogCommentLikesRepository implements IBlogCommentLikesRepository {
     }
   }
 
-  async delete(userId: string, commentLikeId: string): Promise<LikeType> {
+  async delete(userId: string, commentLikeId: string): Promise<LikeStatus> {
     try {
       await this.db.blogCommentLikes.delete({
         where: {

@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { CustomError } from "../../utils/error_handler";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { LikeType } from "../../types/blog/blog.types";
+import { LikeStatus } from "../../types/blog/blog.types";
 
 @injectable()
 export class BlogLikesRepository implements IBlogLikesRepository {
@@ -37,7 +37,7 @@ export class BlogLikesRepository implements IBlogLikesRepository {
     }
   }
 
-  async create(userId: string, blogId: string): Promise<LikeType> {
+  async create(userId: string, blogId: string): Promise<LikeStatus> {
     try {
       await this.db.blogLikes.create({
         data: {
@@ -71,7 +71,7 @@ export class BlogLikesRepository implements IBlogLikesRepository {
     }
   }
 
-  async delete(userId: string, blogLikeId: string): Promise<LikeType> {
+  async delete(userId: string, blogLikeId: string): Promise<LikeStatus> {
     try {
       await this.db.blogLikes.delete({
         where: {

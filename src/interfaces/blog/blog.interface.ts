@@ -2,7 +2,7 @@ import {
   BlogSortingOptions,
   BlogStatus,
   BlogVisibility,
-  LikeType,
+  LikeStatus,
 } from "../../types/blog/blog.types";
 
 export interface IBlog {
@@ -24,7 +24,7 @@ export interface IBlogService {
 
   deleteBlog: (userId: string, blogId: string) => Promise<string[]>;
 
-  toggleLike: (userId: string, blogId: string) => Promise<LikeType>;
+  toggleLike: (userId: string, blogId: string) => Promise<LikeStatus>;
 }
 
 export interface IBlogRepository {

@@ -21,4 +21,6 @@ export type GetBlogsBodyReq = RequestBody<GetBlogsParams>;
 
 export type UpdateBlogBodyReq = RequestBody<UpdateBlogParams>;
 
-export type LikeType = "LIKED" | "UNLIKED";
+export type LikeStatus = "LIKED" | "UNLIKED";
+
+export type LikeType = "BLOG" | "COMMENT" | "REPLY";

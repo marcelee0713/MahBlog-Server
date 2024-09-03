@@ -10,7 +10,7 @@ import {
 } from "../../interfaces/blog/blog.interface";
 import { TYPES } from "../../constants";
 import { IBlogLikesRepository } from "../../interfaces/blog/blog.likes.interface";
-import { LikeType } from "../../types/blog/blog.types";
+import { LikeStatus } from "../../types/blog/blog.types";
 import { IBlogScores, IBlogScoresRepository } from "../../interfaces/blog/blog.scores.interface";
 
 @injectable()
@@ -74,8 +74,8 @@ export class BlogService implements IBlogService {
     return await this.repo.delete(userId, blogId);
   }
 
-  async toggleLike(userId: string, blogId: string): Promise<LikeType> {
-    let type: LikeType = "UNLIKED";
+  async toggleLike(userId: string, blogId: string): Promise<LikeStatus> {
+    let type: LikeStatus = "UNLIKED";
     const blogLikeId = await this.blogLikes.get(userId, blogId);
 
     if (blogLikeId) type = await this.blogLikes.delete(userId, blogLikeId);

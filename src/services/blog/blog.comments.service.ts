@@ -8,7 +8,7 @@ import {
   UpdateBlogCommentsParams,
 } from "../../interfaces/blog/blog.comments.interface";
 import { TYPES } from "../../constants";
-import { LikeType } from "../../types/blog/blog.types";
+import { LikeStatus } from "../../types/blog/blog.types";
 import { IBlogScores, IBlogScoresRepository } from "../../interfaces/blog/blog.scores.interface";
 import { IBlogCommentLikesRepository } from "../../interfaces/blog/blog.likes.interface";
 
@@ -47,8 +47,8 @@ export class BlogCommentsService implements IBlogCommentsService {
     return await this.repo.delete(userId, commentId);
   }
 
-  async toggleLike(userId: string, commentId: string): Promise<LikeType> {
-    let type: LikeType = "UNLIKED";
+  async toggleLike(userId: string, commentId: string): Promise<LikeStatus> {
+    let type: LikeStatus = "UNLIKED";
     const commentLikeId = await this.likeRepo.get(userId, commentId);
 
     if (commentLikeId) type = await this.likeRepo.delete(userId, commentLikeId);
