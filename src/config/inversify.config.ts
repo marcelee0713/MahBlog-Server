@@ -67,11 +67,6 @@ import { BlogService } from "../services/blog/blog.service";
 import { BlogRepository } from "../repositories/blog/blog.repo";
 import { BlogController } from "../controllers/blog/blog.controller";
 import {
-  IBlogCommentLikesRepository,
-  IBlogLikesRepository,
-} from "../interfaces/blog/blog.likes.interface";
-import { BlogLikesRepository } from "../repositories/blog/blog.likes.repo";
-import {
   IBlogContents,
   IBlogContentsRepository,
   IBlogContentsService,
@@ -90,7 +85,10 @@ import {
 import { BlogCommentsService } from "../services/blog/blog.comments.service";
 import { BlogCommentsRepository } from "../repositories/blog/blog.comments.repo";
 import { BlogCommentsController } from "../controllers/blog/blog.comments.controller";
-import { BlogCommentLikesRepository } from "../repositories/blog/blog.comment.likes.repo";
+import { ILikesRepository } from "../interfaces/blog/blog.likes.interface";
+import { LikesRepository } from "../repositories/blog/likes.repo";
+import { IBlogCommentRepliesRepository } from "../interfaces/blog/blog.comments.replies.interface";
+import { BlogCommentRepliesRepository } from "../repositories/blog/blog.comments.replies.repo";
 
 export const container = new Container();
 
@@ -136,7 +134,6 @@ container.bind(TYPES.UserMiddleware).to(UserMiddleware);
 container.bind<IBlog>(TYPES.BlogModel).to(Blog);
 container.bind<IBlogService>(TYPES.BlogService).to(BlogService);
 container.bind<IBlogRepository>(TYPES.BlogRepository).to(BlogRepository);
-container.bind<IBlogLikesRepository>(TYPES.BlogLikesRepository).to(BlogLikesRepository);
 container.bind(TYPES.BlogController).to(BlogController);
 
 container.bind<IBlogContents>(TYPES.BlogContentsModel).to(BlogContents);
@@ -150,9 +147,12 @@ container.bind<IBlogScoresRepository>(TYPES.BlogScoresRepository).to(BlogScoresR
 container.bind<IBlogCommentsService>(TYPES.BlogCommentsService).to(BlogCommentsService);
 container.bind<IBlogCommentsRepository>(TYPES.BlogCommentsRepository).to(BlogCommentsRepository);
 container.bind(TYPES.BlogCommentsController).to(BlogCommentsController);
+
 container
-  .bind<IBlogCommentLikesRepository>(TYPES.BlogCommentLikesRepository)
-  .to(BlogCommentLikesRepository);
+  .bind<IBlogCommentRepliesRepository>(TYPES.BlogCommentRepliesRepository)
+  .to(BlogCommentRepliesRepository);
+
+container.bind<ILikesRepository>(TYPES.LikesRepository).to(LikesRepository);
 
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.EmailService).to(EmailService);

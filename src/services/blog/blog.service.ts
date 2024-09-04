@@ -9,28 +9,28 @@ import {
   UpdateBlogParams,
 } from "../../interfaces/blog/blog.interface";
 import { TYPES } from "../../constants";
-import { IBlogLikesRepository } from "../../interfaces/blog/blog.likes.interface";
-import { LikeStatus } from "../../types/blog/blog.types";
+import { ILikesRepository } from "../../interfaces/blog/blog.likes.interface";
 import { IBlogScores, IBlogScoresRepository } from "../../interfaces/blog/blog.scores.interface";
+import { LikeStatus } from "../../types/blog/blog.likes.types";
 
 @injectable()
 export class BlogService implements IBlogService {
   private entity: IBlog;
   private scoresEntity: IBlogScores;
   private repo: IBlogRepository;
-  private blogLikes: IBlogLikesRepository;
+  private likeRepo: ILikesRepository;
   private scoresRepo: IBlogScoresRepository;
 
   constructor(
     @inject(TYPES.BlogModel) entity: IBlog,
     @inject(TYPES.BlogRepository) repo: IBlogRepository,
-    @inject(TYPES.BlogLikesRepository) blogLikes: IBlogLikesRepository,
+    @inject(TYPES.LikesRepository) likeRepo: ILikesRepository,
     @inject(TYPES.BlogScoresModel) scoresEntity: IBlogScores,
     @inject(TYPES.BlogScoresRepository) scoresRepo: IBlogScoresRepository
   ) {
     this.entity = entity;
     this.repo = repo;
-    this.blogLikes = blogLikes;
+    this.likeRepo = likeRepo;
     this.scoresEntity = scoresEntity;
     this.scoresRepo = scoresRepo;
   }
@@ -76,10 +76,10 @@ export class BlogService implements IBlogService {
 
   async toggleLike(userId: string, blogId: string): Promise<LikeStatus> {
     let type: LikeStatus = "UNLIKED";
-    const blogLikeId = await this.blogLikes.get(userId, blogId);
+    const blogLikeId = await this.likeRepo.get(userId, blogId, "BLOG");
 
-    if (blogLikeId) type = await this.blogLikes.delete(userId, blogLikeId);
-    else type = await this.blogLikes.create(userId, blogId);
+    if (blogLikeId) type = await this.likeRepo.delete(userId, blogLikeId, "BLOG");
+    else type = await this.likeRepo.create({ userId, id: blogId, type: "BLOG" }, "BLOG");
 
     const scoreData = await this.scoresRepo.get("BLOG", blogId);
 

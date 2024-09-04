@@ -1,9 +1,5 @@
-import {
-  BlogSortingOptions,
-  BlogStatus,
-  BlogVisibility,
-  LikeStatus,
-} from "../../types/blog/blog.types";
+import { LikeStatus } from "../../types/blog/blog.likes.types";
+import { BlogSortingOptions, BlogStatus, BlogVisibility } from "../../types/blog/blog.types";
 
 export interface IBlog {
   validateBlogTitle: (title: string) => void;

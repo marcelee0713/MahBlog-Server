@@ -152,8 +152,6 @@ export class BlogContentsRepository implements IBlogContentsRepository {
 
       return content.contentImage;
     } catch (err) {
-      if (err instanceof CustomError) throw err;
-
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2025")
           throw new CustomError("does-not-exist", "This blog no longer exist.");

@@ -202,6 +202,7 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
         },
         data: {
           comment: params.newComment,
+          updatedAt: new Date(),
         },
         include: {
           likes: true,

@@ -8,22 +8,22 @@ import {
   UpdateBlogCommentsParams,
 } from "../../interfaces/blog/blog.comments.interface";
 import { TYPES } from "../../constants";
-import { LikeStatus } from "../../types/blog/blog.types";
 import { IBlogScores, IBlogScoresRepository } from "../../interfaces/blog/blog.scores.interface";
-import { IBlogCommentLikesRepository } from "../../interfaces/blog/blog.likes.interface";
+import { ILikesRepository } from "../../interfaces/blog/blog.likes.interface";
+import { LikeStatus } from "../../types/blog/blog.likes.types";
 
 @injectable()
 export class BlogCommentsService implements IBlogCommentsService {
   private scoresEntity: IBlogScores;
   private repo: IBlogCommentsRepository;
   private scoresRepo: IBlogScoresRepository;
-  private likeRepo: IBlogCommentLikesRepository;
+  private likeRepo: ILikesRepository;
 
   constructor(
     @inject(TYPES.BlogScoresModel) scoresEntity: IBlogScores,
     @inject(TYPES.BlogCommentsRepository) repo: IBlogCommentsRepository,
     @inject(TYPES.BlogScoresRepository) scoresRepo: IBlogScoresRepository,
-    @inject(TYPES.BlogCommentLikesRepository) likeRepo: IBlogCommentLikesRepository
+    @inject(TYPES.LikesRepository) likeRepo: ILikesRepository
   ) {
     this.scoresEntity = scoresEntity;
     this.repo = repo;
@@ -49,10 +49,10 @@ export class BlogCommentsService implements IBlogCommentsService {
 
   async toggleLike(userId: string, commentId: string): Promise<LikeStatus> {
     let type: LikeStatus = "UNLIKED";
-    const commentLikeId = await this.likeRepo.get(userId, commentId);
+    const commentLikeId = await this.likeRepo.get(userId, commentId, "COMMENT");
 
-    if (commentLikeId) type = await this.likeRepo.delete(userId, commentLikeId);
-    else type = await this.likeRepo.create(userId, commentId);
+    if (commentLikeId) type = await this.likeRepo.delete(userId, commentLikeId, "COMMENT");
+    else type = await this.likeRepo.create({ userId, id: commentId, type: "COMMENT" }, "COMMENT");
 
     const scoreData = await this.scoresRepo.get("COMMENT", commentId);
 

@@ -1,4 +1,5 @@
-import { BlogSortingOptions, LikeStatus } from "../../types/blog/blog.types";
+import { LikeStatus } from "../../types/blog/blog.likes.types";
+import { BlogSortingOptions } from "../../types/blog/blog.types";
 import { RawBlogCommentReplyData } from "./blog.comments.replies.interface";
 
 export interface IBlogCommentsService {
