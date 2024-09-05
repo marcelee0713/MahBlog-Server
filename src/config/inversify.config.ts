@@ -87,8 +87,13 @@ import { BlogCommentsRepository } from "../repositories/blog/blog.comments.repo"
 import { BlogCommentsController } from "../controllers/blog/blog.comments.controller";
 import { ILikesRepository } from "../interfaces/blog/blog.likes.interface";
 import { LikesRepository } from "../repositories/blog/likes.repo";
-import { IBlogCommentRepliesRepository } from "../interfaces/blog/blog.comments.replies.interface";
+import {
+  IBlogCommentRepliesRepository,
+  IBlogCommentRepliesService,
+} from "../interfaces/blog/blog.comments.replies.interface";
 import { BlogCommentRepliesRepository } from "../repositories/blog/blog.comments.replies.repo";
+import { BlogCommentRepliesService } from "../services/blog/blog.comment.replies.service";
+import { BlogCommentRepliesController } from "../controllers/blog/blog.comment.replies.controller";
 
 export const container = new Container();
 
@@ -149,8 +154,12 @@ container.bind<IBlogCommentsRepository>(TYPES.BlogCommentsRepository).to(BlogCom
 container.bind(TYPES.BlogCommentsController).to(BlogCommentsController);
 
 container
+  .bind<IBlogCommentRepliesService>(TYPES.BlogCommentRepliesService)
+  .to(BlogCommentRepliesService);
+container
   .bind<IBlogCommentRepliesRepository>(TYPES.BlogCommentRepliesRepository)
   .to(BlogCommentRepliesRepository);
+container.bind(TYPES.BlogCommentRepliesController).to(BlogCommentRepliesController);
 
 container.bind<ILikesRepository>(TYPES.LikesRepository).to(LikesRepository);
 

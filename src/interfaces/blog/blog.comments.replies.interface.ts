@@ -1,12 +1,12 @@
 import { LikeStatus } from "../../types/blog/blog.likes.types";
 import { RawBlogCommentLikeData } from "./blog.comments.interface";
 
-export interface IBlogCommentsRepliesService {
+export interface IBlogCommentRepliesService {
   reply: (params: CreateBlogCommentRepliesParams) => Promise<BlogCommentReplyData>;
   getReplies: (params: GetBlogCommentRepliesParams) => Promise<BlogCommentReplyData[]>;
   editReply: (params: UpdateBlogCommentRepliesParams) => Promise<BlogCommentReplyData>;
   removeReply: (userId: string, replyId: string) => Promise<void>;
-  toggleLike: (userId: string, commentId: string, replyId: string) => Promise<LikeStatus>;
+  toggleLike: (userId: string, replyId: string, commentId: string) => Promise<LikeStatus>;
 }
 
 export interface IBlogCommentRepliesRepository {

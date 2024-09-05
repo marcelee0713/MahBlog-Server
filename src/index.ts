@@ -10,6 +10,7 @@ import userConnectionsRouter from "./routes/users/user.connections.routes";
 import blogRouter from "./routes/blogs/blog.routes";
 import blogContentsRouter from "./routes/blogs/blog.contents.routes";
 import blogCommentsRouter from "./routes/blogs/blog.comments.routes";
+import blogCommentRepliesRouter from "./routes/blogs/blog.comment.replies.routes";
 
 dotenv.config();
 
@@ -40,8 +41,13 @@ app.use("/api/v1/user-connect", userConnectionsRouter);
 app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
+app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
+
+// TODO: Test the routes for blogs
 
 // TODO: UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
 
-// TODO: Do the BlogComments
+// TODO: Implement Auth0 for Nodexpress
+
+// Will comeback and do this. I will do this.

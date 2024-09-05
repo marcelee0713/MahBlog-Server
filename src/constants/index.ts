@@ -39,7 +39,6 @@ export const TYPES = {
   BlogCommentsService: Symbol.for("BlogCommentsService"),
   BlogCommentsRepository: Symbol.for("BlogCommentsRepository"),
   BlogCommentsController: Symbol.for("BlogCommentsController"),
-  BlogCommentLikesRepository: Symbol.for("BlogCommentLikesRepository"),
   BlogCommentRepliesService: Symbol.for("BlogCommentRepliesService"),
   BlogCommentRepliesRepository: Symbol.for("BlogCommentRepliesRepository"),
   BlogCommentRepliesController: Symbol.for("BlogCommentRepliesController"),
