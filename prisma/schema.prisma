@@ -202,7 +202,7 @@ model BlogCommentReplies {
   blog             Blogs                @relation(fields: [blogId], references: [blogId], onDelete: Cascade)
   comment          BlogComments         @relation(fields: [commentId], references: [commentId], onDelete: Cascade)
   likes            BlogCommentLikes[]
-  mentionedReply   BlogCommentReplies?  @relation("MentionedReply", fields: [mentionedReplyId], references: [replyId], onDelete: Cascade)
+  mentionedReply   BlogCommentReplies?  @relation("MentionedReply", fields: [mentionedReplyId], references: [replyId], onDelete: SetNull)
   mentionedReplies BlogCommentReplies[] @relation("MentionedReply")
   notifications    UserNotifications[]
   receivedReports  ReportDetails[]

@@ -23,7 +23,7 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
 
   async create(params: CreateBlogCommentRepliesParams): Promise<BlogCommentReplyData> {
     try {
-      const data: RawBlogCommentRepliesData = await this.db.blogCommentReplies.create({
+      let data: RawBlogCommentRepliesData = await this.db.blogCommentReplies.create({
         data: {
           reply: params.reply,
           blog: {
@@ -41,17 +41,33 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
               userId: params.userId,
             },
           },
-          mentionedReply: {
-            connect: {
-              replyId: params.mentionedReplyId,
-            },
-          },
         },
         include: {
           likes: true,
           mentionedReply: true,
         },
       });
+
+      if (params.mentionedReplyId) {
+        const newData = await this.db.blogCommentReplies.update({
+          where: {
+            replyId: data.replyId,
+          },
+          data: {
+            mentionedReply: {
+              connect: {
+                replyId: params.mentionedReplyId,
+              },
+            },
+          },
+          include: {
+            likes: true,
+            mentionedReply: true,
+          },
+        });
+
+        data = newData;
+      }
 
       return this.get(data, params.userId);
     } catch (err) {
@@ -115,13 +131,14 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
       replyId: data.replyId,
       blogId: data.blogId,
       commentId: data.commentId,
+      reply: data.reply,
       details: {
         fullName,
         profilePicture: userData.profilePicture,
         userId: userData.userId,
       },
       engagement: {
-        likes: [],
+        likes: data.likes.map((val) => val.userId),
         repliesTo: mentionedData,
       },
       timestamps: {
@@ -149,7 +166,7 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
           commentId: params.commentId,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: "asc",
         },
         include: {
           likes: true,

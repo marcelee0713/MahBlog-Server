@@ -227,7 +227,7 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
     }
   }
 
-  async delete(commentId: string, userId: string): Promise<void> {
+  async delete(userId: string, commentId: string): Promise<void> {
     try {
       await this.db.blogComments.delete({
         where: {

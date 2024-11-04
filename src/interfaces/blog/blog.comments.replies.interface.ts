@@ -62,6 +62,7 @@ export interface BlogCommentReplyData {
   replyId: string;
   commentId: string;
   blogId: string;
+  reply: string;
   details: {
     userId: string;
     fullName: string;

@@ -43,7 +43,7 @@ app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
 app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
 
-// TODO: Test the routes for blogs
+// TODO: Test the routes for blog comment replies
 
 // TODO: UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
