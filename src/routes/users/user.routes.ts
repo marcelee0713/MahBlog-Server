@@ -18,11 +18,30 @@ import {
   signInAndOutRateLimit,
   updateUserRateLimit,
 } from "../../middlewares/rate-limiters/user/user.rate_limiter";
+import passport from "passport";
+import { PassportService } from "../../middlewares/passport.middleware";
 
 const userRouter = express.Router();
 
 const controller = userContainer.container.get<UserController>(TYPES.UserController);
 export const middleware = userContainer.container.get<UserMiddleware>(TYPES.UserMiddleware);
+
+const passportService = userContainer.container.get<PassportService>(TYPES.PassportService);
+
+passportService.initializeGoogleStrategy();
+
+userRouter.get(
+  "/google",
+  (req, res, next) => middleware.validateCurrentSession(req, res, next),
+  passport.authenticate("google", { scope: ["profile", "email"], session: false })
+);
+
+userRouter.get(
+  "/google/callback",
+  (req, res, next) => middleware.handleGoogleCallback(req, res, next),
+  passport.authenticate("google", { session: false }),
+  controller.OnSignInPasswordLess.bind(controller)
+);
 
 userRouter
   .route("/")

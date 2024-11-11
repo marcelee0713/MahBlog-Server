@@ -8,7 +8,7 @@ export class UserProfile implements IUserProfile {
   profileId!: string;
   userId!: string;
   firstName!: string;
-  lastName!: string;
+  lastName?: string | null;
   middleName?: string | null;
   profilePicture?: string | null;
   profileCover?: string | null;
@@ -72,7 +72,7 @@ export class UserProfile implements IUserProfile {
     this.middleName = middleName;
   };
 
-  setLastName = (lastName: string) => {
+  setLastName = (lastName?: string | null) => {
     this.lastName = lastName;
   };
 
@@ -90,7 +90,7 @@ export class UserProfile implements IUserProfile {
 
   validate = (
     firstName: string,
-    lastName: string,
+    lastName?: string | null,
     middleName?: string | null,
     bio?: string | null
   ) => {
@@ -106,7 +106,9 @@ export class UserProfile implements IUserProfile {
     if (firstName.length > 50) throw new CustomError("invalid-first-name");
   };
 
-  validateLastName = (lastName: string) => {
+  validateLastName = (lastName?: string | null) => {
+    if (!lastName) return;
+
     if (lastName.length < 2) throw new CustomError("invalid-last-name");
 
     if (lastName.length > 80) throw new CustomError("invalid-last-name");

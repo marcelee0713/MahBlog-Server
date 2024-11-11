@@ -5,6 +5,8 @@ import {
   UserRoles,
   UserStatus,
   UpdateUserUseCase,
+  AuthenticatedAs,
+  SignInParamsType,
 } from "../../types/user/user.types";
 
 export interface IUser {
@@ -29,15 +31,15 @@ export interface IUser {
   setRole: (role: UserRoles) => void;
   setStatus: (status: UserStatus) => void;
   validateEmail: (email: string) => void;
-  validatePassword: (password: string) => void;
-  validate: (email: string, password: string) => void;
+  validatePassword: (password?: string) => void;
+  validate: (email: string, password?: string) => void;
 }
 
 export interface IUserService {
-  signIn: (email: string, password: string) => Promise<string>;
+  signIn: <T extends AuthenticatedAs>(params: SignInParamsType<T>, type: T) => Promise<string>;
   signOut: (userId: string, sessionId: string) => Promise<void>;
   signOutAll: (userId: string) => Promise<void>;
-  signUp: (params: SignInParams) => Promise<UserData>;
+  signUp: (params: SignUpParams) => Promise<UserData>;
   getUser: (userId: string) => Promise<UserData>;
   getUserByEmail: (email: string) => Promise<UserData>;
   updateEmail: (userId: string, oldEmail: string, newEmail: string) => Promise<void>;
@@ -47,7 +49,7 @@ export interface IUserService {
 }
 
 export interface IUserRepository {
-  create: (params: SignInParams) => Promise<UserData>;
+  create: (params: SignUpParams) => Promise<UserData>;
   get: <T extends GetUserUseCase>(params: GetUserParamsType<T>, type: T) => Promise<UserData>;
   update: (params: UpdateUserParams) => Promise<void>;
   delete: (userId: string) => Promise<void>;
@@ -60,10 +62,16 @@ export interface GetUserParams {
 }
 
 export interface SignInParams {
-  firstName: string;
-  lastName: string;
   email: string;
   password: string;
+}
+
+export interface SignUpParams {
+  firstName: string;
+  lastName?: string;
+  email: string;
+  password?: string;
+  authAs: AuthenticatedAs;
 }
 
 export interface UpdateUserBodyReq {

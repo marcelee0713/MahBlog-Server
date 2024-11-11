@@ -6,6 +6,8 @@ import { IAuthService } from "../interfaces/auth.interface";
 import { bodyError, CustomError, identifyErrors } from "../utils/error_handler";
 import { AnyZodObject, z } from "zod";
 import { upload } from "../config/multer";
+import { safeExecute } from "../utils";
+import { FormatResponse } from "../utils/response_handler";
 
 @injectable()
 export class UserMiddleware {
@@ -61,6 +63,44 @@ export class UserMiddleware {
 
       res.locals.token = newToken;
       res.locals.userId = rPayload.userId;
+
+      return next();
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.status).json(errObj);
+    }
+  }
+
+  async validateCurrentSession(req: Request, res: Response, next: NextFunction) {
+    try {
+      const authHeader = req.headers["authorization"];
+
+      if (!authHeader || !authHeader.startsWith("Bearer ")) return next();
+
+      const token = authHeader.split(" ")[1];
+
+      const isAccesTokenValid = await safeExecute(
+        this.auth.verifyToken.bind(this.auth),
+        token,
+        "ACCESS"
+      );
+
+      if (isAccesTokenValid === null) return next();
+
+      return res.status(303).json(FormatResponse({}, "User already logged-in", 303));
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.status).json(errObj);
+    }
+  }
+
+  async handleGoogleCallback(req: Request, res: Response, next: NextFunction) {
+    const url = process.env.GOOGLE_OAUTH_URL as string;
+
+    try {
+      if (req.query.error === "access_denied") return res.redirect(url);
 
       return next();
     } catch (err) {

@@ -18,7 +18,7 @@ export default [
       },
     },
     files: ["src/**/*.ts", "**/*.js"],
-    ignores: ["node_modules/", "./dist/"],
+    ignores: ["node_modules/", "dist/"],
     rules: {
       "no-console": "warn",
       "no-unused-vars": "off",

@@ -9,7 +9,7 @@ export interface IUserProfile {
   profileId: string;
   userId: string;
   firstName: string;
-  lastName: string;
+  lastName?: string | null;
   middleName?: string | null;
   profilePicture?: string | null;
   profileCover?: string | null;
@@ -19,7 +19,7 @@ export interface IUserProfile {
   getUserId: () => string;
   getFirstName: () => string;
   getMiddleName: () => string | null | undefined;
-  getLastName: () => string | null;
+  getLastName: () => string | null | undefined;
   getProfilePicture: () => string | null | undefined;
   getCover: () => string | null | undefined;
   getBio: () => string | null | undefined;
@@ -29,24 +29,24 @@ export interface IUserProfile {
   setFirstName: (firstName: string) => void;
   setMiddleName: (middleName?: string | null) => void;
   setLastName: (lastName: string) => void;
-  setPfp: (pfp?: string | null) => void;
-  setCover: (cover?: string | null) => void;
-  setBio: (bio?: string | null) => void;
+  setPfp: (pfp: string | null) => void;
+  setCover: (cover: string | null) => void;
+  setBio: (bio: string | null) => void;
   validate: (
     firstName: string,
-    lastName: string,
+    lastName: string | null | undefined,
     middleName?: string | null,
     bio?: string | null
   ) => void;
   validateFirstname: (firstName: string) => void;
-  validateLastName: (lastName: string) => void;
+  validateLastName: (lastName: string | null | undefined) => void;
   validateMiddleName: (middleName?: string | null) => void;
   validateBio: (bio?: string | null) => void;
 }
 
 export interface IUserProfileService {
   getUserProfile: (userId: string) => Promise<UserProfileData>;
-  updateName: (userId: string, fName: string, lName: string, mName?: string) => Promise<void>;
+  updateName: (userId: string, fName: string, lName?: string, mName?: string) => Promise<void>;
   updateBio: (userId: string, bio: string) => Promise<void>;
   updateProfileImage: (userId: string, imageUrl: string) => Promise<void>;
   updateCoverImage: (userId: string, imageUrl: string) => Promise<void>;
@@ -65,7 +65,7 @@ export interface IUserProfileRepository {
 export interface UpdateUserProfileParams {
   userId: string;
   fName: string;
-  lName: string;
+  lName?: string;
   imageUrl: string;
   mName?: string;
   bio: string;

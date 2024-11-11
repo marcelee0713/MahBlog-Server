@@ -8,7 +8,7 @@ import { IAuthService } from "../../interfaces/auth.interface";
 import { IEmailService } from "../../interfaces/email.interface";
 import { IUserBlacklistedTokenService } from "../../interfaces/user/user.blacklisted_token.interface";
 import { IUserLogsService } from "../../interfaces/user/user.logs.interface";
-import { GetUserByEmailUseCase } from "../../types/user/user.types";
+import { GetUserByEmailUseCase, UserData } from "../../types/user/user.types";
 
 @injectable()
 export class UserController {
@@ -37,7 +37,26 @@ export class UserController {
       const email = req.body.email;
       const password = req.body.password;
 
-      const token = await this.service.signIn(email, password);
+      const token = await this.service.signIn({ email, password }, "LOCAL");
+
+      return res
+        .set("Authorization", `Bearer ${token}`)
+        .status(200)
+        .json(FormatResponse({}, "User signed in"));
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.status).json(errObj);
+    }
+  }
+
+  async OnSignInPasswordLess(req: Request, res: Response) {
+    try {
+      const user: UserData = req.user as UserData;
+
+      if (!user) throw new CustomError("does-not-exist", "User does not exist.");
+
+      const token = await this.service.signIn({ email: user.email }, "GOOGLE");
 
       return res
         .set("Authorization", `Bearer ${token}`)
@@ -78,6 +97,7 @@ export class UserController {
         password: password,
         firstName: firstName,
         lastName: lastName,
+        authAs: "LOCAL",
       });
 
       const token = this.auth.createToken(

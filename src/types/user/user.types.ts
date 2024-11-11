@@ -1,5 +1,11 @@
 import { ExcludeFunctions } from "..";
-import { IUser, GetUserParams } from "../../interfaces/user/user.interface";
+import { IUser, GetUserParams, SignInParams } from "../../interfaces/user/user.interface";
+
+export type AuthenticatedAs = "GOOGLE" | "LOCAL";
+
+export type SignInPassLessParams = Omit<SignInParams, "password">;
+
+export type SignInParamsType<T extends AuthenticatedAs> = SignInParamMapping[T];
 
 export type UserRoles = "USER" | "ADMIN";
 
@@ -33,4 +39,9 @@ type ParamMapping = {
   USER_ID: GetUserById;
   EMAIL: GetUserByEmail;
   SIGNING_IN: GetUserByEmail;
+};
+
+type SignInParamMapping = {
+  LOCAL: SignInParams;
+  GOOGLE: SignInPassLessParams;
 };

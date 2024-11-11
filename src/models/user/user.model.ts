@@ -75,11 +75,13 @@ export class User implements IUser {
     if (!REG_EX.EMAIL.test(email)) throw new CustomError("invalid-email");
   };
 
-  validatePassword = (password: string) => {
+  validatePassword = (password?: string) => {
+    if (!password) return;
+
     if (!REG_EX.PASSWORD.test(password)) throw new CustomError("invalid-password");
   };
 
-  validate = (email: string, password: string) => {
+  validate = (email: string, password?: string) => {
     this.validateEmail(email);
     this.validatePassword(password);
   };

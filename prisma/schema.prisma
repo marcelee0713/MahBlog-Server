@@ -11,7 +11,7 @@ datasource db {
 model Users {
   userId                  String                  @id @default(cuid())
   email                   String                  @unique
-  password                String
+  password                String?
   emailVerifiedAt         DateTime?
   profile                 UserProfile?
   userSourceConnections   UserConnections[]       @relation("SourceUser")
@@ -32,6 +32,7 @@ model Users {
   createdAt               DateTime                @default(now())
   role                    Role                    @default(USER)
   status                  UserStatus              @default(ACTIVE)
+  authenticatedAs         AuthenticatedAs         @default(LOCAL)
 }
 
 model UserProfile {
@@ -40,7 +41,7 @@ model UserProfile {
   user           Users   @relation(fields: [userId], references: [userId], onDelete: Cascade)
   firstName      String  @db.VarChar(50)
   middleName     String? @db.VarChar(50)
-  lastName       String  @db.VarChar(80)
+  lastName       String? @db.VarChar(80)
   profilePicture String?
   profileCover   String?
   bio            String? @db.VarChar(255)
@@ -265,6 +266,11 @@ enum UserStatus {
   ACTIVE
   SUSPENDED
   BANNED
+}
+
+enum AuthenticatedAs {
+  GOOGLE
+  LOCAL
 }
 
 enum ConnectionStatus {

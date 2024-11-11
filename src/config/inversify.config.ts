@@ -94,6 +94,7 @@ import {
 import { BlogCommentRepliesRepository } from "../repositories/blog/blog.comments.replies.repo";
 import { BlogCommentRepliesService } from "../services/blog/blog.comment.replies.service";
 import { BlogCommentRepliesController } from "../controllers/blog/blog.comment.replies.controller";
+import { PassportService } from "../middlewares/passport.middleware";
 
 export const container = new Container();
 
@@ -166,3 +167,4 @@ container.bind<ILikesRepository>(TYPES.LikesRepository).to(LikesRepository);
 container.bind<IAuthService>(TYPES.AuthService).to(AuthService);
 container.bind<IEmailService>(TYPES.EmailService).to(EmailService);
 container.bind<IMediaService>(TYPES.MediaService).to(MediaService);
+container.bind(TYPES.PassportService).to(PassportService);

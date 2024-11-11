@@ -45,6 +45,7 @@ export const TYPES = {
   LikesRepository: Symbol.for("LikesRepository"),
   MediaService: Symbol.for("MediaService"),
   AuthService: Symbol.for("AuthService"),
+  PassportService: Symbol.for("PassportService"),
   EmailService: Symbol.for("EmailService"),
 };
 

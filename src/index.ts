@@ -3,6 +3,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import passport from "passport";
 import userRouter from "./routes/users/user.routes";
 import userProfileRouter from "./routes/users/user.profile.routes";
 import userReportsRouter from "./routes/users/user.reports.routes";
@@ -26,6 +27,7 @@ app.use(
   })
 );
 app.set("trust proxy", 1);
+app.use(passport.initialize());
 
 const PORT = process.env.PORT || 3000;
 
@@ -43,11 +45,5 @@ app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
 app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
 
-// TODO: Test the routes for blog comment replies
-
 // TODO: UserNotifications <--- do this when Blog is done.
 // TODO: Interactors, Repo, and Controllers, and routes (if applicable)
-
-// TODO: Implement Auth0 for Nodexpress
-
-// Will comeback and do this. I will do this.

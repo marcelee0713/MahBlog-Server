@@ -3,9 +3,9 @@ import {
   IUser,
   IUserRepository,
   IUserService,
-  SignInParams,
+  SignUpParams,
 } from "../../interfaces/user/user.interface";
-import { UserData } from "../../types/user/user.types";
+import { AuthenticatedAs, SignInParamsType, UserData } from "../../types/user/user.types";
 import { TYPES } from "../../constants";
 import { IUserProfile } from "../../interfaces/user/user.profile.interface";
 import { IUserSessionService } from "../../interfaces/user/user.session.interface";
@@ -29,10 +29,8 @@ export class UserService implements IUserService {
     this.session = session;
   }
 
-  async signIn(email: string, password: string): Promise<string> {
-    this.entity.validate(email, password);
-
-    const user = await this.repo.get({ email: email, password: password }, "SIGNING_IN");
+  async signIn<T extends AuthenticatedAs>(params: SignInParamsType<T>): Promise<string> {
+    const user = await this.repo.get({ ...params }, "SIGNING_IN");
 
     const token = await this.session.createSession(user.userId);
 
@@ -47,10 +45,10 @@ export class UserService implements IUserService {
     await this.session.deleteSessions(userId);
   }
 
-  async signUp(params: SignInParams): Promise<UserData> {
+  async signUp(params: SignUpParams): Promise<UserData> {
     this.entity.validate(params.email, params.password);
 
-    this.profile.validate(params.firstName, params.lastName);
+    this.profile.validate(params.firstName, params.email);
 
     const user = await this.repo.create(params);
 

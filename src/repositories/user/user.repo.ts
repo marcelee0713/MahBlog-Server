@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import {
   IUserRepository,
-  SignInParams,
+  SignUpParams,
   UpdateUserParams,
 } from "../../interfaces/user/user.interface";
 import { UserData, GetUserParamsType, GetUserUseCase } from "../../types/user/user.types";
@@ -29,7 +29,7 @@ export class UserRepository implements IUserRepository {
 
       if (!user) throw new CustomError("does-not-exist", "User does not exist.");
 
-      if (params.password) {
+      if (params.password && user.password) {
         const isMatch = await bcrypt.compare(params.password, user.password);
 
         if (!isMatch) throw new CustomError("wrong-credentials");
@@ -62,12 +62,16 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async create(params: SignInParams): Promise<UserData> {
+  async create(params: SignUpParams): Promise<UserData> {
     try {
+      const password =
+        params.authAs === "LOCAL" ? await bcrypt.hash(params.password as string, 10) : null;
+
       const user = await this.db.users.create({
         data: {
           email: params.email,
-          password: await bcrypt.hash(params.password, 10),
+          password,
+          authenticatedAs: params.authAs,
           profile: {
             create: {
               firstName: params.firstName,
@@ -126,9 +130,18 @@ export class UserRepository implements IUserRepository {
 
         if (!user) throw new CustomError("does-not-exist", "User does not exist.");
 
-        const matchPassword = await bcrypt.compare(params.password, user.password);
+        const currentUserPassword = user.password;
 
-        const samePassword = await bcrypt.compare(params.newPassword, user.password);
+        if (user.authenticatedAs !== "LOCAL" || !currentUserPassword) {
+          throw new CustomError(
+            "invalid",
+            `User can not change password due to authenticating as ${user.authenticatedAs}`
+          );
+        }
+
+        const matchPassword = await bcrypt.compare(params.password, currentUserPassword);
+
+        const samePassword = await bcrypt.compare(params.newPassword, currentUserPassword);
 
         if (!matchPassword) throw new CustomError("user-current-password-does-not-match");
 

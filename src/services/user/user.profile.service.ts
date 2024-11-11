@@ -24,7 +24,7 @@ export class UserProfileService implements IUserProfileService {
     return await this.repo.get(userId);
   }
 
-  async updateName(userId: string, fName: string, lName: string, mName?: string): Promise<void> {
+  async updateName(userId: string, fName: string, lName?: string, mName?: string): Promise<void> {
     this.entity.validate(fName, lName, mName);
 
     return await this.repo.update({ fName, lName, userId, mName }, "NAME");
