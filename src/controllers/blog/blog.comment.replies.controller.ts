@@ -9,13 +9,20 @@ import {
   GetBlogCommentRepliesBodyReq,
   UpdateBlogCommentRepliesBodyReq,
 } from "../../types/blog/blog.comment.replies.types";
+import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
+import { safeExecute } from "../../utils";
 
 @injectable()
 export class BlogCommentRepliesController {
   private service: IBlogCommentRepliesService;
+  private notif: IUserNotificationsService;
 
-  constructor(@inject(TYPES.BlogCommentRepliesService) service: IBlogCommentRepliesService) {
+  constructor(
+    @inject(TYPES.BlogCommentRepliesService) service: IBlogCommentRepliesService,
+    @inject(TYPES.UserNotificationsService) notif: IUserNotificationsService
+  ) {
     this.service = service;
+    this.notif = notif;
   }
 
   async onReply(req: Request, res: Response) {
@@ -29,6 +36,42 @@ export class BlogCommentRepliesController {
       };
 
       const data = await this.service.reply(body.body);
+
+      if (data.comment.userId !== userId) {
+        await safeExecute(this.notif.createNotification.bind(this.notif), {
+          type: "REPLIED_COMMENT",
+          message: data.reply,
+          details: {
+            user: {
+              receiverId: data.comment.userId,
+              senderId: userId,
+            },
+            referenceIds: {
+              blog: data.blogId,
+              comment: data.comment.id,
+              reply: data.replyId,
+            },
+          },
+        });
+      }
+
+      if (data.engagement.repliesTo.userId && data.engagement.repliesTo.userId !== userId) {
+        await safeExecute(this.notif.createNotification.bind(this.notif), {
+          type: "REPLIED_COMMENT",
+          message: data.reply,
+          details: {
+            user: {
+              receiverId: data.engagement.repliesTo.userId,
+              senderId: userId,
+            },
+            referenceIds: {
+              blog: data.blogId,
+              comment: data.comment.id,
+              reply: data.replyId,
+            },
+          },
+        });
+      }
 
       return res.status(200).json(FormatResponse(data));
     } catch (err) {
@@ -99,9 +142,9 @@ export class BlogCommentRepliesController {
       const replyId = req.body.replyId as string;
       const commentId = req.body.commentId as string;
 
-      const type = await this.service.toggleLike(userId, replyId, commentId);
+      const likeInfo = await this.service.toggleLike(userId, replyId, commentId);
 
-      return res.status(200).json(FormatResponse({}, type));
+      return res.status(200).json(FormatResponse(likeInfo));
     } catch (err) {
       const errObj = identifyErrors(err);
 

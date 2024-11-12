@@ -6,13 +6,19 @@ import { CustomError, identifyErrors } from "../../utils/error_handler";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
 import { SortOrder } from "../../types";
 import { UpdateUserConnectionReqBody } from "../../types/user/user.connections.types";
+import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
 
 @injectable()
 export class UserConnectionsController {
+  private notif: IUserNotificationsService;
   private service: IUserConnectionsService;
 
-  constructor(@inject(TYPES.UserConnectionsService) service: IUserConnectionsService) {
+  constructor(
+    @inject(TYPES.UserConnectionsService) service: IUserConnectionsService,
+    @inject(TYPES.UserNotificationsService) notif: IUserNotificationsService
+  ) {
     this.service = service;
+    this.notif = notif;
   }
 
   async onCreateConnection(req: Request, res: Response) {
@@ -97,8 +103,15 @@ export class UserConnectionsController {
             status: "ACCEPTED",
           });
 
-          // TODO: Notify sourceUserId here to
-          // know that the targetUserId accepted its request
+          await this.notif.createNotification({
+            type: "ACCEPTED_CONNECTION_STATUS",
+            details: {
+              user: {
+                receiverId: data.body.sourceUserId,
+                senderId: data.body.targetUserId,
+              },
+            },
+          });
 
           break;
         }
@@ -109,8 +122,15 @@ export class UserConnectionsController {
             status: "REJECTED",
           });
 
-          // TODO: Notify sourceUserId here to
-          // know that the targetUserId rejects its request
+          await this.notif.createNotification({
+            type: "REJECTED_CONNECTION_STATUS",
+            details: {
+              user: {
+                receiverId: data.body.sourceUserId,
+                senderId: data.body.targetUserId,
+              },
+            },
+          });
 
           break;
         }

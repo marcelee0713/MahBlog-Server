@@ -12,6 +12,7 @@ import blogRouter from "./routes/blogs/blog.routes";
 import blogContentsRouter from "./routes/blogs/blog.contents.routes";
 import blogCommentsRouter from "./routes/blogs/blog.comments.routes";
 import blogCommentRepliesRouter from "./routes/blogs/blog.comment.replies.routes";
+import userNotifRouter from "./routes/users/user.notifications.routes";
 
 dotenv.config();
 
@@ -39,11 +40,12 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/user-profile", userProfileRouter);
 app.use("/api/v1/user-reports", userReportsRouter);
 app.use("/api/v1/user-connect", userConnectionsRouter);
+app.use("/api/v1/user-notif", userNotifRouter);
 
 app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
 app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
 
-// TODO: UserNotifications <--- do this when Blog is done.
-// TODO: Interactors, Repo, and Controllers, and routes (if applicable)
+//TODO: Add pagination to the route of /get-connections and /get-pending-connections
+//TODO: Add TDD for this or github actions. Research about how to do it better than before.

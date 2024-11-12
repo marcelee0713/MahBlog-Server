@@ -95,6 +95,13 @@ import { BlogCommentRepliesRepository } from "../repositories/blog/blog.comments
 import { BlogCommentRepliesService } from "../services/blog/blog.comment.replies.service";
 import { BlogCommentRepliesController } from "../controllers/blog/blog.comment.replies.controller";
 import { PassportService } from "../middlewares/passport.middleware";
+import {
+  IUserNotificationsRepository,
+  IUserNotificationsService,
+} from "../interfaces/user/user.notifications.interface";
+import { UserNotificationsService } from "../services/user/user.notifications.service";
+import { UserNotificationsRepository } from "../repositories/user/user.notifications.repo";
+import { UserNotificationsController } from "../controllers/user/user.notifications.controller";
 
 export const container = new Container();
 
@@ -134,6 +141,14 @@ container.bind<IUserReports>(TYPES.UserReportsModel).to(UserReports);
 container.bind<IUserReportsService>(TYPES.UserReportsService).to(UserReportsService);
 container.bind<IUserReportsRepository>(TYPES.UserReportsRepository).to(UserReportsRepository);
 container.bind(TYPES.UserReportsController).to(UserReportsController);
+
+container
+  .bind<IUserNotificationsService>(TYPES.UserNotificationsService)
+  .to(UserNotificationsService);
+container
+  .bind<IUserNotificationsRepository>(TYPES.UserNotificationsRepository)
+  .to(UserNotificationsRepository);
+container.bind(TYPES.UserNotificationsController).to(UserNotificationsController);
 
 container.bind(TYPES.UserMiddleware).to(UserMiddleware);
 

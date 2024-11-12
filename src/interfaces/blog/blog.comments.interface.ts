@@ -1,13 +1,13 @@
-import { LikeStatus } from "../../types/blog/blog.likes.types";
 import { BlogSortingOptions } from "../../types/blog/blog.types";
 import { RawBlogCommentReplyData } from "./blog.comments.replies.interface";
+import { LikesInfo } from "./blog.likes.interface";
 
 export interface IBlogCommentsService {
   createBlogComment: (params: CreateBlogCommentParams) => Promise<BlogCommentsData>;
   getBlogComments: (params: GetBlogCommentsParams) => Promise<BlogCommentsData[]>;
   updateBlogComment: (params: UpdateBlogCommentsParams) => Promise<BlogCommentsData>;
   deleteBlogComment: (userId: string, commentId: string) => Promise<void>;
-  toggleLike: (userId: string, commentId: string) => Promise<LikeStatus>;
+  toggleLike: (userId: string, commentId: string) => Promise<LikesInfo>;
 }
 
 export interface IBlogCommentsRepository {
@@ -20,18 +20,19 @@ export interface IBlogCommentsRepository {
 }
 
 export interface RawBlogCommentData {
-  blogId: string;
   comment: string;
   commentId: string;
   userId: string;
   likes: RawBlogCommentLikeData[];
   replies: RawBlogCommentReplyData[];
+  blog: {
+    blogId: string;
+    authorId: string;
+  };
   createdAt: Date;
   updatedAt: Date | null;
 }
 
-// Note: Maybe put this somewhere else?
-// TODO: Put this on a BlogCommentLikesInterface
 export interface RawBlogCommentLikeData {
   commentLikeId: string;
   userId: string;
@@ -42,7 +43,10 @@ export interface RawBlogCommentLikeData {
 
 export interface BlogCommentsData {
   commentId: string;
-  blogId: string;
+  blog: {
+    id: string;
+    authorId: string;
+  };
   comment: string;
   details: {
     userId: string;

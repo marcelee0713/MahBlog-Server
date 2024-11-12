@@ -251,9 +251,6 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
             },
           });
 
-          // TODO SOON: When it goes back in its controller, make sure to also send a UserNotification to the sourceUserId
-          // To say that you've accepted its connection request
-
           break;
         }
 
@@ -265,9 +262,6 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
               targetUserId: params.targetUserId,
             },
           });
-
-          // TODO SOON: When it goes back in its controller, make sure to also send a UserNotification to the sourceUserId
-          // To say that you've rejects its connection request
 
           break;
         }
@@ -291,7 +285,7 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
         if (err.code === "P2025")
           throw new CustomError(
             "does-not-exist",
-            `Looks like this connection request does not exist no longer exist.`,
+            "This connection request does not exist",
             404,
             "UserConnectionsRepository",
             "The user who created the connection request may no longer exist."

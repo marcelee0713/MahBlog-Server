@@ -9,9 +9,8 @@ import {
   UpdateBlogParams,
 } from "../../interfaces/blog/blog.interface";
 import { TYPES } from "../../constants";
-import { ILikesRepository } from "../../interfaces/blog/blog.likes.interface";
+import { ILikesRepository, LikesInfo } from "../../interfaces/blog/blog.likes.interface";
 import { IBlogScores, IBlogScoresRepository } from "../../interfaces/blog/blog.scores.interface";
-import { LikeStatus } from "../../types/blog/blog.likes.types";
 
 @injectable()
 export class BlogService implements IBlogService {
@@ -74,12 +73,16 @@ export class BlogService implements IBlogService {
     return await this.repo.delete(userId, blogId);
   }
 
-  async toggleLike(userId: string, blogId: string): Promise<LikeStatus> {
-    let type: LikeStatus = "UNLIKED";
+  async toggleLike(userId: string, blogId: string): Promise<LikesInfo> {
+    let info: LikesInfo = {
+      likedByUserId: userId,
+      likeStatus: "UNLIKED",
+    };
+
     const blogLikeId = await this.likeRepo.get(userId, blogId, "BLOG");
 
-    if (blogLikeId) type = await this.likeRepo.delete(userId, blogLikeId, "BLOG");
-    else type = await this.likeRepo.create({ userId, id: blogId, type: "BLOG" }, "BLOG");
+    if (blogLikeId) info.likeStatus = await this.likeRepo.delete(userId, blogLikeId, "BLOG");
+    else info = await this.likeRepo.create({ userId, id: blogId, type: "BLOG" }, "BLOG");
 
     const scoreData = await this.scoresRepo.get("BLOG", blogId);
 
@@ -96,6 +99,6 @@ export class BlogService implements IBlogService {
       type: scoreData.type,
     });
 
-    return type;
+    return info;
   }
 }

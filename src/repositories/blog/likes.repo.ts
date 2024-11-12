@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { ILikesRepository } from "../../interfaces/blog/blog.likes.interface";
+import { ILikesRepository, LikesInfo } from "../../interfaces/blog/blog.likes.interface";
 import { PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { CustomError } from "../../utils/error_handler";
@@ -73,10 +73,15 @@ export class LikesRepository implements ILikesRepository {
     }
   }
 
-  async create<T extends LikeType>(params: CreateLikesParamsType<T>): Promise<LikeStatus> {
+  async create<T extends LikeType>(params: CreateLikesParamsType<T>): Promise<LikesInfo> {
+    const info: LikesInfo = {
+      likedByUserId: params.userId,
+      likeStatus: "LIKED",
+    };
+
     const createByType: Record<LikeType, () => Promise<void>> = {
       BLOG: async () => {
-        await this.db.blogLikes.create({
+        const data = await this.db.blogLikes.create({
           data: {
             blog: {
               connect: {
@@ -89,11 +94,16 @@ export class LikesRepository implements ILikesRepository {
               },
             },
           },
+          include: {
+            blog: true,
+          },
         });
+
+        info.likedUserId = data.blog?.authorId;
       },
 
       COMMENT: async () => {
-        await this.db.blogCommentLikes.create({
+        const data = await this.db.blogCommentLikes.create({
           data: {
             comment: {
               connect: {
@@ -106,13 +116,18 @@ export class LikesRepository implements ILikesRepository {
               },
             },
           },
+          include: {
+            comment: true,
+          },
         });
+
+        info.likedUserId = data.comment?.userId;
       },
 
       REPLY: async () => {
         const param = params as CreateLikesParamsType<"REPLY">;
 
-        await this.db.blogCommentLikes.create({
+        const data = await this.db.blogCommentLikes.create({
           data: {
             reply: {
               connect: {
@@ -130,7 +145,12 @@ export class LikesRepository implements ILikesRepository {
               },
             },
           },
+          include: {
+            reply: true,
+          },
         });
+
+        info.likedUserId = data.reply?.userId;
       },
     };
 
@@ -139,7 +159,7 @@ export class LikesRepository implements ILikesRepository {
 
       await callback();
 
-      return "LIKED";
+      return info;
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {
         if (err.code === "P2025")

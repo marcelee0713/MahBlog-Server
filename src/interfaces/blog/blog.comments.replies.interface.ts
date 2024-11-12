@@ -1,12 +1,12 @@
-import { LikeStatus } from "../../types/blog/blog.likes.types";
 import { RawBlogCommentLikeData } from "./blog.comments.interface";
+import { LikesInfo } from "./blog.likes.interface";
 
 export interface IBlogCommentRepliesService {
   reply: (params: CreateBlogCommentRepliesParams) => Promise<BlogCommentReplyData>;
   getReplies: (params: GetBlogCommentRepliesParams) => Promise<BlogCommentReplyData[]>;
   editReply: (params: UpdateBlogCommentRepliesParams) => Promise<BlogCommentReplyData>;
   removeReply: (userId: string, replyId: string) => Promise<void>;
-  toggleLike: (userId: string, replyId: string, commentId: string) => Promise<LikeStatus>;
+  toggleLike: (userId: string, replyId: string, commentId: string) => Promise<LikesInfo>;
 }
 
 export interface IBlogCommentRepliesRepository {
@@ -19,7 +19,6 @@ export interface IBlogCommentRepliesRepository {
 
 export interface RawBlogCommentReplyData {
   replyId: string;
-  commentId: string;
   blogId: string;
   userId: string;
   mentionedReplyId: string | null;
@@ -31,6 +30,10 @@ export interface RawBlogCommentReplyData {
 export interface RawBlogCommentRepliesData extends RawBlogCommentReplyData {
   likes: RawBlogCommentLikeData[];
   mentionedReply: RawBlogCommentReplyData | null;
+  comment: {
+    commentId: string;
+    userId: string;
+  };
 }
 
 export interface CreateBlogCommentRepliesParams {
@@ -60,7 +63,10 @@ export interface UpdateBlogCommentRepliesParams {
 
 export interface BlogCommentReplyData {
   replyId: string;
-  commentId: string;
+  comment: {
+    id: string;
+    userId: string;
+  };
   blogId: string;
   reply: string;
   details: {
@@ -80,6 +86,7 @@ export interface BlogCommentReplyData {
 }
 
 export interface MentionedDetails {
+  userId: string | null;
   mentionedReplyId: string | null;
   mentionedName: string | null;
   mentionedMessage: string | null;

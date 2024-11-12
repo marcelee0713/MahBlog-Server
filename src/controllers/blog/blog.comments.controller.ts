@@ -5,13 +5,20 @@ import { TYPES } from "../../constants";
 import { identifyErrors } from "../../utils/error_handler";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
 import { GetBlogCommentsBodyReq } from "../../types/blog/blog.comments.types";
+import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
+import { safeExecute } from "../../utils";
 
 @injectable()
 export class BlogCommentsController {
   private service: IBlogCommentsService;
+  private notif: IUserNotificationsService;
 
-  constructor(@inject(TYPES.BlogCommentsService) service: IBlogCommentsService) {
+  constructor(
+    @inject(TYPES.BlogCommentsService) service: IBlogCommentsService,
+    @inject(TYPES.UserNotificationsService) notif: IUserNotificationsService
+  ) {
     this.service = service;
+    this.notif = notif;
   }
 
   async onCreateBlogComment(req: Request, res: Response) {
@@ -21,6 +28,23 @@ export class BlogCommentsController {
       const comment = req.body.comment as string;
 
       const data = await this.service.createBlogComment({ userId, blogId, comment });
+
+      if (data.blog.authorId !== userId) {
+        await safeExecute(this.notif.createNotification.bind(this.notif), {
+          type: "COMMENT_BLOG",
+          message: data.comment,
+          details: {
+            user: {
+              receiverId: data.blog.authorId,
+              senderId: userId,
+            },
+            referenceIds: {
+              blog: data.blog.id,
+              comment: data.commentId,
+            },
+          },
+        });
+      }
 
       return res.status(200).json(FormatResponse(data));
     } catch (err) {
@@ -86,9 +110,9 @@ export class BlogCommentsController {
       const userId = res.locals.userId as string;
       const commentId = req.body.commentId as string;
 
-      const type = await this.service.toggleLike(userId, commentId);
+      const likeInfo = await this.service.toggleLike(userId, commentId);
 
-      return res.status(200).json(FormatResponse({}, type));
+      return res.status(200).json(FormatResponse(likeInfo));
     } catch (err) {
       const errObj = identifyErrors(err);
 

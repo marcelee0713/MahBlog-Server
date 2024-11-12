@@ -10,18 +10,23 @@ import {
   UpdateBlogImageUseCase,
 } from "../../types/blog/blog.types";
 import { IMediaService } from "../../interfaces/media.interface";
+import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
+import { safeExecute } from "../../utils";
 
 @injectable()
 export class BlogController {
   private service: IBlogService;
   private media: IMediaService;
+  private notif: IUserNotificationsService;
 
   constructor(
     @inject(TYPES.BlogService) service: IBlogService,
-    @inject(TYPES.MediaService) media: IMediaService
+    @inject(TYPES.MediaService) media: IMediaService,
+    @inject(TYPES.UserNotificationsService) notif: IUserNotificationsService
   ) {
     this.service = service;
     this.media = media;
+    this.notif = notif;
   }
 
   async onCreateBlog(req: Request, res: Response) {
@@ -185,9 +190,24 @@ export class BlogController {
       const userId = res.locals.userId as string;
       const blogId = req.body.blogId as string;
 
-      const type = await this.service.toggleLike(userId, blogId);
+      const likeInfo = await this.service.toggleLike(userId, blogId);
 
-      return res.status(200).json(FormatResponse({}, type));
+      if (likeInfo.likedUserId && likeInfo.likedUserId !== userId) {
+        await safeExecute(this.notif.createNotification.bind(this.notif), {
+          type: "LIKED_BLOG",
+          details: {
+            user: {
+              receiverId: likeInfo.likedUserId,
+              senderId: userId,
+            },
+            referenceIds: {
+              blog: blogId,
+            },
+          },
+        });
+      }
+
+      return res.status(200).json(FormatResponse(likeInfo));
     } catch (err) {
       const errObj = identifyErrors(err);
 

@@ -1,5 +1,5 @@
-import { LikeStatus } from "../../types/blog/blog.likes.types";
 import { BlogSortingOptions, BlogStatus, BlogVisibility } from "../../types/blog/blog.types";
+import { LikesInfo } from "./blog.likes.interface";
 
 export interface IBlog {
   validateBlogTitle: (title: string) => void;
@@ -20,7 +20,7 @@ export interface IBlogService {
 
   deleteBlog: (userId: string, blogId: string) => Promise<string[]>;
 
-  toggleLike: (userId: string, blogId: string) => Promise<LikeStatus>;
+  toggleLike: (userId: string, blogId: string) => Promise<LikesInfo>;
 }
 
 export interface IBlogRepository {

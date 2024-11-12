@@ -45,6 +45,12 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
         include: {
           likes: true,
           mentionedReply: true,
+          comment: {
+            select: {
+              commentId: true,
+              userId: true,
+            },
+          },
         },
       });
 
@@ -63,6 +69,12 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
           include: {
             likes: true,
             mentionedReply: true,
+            comment: {
+              select: {
+                commentId: true,
+                userId: true,
+              },
+            },
           },
         });
 
@@ -90,6 +102,7 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
 
   async get(data: RawBlogCommentRepliesData, userId: string): Promise<BlogCommentReplyData> {
     let mentionedData: MentionedDetails = {
+      userId: null,
       mentionedMessage: null,
       mentionedName: null,
       mentionedReplyId: null,
@@ -109,6 +122,7 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
         .trim();
 
       mentionedData = {
+        userId: userData.userId,
         mentionedMessage: data.mentionedReply.reply,
         mentionedReplyId: data.mentionedReply.replyId,
         mentionedName: fullName,
@@ -130,7 +144,10 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
     const reply: BlogCommentReplyData = {
       replyId: data.replyId,
       blogId: data.blogId,
-      commentId: data.commentId,
+      comment: {
+        id: data.comment.commentId,
+        userId: data.comment.userId,
+      },
       reply: data.reply,
       details: {
         fullName,
@@ -171,6 +188,12 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
         include: {
           likes: true,
           mentionedReply: true,
+          comment: {
+            select: {
+              commentId: true,
+              userId: true,
+            },
+          },
         },
       });
 
@@ -210,6 +233,12 @@ export class BlogCommentRepliesRepository implements IBlogCommentRepliesReposito
         include: {
           likes: true,
           mentionedReply: true,
+          comment: {
+            select: {
+              commentId: true,
+              userId: true,
+            },
+          },
         },
       });
 

@@ -7,8 +7,7 @@ import {
   IBlogCommentRepliesService,
   UpdateBlogCommentRepliesParams,
 } from "../../interfaces/blog/blog.comments.replies.interface";
-import { LikeStatus } from "../../types/blog/blog.likes.types";
-import { ILikesRepository } from "../../interfaces/blog/blog.likes.interface";
+import { ILikesRepository, LikesInfo } from "../../interfaces/blog/blog.likes.interface";
 import { TYPES } from "../../constants";
 
 @injectable()
@@ -40,14 +39,18 @@ export class BlogCommentRepliesService implements IBlogCommentRepliesService {
     await this.repo.delete(userId, replyId);
   }
 
-  async toggleLike(userId: string, replyId: string, commentId: string): Promise<LikeStatus> {
-    let type: LikeStatus = "UNLIKED";
+  async toggleLike(userId: string, replyId: string, commentId: string): Promise<LikesInfo> {
+    let info: LikesInfo = {
+      likedByUserId: userId,
+      likeStatus: "UNLIKED",
+    };
+
     const replyLikeId = await this.likeRepo.get(userId, replyId, "REPLY");
 
-    if (replyLikeId) type = await this.likeRepo.delete(userId, replyLikeId, "REPLY");
+    if (replyLikeId) info.likeStatus = await this.likeRepo.delete(userId, replyLikeId, "REPLY");
     else
-      type = await this.likeRepo.create({ userId, id: replyId, commentId, type: "REPLY" }, "REPLY");
+      info = await this.likeRepo.create({ userId, id: replyId, commentId, type: "REPLY" }, "REPLY");
 
-    return type;
+    return info;
   }
 }

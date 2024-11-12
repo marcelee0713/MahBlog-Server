@@ -46,6 +46,12 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
         include: {
           likes: true,
           replies: true,
+          blog: {
+            select: {
+              blogId: true,
+              authorId: true,
+            },
+          },
         },
       });
 
@@ -88,6 +94,12 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
         include: {
           likes: true,
           replies: true,
+          blog: {
+            select: {
+              blogId: true,
+              authorId: true,
+            },
+          },
         },
       });
 
@@ -135,7 +147,10 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
 
     return {
       commentId: data.commentId,
-      blogId: data.blogId,
+      blog: {
+        id: data.blog.blogId,
+        authorId: data.blog.authorId,
+      },
       comment: data.comment,
       details: {
         userId: data.userId,
@@ -173,6 +188,12 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
         include: {
           likes: true,
           replies: true,
+          blog: {
+            select: {
+              blogId: true,
+              authorId: true,
+            },
+          },
         },
       });
 
@@ -207,6 +228,12 @@ export class BlogCommentsRepository implements IBlogCommentsRepository {
         include: {
           likes: true,
           replies: true,
+          blog: {
+            select: {
+              blogId: true,
+              authorId: true,
+            },
+          },
         },
       });
 
