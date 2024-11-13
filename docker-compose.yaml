@@ -7,7 +7,28 @@ services:
     env_file:
       - .env
     ports:
-      - 3001:3001
+      - "3001:3001"
     volumes:
       - .:/app
       - /app/node_modules
+    depends_on:
+      - db # Ensure API waits for the DB to be ready
+    environment:
+      DATABASE_URL: postgres://postgres:password@db:5432/mahblog_db
+      DIRECT_URL: postgres://postgres:password@db:5432/mahblog_db
+    command: ["sh", "-c", "npm run build:dev && npm run migrate:dev && npm run start:dev"]
+
+  db:
+    image: postgres:15
+    container_name: mahblog-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mahblog_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data # Persist database data
+
+volumes:
+  db-data:

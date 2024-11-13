@@ -7,7 +7,7 @@ import {
 import { UserData, GetUserParamsType, GetUserUseCase } from "../../types/user/user.types";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { CustomError } from "../../utils/error_handler";
 
 @injectable()
