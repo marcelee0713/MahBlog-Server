@@ -47,5 +47,4 @@ app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
 app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
 
-//TODO: Add pagination to the route of /get-connections and /get-pending-connections
 //TODO: Add TDD for this or github actions. Research about how to do it better than before.

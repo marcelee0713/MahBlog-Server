@@ -105,18 +105,42 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
         }
 
         case "GET_CONNECTIONS": {
-          const targetUsers: UserConnections[] = [];
+          const connections: UserConnections[] = [];
 
           const param = params as GetConnectionsParamsType<"GET_CONNECTIONS">;
 
+          const { userId, dateOrder, pagination, searchNameInput } = param;
+
           const data = await this.db.userConnections.findMany({
+            skip: pagination.skip,
+            take: pagination.take,
             where: {
               OR: [
                 {
-                  sourceUserId: param.userId,
+                  sourceUserId: userId,
+                  sourceUser: searchNameInput
+                    ? {
+                        profile: {
+                          firstName: {
+                            startsWith: searchNameInput,
+                            mode: "insensitive",
+                          },
+                        },
+                      }
+                    : undefined,
                 },
                 {
-                  targetUserId: param.userId,
+                  targetUserId: userId,
+                  targetUser: searchNameInput
+                    ? {
+                        profile: {
+                          firstName: {
+                            startsWith: searchNameInput,
+                            mode: "insensitive",
+                          },
+                        },
+                      }
+                    : undefined,
                 },
               ],
               AND: [
@@ -126,99 +150,103 @@ export class UserConnectionsRepository implements IUserConnectionRepository {
               ],
             },
             orderBy: {
-              createdAt: "desc",
+              createdAt: dateOrder,
+            },
+            include: {
+              sourceUser: {
+                select: {
+                  profile: true,
+                },
+              },
+              targetUser: {
+                select: {
+                  profile: true,
+                },
+              },
             },
           });
 
           for (let i = 0; i < data.length; i++) {
-            const targetUser = await this.db.userProfile.findFirst({
-              where: {
-                userId: data[i].targetUserId,
-              },
-              select: {
-                userId: true,
-                firstName: true,
-                middleName: true,
-                lastName: true,
-                profilePicture: true,
-              },
-            });
+            const val = data[i];
 
-            if (targetUser) {
-              const name = `${targetUser.firstName} ${targetUser.middleName ? targetUser.middleName + " " : ""}${targetUser.lastName}`;
+            let profile = null;
 
-              const nameLowCaseVer = name.toLowerCase();
-
-              const searchingCondition =
-                param.searchNameInput &&
-                nameLowCaseVer.startsWith(param.searchNameInput.toLowerCase());
-
-              if (searchingCondition) {
-                targetUsers.push({
-                  connectionId: data[i].connectionId,
-                  userId: targetUser.userId,
-                  name: name,
-                  profilePicture: targetUser.profilePicture,
-                });
-              } else {
-                targetUsers.push({
-                  connectionId: data[i].connectionId,
-                  userId: targetUser.userId,
-                  name: name,
-                  profilePicture: targetUser.profilePicture,
-                });
-              }
+            if (val.sourceUserId !== userId && val.targetUserId === userId) {
+              profile = val.sourceUser.profile;
+            } else {
+              profile = val.targetUser.profile;
             }
+
+            if (!profile) continue;
+
+            const name = [profile.firstName, profile.middleName, profile.lastName]
+              .filter(Boolean)
+              .join(" ");
+
+            const obj: UserConnections = {
+              connectionId: val.connectionId,
+              name,
+              profilePicture: profile.profilePicture,
+              userId: profile.userId,
+            };
+
+            connections.push(obj);
           }
 
-          const res = targetUsers as GetConnectionReturnType<T>;
+          const res = connections as GetConnectionReturnType<T>;
 
           return res;
         }
 
         case "GET_PENDING_CONNECTIONS": {
-          const pendingConnectors: UserPendingConnections[] = [];
+          const pendingConnections: UserPendingConnections[] = [];
 
           const param = params as GetConnectionsParamsType<"GET_PENDING_CONNECTIONS">;
 
+          const { dateOrder, pagination, userId } = param;
+
           const data = await this.db.userConnections.findMany({
+            skip: pagination.skip,
+            take: pagination.take,
             where: {
-              targetUserId: param.userId,
+              targetUserId: userId,
               status: "PENDING",
             },
             orderBy: {
-              createdAt: param.dateOrder,
+              createdAt: dateOrder,
+            },
+            include: {
+              targetUser: {
+                select: {
+                  profile: true,
+                },
+              },
             },
           });
 
           for (let i = 0; i < data.length; i++) {
-            const targetUser = await this.db.userProfile.findFirst({
-              where: {
-                userId: data[i].sourceUserId,
-              },
-              select: {
-                userId: true,
-                firstName: true,
-                middleName: true,
-                lastName: true,
-                profilePicture: true,
-              },
-            });
+            const val = data[i];
 
-            if (targetUser) {
-              const name = `${targetUser.firstName} ${targetUser.middleName ?? ""} ${targetUser.lastName}`;
+            const profile = val.targetUser.profile;
 
-              pendingConnectors.push({
-                connectionId: data[i].connectionId,
-                userId: targetUser.userId,
-                name: name,
-                profilePicture: targetUser.profilePicture,
-                createdAt: data[i].createdAt,
-              });
-            }
+            if (!profile) continue;
+
+            const name = [profile.firstName, profile.middleName, profile.lastName]
+              .filter(Boolean)
+              .join(" ");
+
+            const obj: UserPendingConnections = {
+              connectionId: val.connectionId,
+              name,
+              profilePicture: profile.profilePicture,
+              userId: profile.userId,
+              createdAt: val.createdAt,
+            };
+
+            pendingConnections.push(obj);
           }
 
-          return pendingConnectors as GetConnectionReturnType<T>;
+          return pendingConnections as GetConnectionReturnType<T>;
         }
 
         default:

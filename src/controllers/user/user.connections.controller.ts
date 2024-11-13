@@ -4,8 +4,11 @@ import { IUserConnectionsService } from "../../interfaces/user/user.connections.
 import { TYPES } from "../../constants";
 import { CustomError, identifyErrors } from "../../utils/error_handler";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
-import { SortOrder } from "../../types";
-import { UpdateUserConnectionReqBody } from "../../types/user/user.connections.types";
+import {
+  GetUserConnectionsReqBody,
+  GetUserPendingConnectionsReqBody,
+  UpdateUserConnectionReqBody,
+} from "../../types/user/user.connections.types";
 import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
 
 @injectable()
@@ -38,11 +41,14 @@ export class UserConnectionsController {
 
   async onGetTotalConnections(req: Request, res: Response) {
     try {
-      const userId = res.locals.userId as string;
+      const body: GetUserConnectionsReqBody = {
+        body: {
+          ...req.body,
+          userId: res.locals.userId as string,
+        },
+      };
 
-      const searchNameInput = req.body.searchNameInput as string | undefined;
-
-      const data = await this.service.getTotalConnections(userId, searchNameInput);
+      const data = await this.service.getTotalConnections(body.body);
 
       return res
         .status(200)
@@ -72,10 +78,14 @@ export class UserConnectionsController {
 
   async onGetPendingConnections(req: Request, res: Response) {
     try {
-      const userId = res.locals.userId as string;
-      const dateOrder = req.body.dateOrder as SortOrder;
+      const body: GetUserPendingConnectionsReqBody = {
+        body: {
+          ...req.body,
+          userId: res.locals.userId as string,
+        },
+      };
 
-      const data = await this.service.getPendingConnections(userId, dateOrder);
+      const data = await this.service.getPendingConnections(body.body);
 
       return res
         .status(200)

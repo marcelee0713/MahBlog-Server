@@ -8,9 +8,14 @@ export const createUserConnectionsSchema = z.object({
   }),
 });
 
-export const getUserTotalConnectionsSchema = z.object({
+export const getUserConnectionsSchema = z.object({
   body: z.object({
     searchNameInput: z.string().max(255).trim().optional(),
+    pagination: z.object({
+      skip: z.number(),
+      take: z.number(),
+    }),
+    dateOrder: z.enum(SortOrderArr),
   }),
 });
 
@@ -22,6 +27,10 @@ export const getUserTotalConnectionsCountSchema = z.object({
 
 export const getUserPendingConnectionsSchema = z.object({
   body: z.object({
+    pagination: z.object({
+      skip: z.number(),
+      take: z.number(),
+    }),
     dateOrder: z.enum(SortOrderArr),
   }),
 });

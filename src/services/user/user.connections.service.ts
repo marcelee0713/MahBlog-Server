@@ -1,5 +1,7 @@
 import { inject, injectable } from "inversify";
 import {
+  GetUserConnectionsParams,
+  GetUserPendingConnectionsParams,
   IUserConnectionRepository,
   IUserConnectionsService,
   UserConnections,
@@ -7,7 +9,6 @@ import {
   UserPendingConnections,
   UserUpdateConnectionParams,
 } from "../../interfaces/user/user.connections.interface";
-import { SortOrder } from "../../types";
 import { TYPES } from "../../constants";
 
 @injectable()
@@ -22,8 +23,8 @@ export class UserConnectionsService implements IUserConnectionsService {
     await this.repo.create(sourceUserId, targetUserId);
   }
 
-  async getTotalConnections(userId: string, searchNameInput?: string): Promise<UserConnections[]> {
-    const res = await this.repo.get({ userId, searchNameInput }, "GET_CONNECTIONS");
+  async getTotalConnections(params: GetUserConnectionsParams): Promise<UserConnections[]> {
+    const res = await this.repo.get(params, "GET_CONNECTIONS");
 
     return res;
   }
@@ -35,10 +36,9 @@ export class UserConnectionsService implements IUserConnectionsService {
   }
 
   async getPendingConnections(
-    userId: string,
-    dateOrder: SortOrder
+    params: GetUserPendingConnectionsParams
   ): Promise<UserPendingConnections[]> {
-    const res = await this.repo.get({ userId, dateOrder }, "GET_PENDING_CONNECTIONS");
+    const res = await this.repo.get(params, "GET_PENDING_CONNECTIONS");
 
     return res;
   }

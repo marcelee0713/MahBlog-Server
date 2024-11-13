@@ -6,7 +6,7 @@ import { middleware } from "./user.routes";
 import {
   createUserConnectionsSchema,
   getUserPendingConnectionsSchema,
-  getUserTotalConnectionsSchema,
+  getUserConnectionsSchema,
   onUpdateUserConnectionsSchema,
 } from "../../middlewares/schemas/user/user.connections.schema";
 import {
@@ -39,7 +39,7 @@ userConnectionsRouter
 userConnectionsRouter.post(
   "/get-connections",
   getConnectionsRateLimit,
-  middleware.validateBody(getUserTotalConnectionsSchema),
+  middleware.validateBody(getUserConnectionsSchema),
   controller.onGetTotalConnections.bind(controller)
 );
 

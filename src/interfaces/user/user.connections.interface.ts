@@ -17,11 +17,10 @@ export interface IUserConnections {
 
 export interface IUserConnectionsService {
   createConnection: (sourceUserId: string, targetUserId: string) => Promise<void>;
-  getTotalConnections: (userId: string, searchNameInput?: string) => Promise<UserConnections[]>;
+  getTotalConnections: (params: GetUserConnectionsParams) => Promise<UserConnections[]>;
   getTotalConnectionsCount: (userId: string) => Promise<UserConnectionsCount>;
   getPendingConnections: (
-    userId: string,
-    dateOrder: SortOrder
+    params: GetUserPendingConnectionsParams
   ) => Promise<UserPendingConnections[]>;
   updateConnection: (params: UserUpdateConnectionParams) => Promise<void>;
 }
@@ -59,12 +58,15 @@ export interface GetUserConnectionsCountParams {
   userId: string;
 }
 
-export interface GetUserTotalConnectionsParams extends GetUserConnectionsCountParams {
-  searchNameInput?: string;
-}
-
-export interface GetUserTotalPendingConnectionsParams extends GetUserConnectionsCountParams {
+export interface GetUserPendingConnectionsParams extends GetUserConnectionsCountParams {
+  pagination: {
+    skip: number;
+    take: number;
+  };
   dateOrder: SortOrder;
+}
+export interface GetUserConnectionsParams extends GetUserPendingConnectionsParams {
+  searchNameInput?: string;
 }
 
 export interface UserUpdateConnectionParams {
