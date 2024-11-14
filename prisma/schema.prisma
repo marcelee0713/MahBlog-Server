@@ -1,7 +1,7 @@
 generator client {
-  provider      = "prisma-client-js"
-  // Uncomment this if you are running this on linux 
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  provider = "prisma-client-js"
+  // Uncomment this if you are running this on linux or docker
+  // binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
