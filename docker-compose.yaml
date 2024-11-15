@@ -16,7 +16,8 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:password@db:5432/mahblog_db
       DIRECT_URL: postgres://postgres:password@db:5432/mahblog_db
-    command: ["sh", "-c", "npm run build:dev && npm run migrate:dev && npm run start:dev"]
+    command:
+      ["sh", "-c", "npm run build:dev && npm run migrate:dev && npm test && npm run start:dev"]
 
   db:
     image: postgres:15

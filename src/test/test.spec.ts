@@ -1,5 +1,10 @@
-import { beforeAll, describe, afterAll } from "@jest/globals";
-import { UserAuthTestSuite } from "./user/user.auth";
+import { beforeAll, describe, afterAll, expect } from "@jest/globals";
+import {
+  UserChangeEmailTestSuite,
+  UserRegisterationTestSuite,
+  UserResetPasswordTestSuite,
+} from "./user/user.auth";
+import { DatabaseTearDown } from "./setup";
 
 beforeAll(async () => {
   // const user = await CreateUserTest();
@@ -8,11 +13,19 @@ beforeAll(async () => {
 
 describe("User Test Suite", () => {
   describe("User Registeration", () => {
-    UserAuthTestSuite();
+    UserRegisterationTestSuite();
+  });
+
+  describe("User Reset Password", () => {
+    UserResetPasswordTestSuite();
+  });
+
+  describe("User Change Email", () => {
+    UserChangeEmailTestSuite();
   });
 });
 
 afterAll(async () => {
-  // const res = await DatabaseTearDown();
-  // expect(res).resolves;
+  const res = await DatabaseTearDown();
+  expect(res).resolves;
 });

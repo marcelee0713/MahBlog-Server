@@ -111,7 +111,7 @@ export class UserController {
         token: token,
       });
 
-      return res.status(200).json(FormatResponse({}, "Created a user"));
+      return res.status(200).json(FormatResponse(userData, "Created a user"));
     } catch (err) {
       const errObj = identifyErrors(err);
 
@@ -261,6 +261,8 @@ export class UserController {
       await this.service.updateEmail(payload.userId, payload.oldEmail, payload.newEmail);
 
       await this.logs.addLog(payload.userId, "UPDATE_EMAIL");
+
+      await this.blacklisted.addTokenToBlacklist({ token, ...payload });
 
       const emailVerficationToken = this.auth.createToken(
         {
