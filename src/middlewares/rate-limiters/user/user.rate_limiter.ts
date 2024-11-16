@@ -16,7 +16,7 @@ export const getUserRateLimit = rateLimit({
 
 export const signInAndOutRateLimit = rateLimit({
   windowMs: 60 * 1000 * 5,
-  limit: 10,
+  limit: 20,
   standardHeaders: true,
   legacyHeaders: false,
   skipFailedRequests: true,

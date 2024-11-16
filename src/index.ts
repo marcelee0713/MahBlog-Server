@@ -47,5 +47,4 @@ app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
 app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
 
-//TODO: Add TDD for this or github actions. Research about how to do it better than before.
-//TODO: Add admin routes or protected routes.
+//TODO: Add admin routes or protected routes. Make sure to add TDD for this one as well.

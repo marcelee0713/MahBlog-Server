@@ -1,14 +1,13 @@
 import { beforeAll, describe, afterAll, expect } from "@jest/globals";
-import {
-  UserChangeEmailTestSuite,
-  UserRegisterationTestSuite,
-  UserResetPasswordTestSuite,
-} from "./user/user.auth";
-import { DatabaseTearDown } from "./setup";
+import { UserRegisterationTestSuite } from "./user/user.registration";
+import { UserChangeEmailTestSuite } from "./user/user.change_email";
+import { UserResetPasswordTestSuite } from "./user/user.reset_password";
+import { CreateUserTest, DatabaseTearDown } from "./setup";
+import { BlogTestSuite } from "./blog/blog";
+import { BlogCommentTestSuite } from "./blog/blog-comment";
 
 beforeAll(async () => {
-  // const user = await CreateUserTest();
-  // expect(user).toBeDefined();
+  await CreateUserTest();
 });
 
 describe("User Test Suite", () => {
@@ -22,6 +21,16 @@ describe("User Test Suite", () => {
 
   describe("User Change Email", () => {
     UserChangeEmailTestSuite();
+  });
+});
+
+describe("Core Test Suite", () => {
+  describe("Blog Utilization", () => {
+    BlogTestSuite();
+  });
+
+  describe("Blog Comment Utilization", () => {
+    BlogCommentTestSuite();
   });
 });
 
