@@ -46,5 +46,3 @@ app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
 app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
-
-//TODO: Add admin routes or protected routes. Make sure to add TDD for this one as well.

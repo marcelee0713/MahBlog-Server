@@ -2,20 +2,25 @@ import { Request, Response } from "express";
 import { injectable, inject } from "inversify";
 import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
 import { TYPES } from "../../constants";
-import { identifyErrors } from "../../utils/error_handler";
+import { CustomError, identifyErrors } from "../../utils/error_handler";
 import {
   CreateNotificationReqBody,
   GetNotificationReqBody,
 } from "../../types/user/user.notifications.type";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
+import { IUserService } from "../../interfaces/user/user.interface";
 
-// TODO: Make this part admin protected.
 @injectable()
 export class UserNotificationsController {
   private service: IUserNotificationsService;
+  private userService: IUserService;
 
-  constructor(@inject(TYPES.UserNotificationsService) service: IUserNotificationsService) {
+  constructor(
+    @inject(TYPES.UserNotificationsService) service: IUserNotificationsService,
+    @inject(TYPES.UserService) userService: IUserService
+  ) {
     this.service = service;
+    this.userService = userService;
   }
 
   async onCreateNotification(req: Request, res: Response) {
@@ -26,7 +31,13 @@ export class UserNotificationsController {
         },
       };
 
-      data.body.details.user.senderId = res.locals.userId as string;
+      const userId = res.locals.userId as string;
+
+      data.body.details.user.senderId = userId;
+
+      const user = await this.userService.getUser(userId);
+
+      if (user.role !== "ADMIN") throw new CustomError("user-not-authorized");
 
       await this.service.createNotification(data.body);
 

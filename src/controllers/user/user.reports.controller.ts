@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { IUserReportsService } from "../../interfaces/user/user.reports.interface";
 import { TYPES } from "../../constants";
-import { identifyErrors } from "../../utils/error_handler";
+import { CustomError, identifyErrors } from "../../utils/error_handler";
 import {
   CreateUserReportBlogBodyReq,
   CreateUserReportCommentBodyReq,
@@ -11,13 +11,19 @@ import {
   GetUserReportBodyReq,
 } from "../../types/user/user.reports.type";
 import { FormatResponse } from "../../utils/response_handler";
+import { IUserService } from "../../interfaces/user/user.interface";
 
 @injectable()
 export class UserReportsController {
   private service: IUserReportsService;
+  private userService: IUserService;
 
-  constructor(@inject(TYPES.UserReportsService) service: IUserReportsService) {
+  constructor(
+    @inject(TYPES.UserReportsService) service: IUserReportsService,
+    @inject(TYPES.UserService) userService: IUserService
+  ) {
     this.service = service;
+    this.userService = userService;
   }
 
   async onReportIssue(req: Request, res: Response) {
@@ -121,6 +127,10 @@ export class UserReportsController {
       const userId = req.body.userId as string;
       const reportId = req.body.reportId as string;
 
+      const user = await this.userService.getUser(userId);
+
+      if (user.role !== "ADMIN") throw new CustomError("user-not-authorized");
+
       const report = await this.service.getReport(userId, reportId);
 
       return res.status(200).json(FormatResponse(report));
@@ -133,6 +143,12 @@ export class UserReportsController {
 
   async onDeleteAllReports(req: Request, res: Response) {
     try {
+      const userId = req.body.userId as string;
+
+      const user = await this.userService.getUser(userId);
+
+      if (user.role !== "ADMIN") throw new CustomError("user-not-authorized");
+
       await this.service.deleteAllReports();
 
       return res.status(200).json(FormatResponse({}, "Deleted all reports"));
@@ -146,6 +162,10 @@ export class UserReportsController {
   async onDeleteUserReports(req: Request, res: Response) {
     try {
       const userId = req.body.userId as string;
+
+      const user = await this.userService.getUser(userId);
+
+      if (user.role !== "ADMIN") throw new CustomError("user-not-authorized");
 
       await this.service.deleteUserReports(userId);
 
@@ -161,6 +181,10 @@ export class UserReportsController {
     try {
       const userId = req.body.userId as string;
       const reportId = req.body.reportId as string;
+
+      const user = await this.userService.getUser(userId);
+
+      if (user.role !== "ADMIN") throw new CustomError("user-not-authorized");
 
       await this.service.deleteReport(userId, reportId);
 
