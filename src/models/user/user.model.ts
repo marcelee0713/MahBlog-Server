@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { REG_EX } from "../../constants";
 import { IUser } from "../../interfaces/user/user.interface";
-import { UserData, UserRoles, UserStatus } from "../../types/user/user.types";
+import { AuthenticatedAs, UserData, UserRoles, UserStatus } from "../../types/user/user.types";
 import { CustomError } from "../../utils/error_handler";
 
 @injectable()
@@ -12,6 +12,7 @@ export class User implements IUser {
   createdAt!: Date;
   role!: UserRoles;
   status!: UserStatus;
+  authenticatedAs!: AuthenticatedAs;
 
   getUserId = () => this.userId;
 
@@ -33,6 +34,7 @@ export class User implements IUser {
       role: this.role,
       status: this.status,
       createdAt: this.createdAt,
+      authenticatedAs: this.authenticatedAs,
     };
 
     return obj;

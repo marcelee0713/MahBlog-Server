@@ -16,6 +16,7 @@ export interface IUser {
   createdAt: Date;
   role: UserRoles;
   status: UserStatus;
+  authenticatedAs: AuthenticatedAs;
   getUser: () => UserData;
   getUserId: () => string;
   getEmail: () => string;

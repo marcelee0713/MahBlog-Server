@@ -9,6 +9,7 @@ import { AuthenticatedAs, SignInParamsType, UserData } from "../../types/user/us
 import { TYPES } from "../../constants";
 import { IUserProfile } from "../../interfaces/user/user.profile.interface";
 import { IUserSessionService } from "../../interfaces/user/user.session.interface";
+import { CustomError } from "../../utils/error_handler";
 
 @injectable()
 export class UserService implements IUserService {
@@ -29,8 +30,19 @@ export class UserService implements IUserService {
     this.session = session;
   }
 
-  async signIn<T extends AuthenticatedAs>(params: SignInParamsType<T>): Promise<string> {
+  async signIn<T extends AuthenticatedAs>(params: SignInParamsType<T>, type: T): Promise<string> {
     const user = await this.repo.get({ ...params }, "SIGNING_IN");
+
+    if (user.authenticatedAs !== type) {
+      let message =
+        "Please sign in using your email and password, as your account was created through the traditional sign-in method.";
+
+      if (user.authenticatedAs !== "LOCAL") {
+        message = `Please sign in through ${user.authenticatedAs}, as your account was created through that method.`;
+      }
+
+      throw new CustomError("invalid", message);
+    }
 
     const token = await this.session.createSession(user.userId);
 

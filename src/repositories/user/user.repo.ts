@@ -48,6 +48,7 @@ export class UserRepository implements IUserRepository {
         status: user.status,
         emailVerifiedAt: user.emailVerifiedAt,
         createdAt: user.createdAt,
+        authenticatedAs: user.authenticatedAs,
       };
     } catch (err) {
       if (err instanceof CustomError) throw err;
