@@ -24,7 +24,8 @@ app.use(express.json());
 app.use(
   cors({
     origin: [process.env.CLIENT_BASE_URL as string],
-    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["Authorization"],
   })
 );
 app.set("trust proxy", 1);
@@ -46,3 +47,12 @@ app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
 app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
+
+// TODO: Add Rate Limiters for Blogs
+
+// TODO: Think about what other feature, especially in the admin side would be added on?
+// Maybe be do this when you're finish on the web?
+// Might be Analytics, User Management. What routes should be for this one?
+
+// TODO: Maybe also identify the given device id?
+// Like check the user's database if that device id have been authorize?

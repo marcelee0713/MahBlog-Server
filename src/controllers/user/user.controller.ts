@@ -58,10 +58,9 @@ export class UserController {
 
       const token = await this.service.signIn({ email: user.email }, "GOOGLE");
 
-      return res
-        .set("Authorization", `Bearer ${token}`)
-        .status(200)
-        .json(FormatResponse({}, "User signed in"));
+      const clientURL = `${process.env.CLIENT_BASE_URL}/api/user/oauth/success?token=${token}`;
+
+      return res.redirect(clientURL);
     } catch (err) {
       const errObj = identifyErrors(err);
 
