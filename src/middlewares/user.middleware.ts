@@ -32,6 +32,8 @@ export class UserMiddleware {
 
       const token = authHeader.split(" ")[1];
 
+      if (!token) throw new CustomError("user-not-authorized");
+
       const payload = this.auth.decodeToken(token, "ACCESS");
 
       const isAccesTokenValid = this.auth.verifyToken(token, "ACCESS");

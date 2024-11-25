@@ -64,6 +64,9 @@ export class UserController {
     } catch (err) {
       const errObj = identifyErrors(err);
 
+      if (errObj.error.code === "wrong-authentication-type")
+        return res.redirect(`${process.env.CLIENT_BASE_URL}/sign-in?error=${errObj.error.code}`);
+
       return res.status(errObj.status).json(errObj);
     }
   }

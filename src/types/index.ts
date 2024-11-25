@@ -19,6 +19,7 @@ export type ErrorType =
   | "invalid-password"
   | "invalid-bio"
   | "invalid-report-description"
+  | "wrong-authentication-type"
   | "wrong-credentials"
   | "authorization-header-missing"
   | "request-expired"

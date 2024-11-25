@@ -37,6 +37,10 @@ export class UserService implements IUserService {
       let message =
         "Please sign in using your email and password, as your account was created through the traditional sign-in method.";
 
+      if (user.authenticatedAs === "LOCAL" && type !== "LOCAL") {
+        throw new CustomError("wrong-authentication-type", message);
+      }
+
       if (user.authenticatedAs !== "LOCAL") {
         message = `Please sign in through ${user.authenticatedAs}, as your account was created through that method.`;
       }

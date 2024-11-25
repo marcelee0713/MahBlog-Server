@@ -121,6 +121,11 @@ export const KNOWN_ERRORS: Record<ErrorType, ErrorObject> = {
     message: "Email or password is not correct, please check your credentials.",
   },
 
+  "wrong-authentication-type": {
+    status: 400,
+    message: "Please sign in where you authenticated as.",
+  },
+
   "authorization-header-missing": {
     status: 401,
     message: "Authorization header is currently missing.",
