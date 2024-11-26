@@ -108,7 +108,7 @@ export class UserController {
       );
 
       await this.emailService.sendEmailVerification({
-        clientRoute: "/verify-email",
+        clientRoute: CLIENT_ROUTES.EMAIL_VERIFICATION,
         emailToSend: userData.email,
         token: token,
       });

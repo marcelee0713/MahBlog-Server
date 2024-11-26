@@ -93,6 +93,6 @@ export const DEFAULT_LOG_CONTENT = {
 
 export const CLIENT_ROUTES = {
   EMAIL_CHANGE: "/email-change-confirmation",
-  EMAIL_VERIFICATION: "/verify-email",
+  EMAIL_VERIFICATION: "/email-verification",
   RESET_PASSWORD: "/reset-password",
 };
