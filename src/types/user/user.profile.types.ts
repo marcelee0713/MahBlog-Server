@@ -6,6 +6,13 @@ import {
 
 export type UserProfileData = ExcludeFunctions<IUserProfile>;
 
+export type UserProfileMinimizedData = Pick<
+  UserProfileData,
+  "userId" | "profilePicture" | "firstName" | "middleName" | "lastName"
+> & {
+  email: string;
+};
+
 export type DeleteUserProfileUseCase = "BIO" | "PROFILE_IMAGE" | "COVER_IMAGE";
 
 export type UpdateUserProfileUseCase = "BIO" | "NAME" | "PROFILE_IMAGE" | "COVER_IMAGE";

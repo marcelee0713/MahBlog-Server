@@ -37,6 +37,22 @@ export class UserProfileController {
     }
   }
 
+  async onGetUserProfileDataByEmail(req: Request, res: Response) {
+    try {
+      const userId = req.body.email as string;
+
+      if (!req.body.email) throw new CustomError("missing-inputs");
+
+      const data = await this.service.getUserProfileByEmail(userId);
+
+      return res.status(200).json(FormatResponse(data, "Minimized profile data."));
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.status).json(errObj);
+    }
+  }
+
   async onUpdateName(req: Request, res: Response) {
     try {
       const userId = res.locals.userId as string;

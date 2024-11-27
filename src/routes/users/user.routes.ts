@@ -76,13 +76,6 @@ userRouter.put(
 );
 
 userRouter.post(
-  "/get-user-by-email",
-  getUserRateLimit,
-  middleware.validateBody(getUserByEmailSchema),
-  controller.onGetUserByEmail.bind(controller)
-);
-
-userRouter.post(
   "/req-change-email",
   updateUserRateLimit,
   middleware.validateBody(updateUserSchema),

@@ -12,11 +12,18 @@ import {
   getProfileRateLimit,
   updateProfileRateLimit,
   removeProfileRateLimit,
+  getProfileRateLimitMinimized,
 } from "../../middlewares/rate-limiters/user/user.profile.rate_limiter";
 
 const userProfileRouter = express.Router();
 
 const controller = userContainer.container.get<UserProfileController>(TYPES.UserProfileController);
+
+userProfileRouter.post(
+  "/get-by-email",
+  getProfileRateLimitMinimized,
+  controller.onGetUserProfileDataByEmail.bind(controller)
+);
 
 userProfileRouter.use((req, res, next) => middleware.verifySession(req, res, next));
 

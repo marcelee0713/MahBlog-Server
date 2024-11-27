@@ -3,6 +3,7 @@ import {
   DeleteUserProfileUseCase,
   UpdateUserProfileParamsType,
   UpdateUserProfileUseCase,
+  UserProfileMinimizedData,
 } from "../../types/user/user.profile.types";
 
 export interface IUserProfile {
@@ -46,6 +47,7 @@ export interface IUserProfile {
 
 export interface IUserProfileService {
   getUserProfile: (userId: string) => Promise<UserProfileData>;
+  getUserProfileByEmail: (email: string) => Promise<UserProfileMinimizedData>;
   updateName: (userId: string, fName: string, lName?: string, mName?: string) => Promise<void>;
   updateBio: (userId: string, bio: string) => Promise<void>;
   updateProfileImage: (userId: string, imageUrl: string) => Promise<void>;
