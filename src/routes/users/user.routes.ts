@@ -5,7 +5,6 @@ import { TYPES } from "../../constants";
 import { UserMiddleware } from "../../middlewares/user.middleware";
 import {
   emailVerificationReqSchema,
-  getUserByEmailSchema,
   resetPasswordReqSchema,
   tokenSchema,
   updateUserSchema,

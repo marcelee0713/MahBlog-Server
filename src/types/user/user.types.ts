@@ -30,7 +30,11 @@ export type GetUserById = Omit<GetUserParams, "email">;
 
 export type GetUserParamsType<T extends GetUserUseCase> = ParamMapping[T];
 
-export const GetUserByEmailUseCaseArr = ["VERIFY_EMAIL", "GET_USER_DATA"] as const;
+export const GetUserByEmailUseCaseArr = [
+  "VERIFY_EMAIL",
+  "GET_USER_DATA",
+  "VERIFY_EMAIL_BY_TOKEN",
+] as const;
 
 export type GetUserByEmailUseCase = (typeof GetUserByEmailUseCaseArr)[number];
 

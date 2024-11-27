@@ -295,9 +295,39 @@ export class UserController {
       const email: string = req.body.email;
       const useCase: GetUserByEmailUseCase = req.body.useCase;
 
-      const data = await this.service.getUserByEmail(email);
+      const token = req.body.token as string;
+
+      if (useCase === "VERIFY_EMAIL_BY_TOKEN") {
+        if (!token) throw new CustomError("missing-inputs", "Token is required in the body");
+
+        const payload = this.auth.decodeToken(token, "EMAIL_VERIFY");
+
+        const data = await this.service.getUserByEmail(payload.email);
+
+        if (data.emailVerifiedAt) throw new CustomError("user-already-verified");
+
+        const emailVerficationToken = this.auth.createToken(
+          {
+            email: payload.email,
+            userId: payload.userId,
+          },
+          "EMAIL_VERIFY"
+        );
+
+        await this.emailService.sendEmailVerification({
+          clientRoute: CLIENT_ROUTES.EMAIL_VERIFICATION,
+          emailToSend: payload.email,
+          token: emailVerficationToken,
+        });
+
+        return res.status(200).json(FormatResponse({}));
+      }
 
       if (useCase === "VERIFY_EMAIL") {
+        if (!email) throw new CustomError("missing-inputs", "Email is required in the body.");
+
+        const data = await this.service.getUserByEmail(email);
+
         if (data.emailVerifiedAt) throw new CustomError("user-already-verified");
 
         const emailVerficationToken = this.auth.createToken(
@@ -317,7 +347,7 @@ export class UserController {
         return res.status(200).json(FormatResponse({}, "Email verification sent."));
       }
 
-      return res.status(200).json(FormatResponse(data));
+      return res.status(200).json(FormatResponse({}));
     } catch (err) {
       const errObj = identifyErrors(err);
 

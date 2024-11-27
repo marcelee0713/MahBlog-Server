@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { GetUserByEmailUseCase, UpdateUserUseCaseArr } from "../../../types/user/user.types";
+import {
+  GetUserByEmailUseCase,
+  GetUserByEmailUseCaseArr,
+  UpdateUserUseCaseArr,
+} from "../../../types/user/user.types";
 
 export const updateUserSchema = z.object({
   body: z.object({
@@ -23,8 +27,9 @@ export const getUserByEmailSchema = z.object({
 
 export const emailVerificationReqSchema = z.object({
   body: z.object({
-    email: z.string().email().trim(),
-    useCase: z.literal("VERIFY_EMAIL" as GetUserByEmailUseCase),
+    email: z.string().email().trim().optional(),
+    useCase: z.enum(GetUserByEmailUseCaseArr),
+    token: z.string().trim().optional(),
   }),
 });
 
