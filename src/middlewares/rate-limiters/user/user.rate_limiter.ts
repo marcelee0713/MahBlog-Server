@@ -32,7 +32,7 @@ export const emailAndPassReqRateLimit = rateLimit({
 
 export const updateUserRateLimit = rateLimit({
   windowMs: 60 * 1000 * 15,
-  limit: 10,
+  limit: 13,
   standardHeaders: true,
   legacyHeaders: false,
 });

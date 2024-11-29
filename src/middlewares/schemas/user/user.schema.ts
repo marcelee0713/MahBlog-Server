@@ -44,3 +44,10 @@ export const tokenSchema = z.object({
     token: z.string(),
   }),
 });
+
+export const deviceVerificationReqSchema = z.object({
+  body: z.object({
+    code: z.string(),
+    token: z.string(),
+  }),
+});

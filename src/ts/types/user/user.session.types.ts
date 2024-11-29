@@ -1,5 +1,6 @@
 import { ExcludeFunctions } from "..";
 import {
+  DeviceVerifyPayload,
   EmailChangePayload,
   EmailVerifyPayload,
   ResetPassPayload,
@@ -9,7 +10,13 @@ import { IUserSession } from "../../interfaces/user/user.session.interface";
 
 export type UserSessionData = ExcludeFunctions<IUserSession>;
 
-export type SessionType = "ACCESS" | "REFRESH" | "EMAIL_VERIFY" | "EMAIL_CHANGE" | "RESET_PASS";
+export type SessionType =
+  | "ACCESS"
+  | "REFRESH"
+  | "EMAIL_VERIFY"
+  | "EMAIL_CHANGE"
+  | "RESET_PASS"
+  | "DEVICE_VERIFY";
 
 export type PayloadType<T extends SessionType> = PayloadMapping[T];
 
@@ -19,4 +26,5 @@ type PayloadMapping = {
   EMAIL_VERIFY: EmailVerifyPayload;
   EMAIL_CHANGE: EmailChangePayload;
   RESET_PASS: ResetPassPayload;
+  DEVICE_VERIFY: DeviceVerifyPayload;
 };

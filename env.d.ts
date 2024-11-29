@@ -9,6 +9,7 @@ declare global {
       EMAIL_CHANGE_SECRETKEY: string;
       EMAIL_VERIFICATION_SECRETKEY: string;
       RESET_PASSWORD_SECRETKEY: string;
+      DEVICE_VERIFICATION_SECRETKEY: string;
       CLIENT_BASE_URL: string;
       ADMIN_USERNAME: string;
       ADMIN_PASSWORD: string;

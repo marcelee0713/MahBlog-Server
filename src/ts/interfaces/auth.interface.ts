@@ -30,3 +30,8 @@ export interface EmailChangePayload extends AuthServicePayload {
 export interface ResetPassPayload extends AuthServicePayload {
   userId: string;
 }
+
+export interface DeviceVerifyPayload extends AuthServicePayload {
+  userId: string;
+  deviceVerificationId: string;
+}

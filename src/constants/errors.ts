@@ -46,6 +46,11 @@ export const KNOWN_ERRORS: Record<ErrorType, ErrorObject> = {
     message: "User current password does not match.",
   },
 
+  "unrecognized-device": {
+    status: 401,
+    message: "This current device is not recognized.",
+  },
+
   "invalid-image-upload": {
     status: 400,
     message: "Invalid image, only accepts png, jpg, jpeg, and gif with a maximum of 3mb.",
@@ -127,8 +132,13 @@ export const KNOWN_ERRORS: Record<ErrorType, ErrorObject> = {
   },
 
   "authorization-header-missing": {
-    status: 401,
+    status: 400,
     message: "Authorization header is currently missing.",
+  },
+
+  "device-header-missing": {
+    status: 400,
+    message: "Device-ID header is currently missing.",
   },
 
   "email-service-error": {

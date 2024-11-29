@@ -18,6 +18,10 @@ export const TYPES = {
   UserSessionModel: Symbol.for("UserSessionModel"),
   UserSessionService: Symbol.for("UserSessionService"),
   UserSessionRepository: Symbol.for("UserSessionRepository"),
+  UserDevicesModel: Symbol.for("UserDevicesModel"),
+  UserDevicesService: Symbol.for("UserDevicesService"),
+  UserDevicesRepository: Symbol.for("UserDevicesRepository"),
+  UserDevicesController: Symbol.for("UserDevicesController"),
   UserConnectionsModel: Symbol.for("UserConnectionsModel"),
   UserConnectionsService: Symbol.for("UserConnectionsService"),
   UserConnectionsRepository: Symbol.for("UserConnectionsRepository"),
@@ -28,6 +32,7 @@ export const TYPES = {
   UserBlacklistedTokenModel: Symbol.for("UserBlacklistedTokenModel"),
   UserBlacklistedTokenService: Symbol.for("UserBlacklistedTokenService"),
   UserBlacklistedTokenRepository: Symbol.for("UserBlacklistedTokenRepository"),
+  DeviceVerificationsRepository: Symbol.for("DeviceVerificationsRepository"),
   BlogModel: Symbol.for("BlogModel"),
   BlogService: Symbol.for("BlogService"),
   BlogRepository: Symbol.for("BlogRepository"),
@@ -59,10 +64,16 @@ export const REG_EX = {
 
 export const TOKENS_LIFESPAN = {
   REFRESH: "30d",
-  ACCESS: "10m",
+  ACCESS: "1m",
+  DEVICE_VERIFY: "10m",
   EMAIL_VERIFY: "1d",
   EMAIL_CHANGE: "1d",
   PASS_RESET: "1d",
+};
+
+export const DEVICE_VERIFY_CONTENT = {
+  NAME: "MahBlog Device Verification",
+  SUBJECT: "A verification to verify your device from MahBlog.",
 };
 
 export const EMAIL_VERIFY_CONTENT = {
@@ -95,4 +106,5 @@ export const CLIENT_ROUTES = {
   EMAIL_CHANGE: "/email-change-confirmation",
   EMAIL_VERIFICATION: "/email-verification",
   RESET_PASSWORD: "/reset-password",
+  DEVICE_VERIFICATION: "/device-verification",
 };

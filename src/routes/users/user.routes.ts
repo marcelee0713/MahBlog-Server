@@ -4,6 +4,7 @@ import { UserController } from "../../controllers/user/user.controller";
 import { TYPES } from "../../constants";
 import { UserMiddleware } from "../../middlewares/user.middleware";
 import {
+  deviceVerificationReqSchema,
   emailVerificationReqSchema,
   resetPasswordReqSchema,
   tokenSchema,
@@ -19,6 +20,7 @@ import {
 } from "../../middlewares/rate-limiters/user/user.rate_limiter";
 import passport from "passport";
 import { PassportService } from "../../middlewares/passport.middleware";
+import { UserDevicesController } from "../../controllers/user/user.devices.controller";
 
 const userRouter = express.Router();
 
@@ -26,6 +28,9 @@ const controller = userContainer.container.get<UserController>(TYPES.UserControl
 export const middleware = userContainer.container.get<UserMiddleware>(TYPES.UserMiddleware);
 
 const passportService = userContainer.container.get<PassportService>(TYPES.PassportService);
+const userDeviceController = userContainer.container.get<UserDevicesController>(
+  TYPES.UserDevicesController
+);
 
 passportService.initializeGoogleStrategy();
 
@@ -116,6 +121,20 @@ userRouter.put(
   middleware.validateBody(tokenSchema),
   (req, res, next) => middleware.verifySession(req, res, next),
   controller.onEmailChange.bind(controller)
+);
+
+userRouter.post(
+  "/verify-device",
+  updateUserRateLimit,
+  middleware.validateBody(deviceVerificationReqSchema),
+  userDeviceController.onSubmitVerification.bind(userDeviceController)
+);
+
+userRouter.post(
+  "/verify-device-oauth",
+  updateUserRateLimit,
+  (req, res, next) => middleware.verifySession(req, res, next),
+  userDeviceController.OAuthStoreDeviceID.bind(userDeviceController)
 );
 
 export default userRouter;

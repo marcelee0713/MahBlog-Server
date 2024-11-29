@@ -98,9 +98,9 @@ model UserBlacklistedTokens {
 
 model UserDevices {
   deviceId     String    @id
-  userId       String?
+  userId       String
   lastSignedIn DateTime?
-  users        Users?    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  users        Users     @relation(fields: [userId], references: [userId], onDelete: Cascade)
   createdAt    DateTime  @default(now())
 }
 

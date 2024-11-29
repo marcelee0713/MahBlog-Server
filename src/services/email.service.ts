@@ -1,8 +1,17 @@
 import { Transporter, createTransport } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
-import { EmailParams, IEmailService } from "../ts/interfaces/email.interface";
+import {
+  DeviceVerificationEmailParams,
+  EmailParams,
+  IEmailService,
+} from "../ts/interfaces/email.interface";
 import { injectable } from "inversify";
-import { EMAIL_CHANGE_CONTENT, EMAIL_RESET_PASSWORD, EMAIL_VERIFY_CONTENT } from "../constants";
+import {
+  DEVICE_VERIFY_CONTENT,
+  EMAIL_CHANGE_CONTENT,
+  EMAIL_RESET_PASSWORD,
+  EMAIL_VERIFY_CONTENT,
+} from "../constants";
 import { CustomError } from "../utils/error_handler";
 
 @injectable()
@@ -41,6 +50,25 @@ export class EmailService implements IEmailService {
     } catch (err) {
       throw new CustomError("email-service-error");
     }
+  }
+
+  async sendDeviceVerification(info: DeviceVerificationEmailParams): Promise<void> {
+    const link = `${this.clientBaseUrl}${info.clientRoute}?token=${info.token}`;
+
+    await this.transporter.sendMail({
+      to: info.emailToSend,
+      from: {
+        name: DEVICE_VERIFY_CONTENT.NAME,
+        address: this.emailAddress,
+      },
+      subject: DEVICE_VERIFY_CONTENT.SUBJECT,
+      html: `<h1>Device Verification</h1>
+      <br>
+      <a href=${link}>Enter the code here</a>
+      <br>
+      <p>Code: <strong>${info.code}</strong> </p>
+      <p>This will expire in 10 minutes. <strong>DO NOT SHARE THIS LINK!</strong></p>`,
+    });
   }
 
   async sendEmailChangeConfirmation(info: EmailParams): Promise<void> {

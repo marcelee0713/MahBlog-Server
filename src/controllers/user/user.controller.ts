@@ -9,6 +9,7 @@ import { IEmailService } from "../../ts/interfaces/email.interface";
 import { IUserBlacklistedTokenService } from "../../ts/interfaces/user/user.blacklisted_token.interface";
 import { IUserLogsService } from "../../ts/interfaces/user/user.logs.interface";
 import { GetUserByEmailUseCase, UserData } from "../../ts/types/user/user.types";
+import { IUserDevicesService } from "../../ts/interfaces/user/user.devices.interface";
 
 @injectable()
 export class UserController {
@@ -17,19 +18,22 @@ export class UserController {
   private emailService: IEmailService;
   private blacklisted: IUserBlacklistedTokenService;
   private logs: IUserLogsService;
+  private device: IUserDevicesService;
 
   constructor(
     @inject(TYPES.AuthService) auth: IAuthService,
     @inject(TYPES.EmailService) emailService: IEmailService,
     @inject(TYPES.UserService) service: IUserService,
     @inject(TYPES.UserBlacklistedTokenService) blacklisted: IUserBlacklistedTokenService,
-    @inject(TYPES.UserLogsService) logs: IUserLogsService
+    @inject(TYPES.UserLogsService) logs: IUserLogsService,
+    @inject(TYPES.UserDevicesService) device: IUserDevicesService
   ) {
     this.emailService = emailService;
     this.auth = auth;
     this.service = service;
     this.blacklisted = blacklisted;
     this.logs = logs;
+    this.device = device;
   }
 
   async onSignIn(req: Request, res: Response) {
@@ -186,8 +190,11 @@ export class UserController {
 
       if (data.body.useCase === "VERIFY_EMAIL") {
         const token = data.body.token as string;
+        const deviceId = req.headers["device-id"] as string;
 
         if (!token) throw new CustomError("missing-inputs");
+
+        if (!deviceId) throw new CustomError("device-header-missing");
 
         const payload = this.auth.decodeToken(token, "EMAIL_VERIFY");
 
@@ -207,6 +214,8 @@ export class UserController {
           exp: payload.exp,
           iat: payload.iat,
         });
+
+        await this.device.addDeviceId(payload.userId, deviceId);
       }
 
       if (data.body.useCase === "CHANGE_EMAIL") {

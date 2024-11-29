@@ -102,6 +102,17 @@ import {
 import { UserNotificationsService } from "../services/user/user.notifications.service";
 import { UserNotificationsRepository } from "../repositories/user/user.notifications.repo";
 import { UserNotificationsController } from "../controllers/user/user.notifications.controller";
+import {
+  IDeviceVerificationsRepository,
+  IUserDevices,
+  IUserDevicesRepository,
+  IUserDevicesService,
+} from "../ts/interfaces/user/user.devices.interface";
+import { UserDevices } from "../models/user/user.devices.model";
+import { UserDevicesService } from "../services/user/user.devices.service";
+import { UserDevicesRepository } from "../repositories/user/user.devices.repo";
+import { UserDevicesController } from "../controllers/user/user.devices.controller";
+import { DeviceVerificationsRepository } from "../repositories/device-verification.repo";
 
 export const container = new Container();
 
@@ -149,6 +160,14 @@ container
   .bind<IUserNotificationsRepository>(TYPES.UserNotificationsRepository)
   .to(UserNotificationsRepository);
 container.bind(TYPES.UserNotificationsController).to(UserNotificationsController);
+
+container.bind<IUserDevices>(TYPES.UserDevicesModel).to(UserDevices);
+container.bind<IUserDevicesService>(TYPES.UserDevicesService).to(UserDevicesService);
+container.bind<IUserDevicesRepository>(TYPES.UserDevicesRepository).to(UserDevicesRepository);
+container.bind(TYPES.UserDevicesController).to(UserDevicesController);
+container
+  .bind<IDeviceVerificationsRepository>(TYPES.DeviceVerificationsRepository)
+  .to(DeviceVerificationsRepository);
 
 container.bind(TYPES.UserMiddleware).to(UserMiddleware);
 
