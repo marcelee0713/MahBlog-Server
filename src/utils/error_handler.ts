@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { KNOWN_ERRORS } from "../constants/errors";
-import { ErrorReqBody, ErrorReqStack, ErrorResponse } from "../interfaces/error.interface";
-import { ErrorType } from "../types";
+import { ErrorReqBody, ErrorReqStack, ErrorResponse } from "../ts/interfaces/error.interface";
+import { ErrorType } from "../ts/types";
 
 class CustomError extends Error {
   type: ErrorType;

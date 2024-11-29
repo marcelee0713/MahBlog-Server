@@ -3,8 +3,8 @@ import {
   IUserLogs,
   IUserLogsRepository,
   IUserLogsService,
-} from "../../interfaces/user/user.logs.interface";
-import { LogType, UserLogData } from "../../types/user/user.logs.types";
+} from "../../ts/interfaces/user/user.logs.interface";
+import { LogType, UserLogData } from "../../ts/types/user/user.logs.types";
 import { TYPES } from "../../constants";
 import { CustomError } from "../../utils/error_handler";
 

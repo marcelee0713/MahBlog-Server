@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { IBlogService } from "../../interfaces/blog/blog.interface";
+import { IBlogService } from "../../ts/interfaces/blog/blog.interface";
 import { TYPES } from "../../constants";
 import { CustomError, identifyErrors } from "../../utils/error_handler";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
@@ -8,9 +8,9 @@ import {
   GetBlogsBodyReq,
   UpdateBlogBodyReq,
   UpdateBlogImageUseCase,
-} from "../../types/blog/blog.types";
-import { IMediaService } from "../../interfaces/media.interface";
-import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
+} from "../../ts/types/blog/blog.types";
+import { IMediaService } from "../../ts/interfaces/media.interface";
+import { IUserNotificationsService } from "../../ts/interfaces/user/user.notifications.interface";
 import { safeExecute } from "../../utils";
 
 @injectable()

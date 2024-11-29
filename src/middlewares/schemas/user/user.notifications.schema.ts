@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { SortOrderArr } from "../../../types";
-import { NotificationTypeArr } from "../../../types/user/user.notifications.type";
+import { SortOrderArr } from "../../../ts/types";
+import { NotificationTypeArr } from "../../../ts/types/user/user.notifications.type";
 
 export const createNotificationSchema = z.object({
   body: z.object({

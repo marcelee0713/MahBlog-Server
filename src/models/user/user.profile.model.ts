@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
-import { IUserProfile } from "../../interfaces/user/user.profile.interface";
-import { UserProfileData } from "../../types/user/user.profile.types";
+import { IUserProfile } from "../../ts/interfaces/user/user.profile.interface";
+import { UserProfileData } from "../../ts/types/user/user.profile.types";
 import { CustomError } from "../../utils/error_handler";
 
 @injectable()

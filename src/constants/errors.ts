@@ -1,6 +1,6 @@
 import { UPDATE_DAYS_COOLDOWN } from ".";
-import { ErrorObject } from "../interfaces/error.interface";
-import { ErrorType } from "../types";
+import { ErrorObject } from "../ts/interfaces/error.interface";
+import { ErrorType } from "../ts/types";
 
 export const KNOWN_ERRORS: Record<ErrorType, ErrorObject> = {
   "does-not-exist": {

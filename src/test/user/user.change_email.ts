@@ -3,9 +3,9 @@ import request from "supertest";
 import jwt from "jsonwebtoken";
 import { app } from "../..";
 import { TOKENS_LIFESPAN, UPDATE_DAYS_COOLDOWN } from "../../constants";
-import { PayloadType } from "../../types/user/user.session.types";
-import { UpdateUserUseCase } from "../../types/user/user.types";
-import { ErrorType } from "../../types";
+import { PayloadType } from "../../ts/types/user/user.session.types";
+import { UpdateUserUseCase } from "../../ts/types/user/user.types";
+import { ErrorType } from "../../ts/types";
 
 const email = "johndoe@fakemail.com";
 

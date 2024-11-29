@@ -3,8 +3,8 @@ import {
   ReportCategoriesArr,
   ReportTypeArr,
   ReportType,
-} from "../../../types/user/user.reports.type";
-import { SortOrderArr } from "../../../types";
+} from "../../../ts/types/user/user.reports.type";
+import { SortOrderArr } from "../../../ts/types";
 
 export const getReportsSchema = z.object({
   body: z

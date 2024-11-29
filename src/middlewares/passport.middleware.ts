@@ -2,9 +2,9 @@ import { inject, injectable } from "inversify";
 import { TYPES } from "../constants";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { IUserService } from "../interfaces/user/user.interface";
+import { IUserService } from "../ts/interfaces/user/user.interface";
 import { CustomError } from "../utils/error_handler";
-import { IUserProfileService } from "../interfaces/user/user.profile.interface";
+import { IUserProfileService } from "../ts/interfaces/user/user.profile.interface";
 import { safeExecute } from "../utils";
 
 @injectable()

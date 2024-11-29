@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { IAuthService } from "../interfaces/auth.interface";
-import { PayloadType, SessionType } from "../types/user/user.session.types";
+import { IAuthService } from "../ts/interfaces/auth.interface";
+import { PayloadType, SessionType } from "../ts/types/user/user.session.types";
 import { injectable } from "inversify";
 import { TOKENS_LIFESPAN } from "../constants";
 import { CustomError } from "../utils/error_handler";

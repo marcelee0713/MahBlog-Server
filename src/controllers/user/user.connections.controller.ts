@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { IUserConnectionsService } from "../../interfaces/user/user.connections.interface";
+import { IUserConnectionsService } from "../../ts/interfaces/user/user.connections.interface";
 import { TYPES } from "../../constants";
 import { CustomError, identifyErrors } from "../../utils/error_handler";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
@@ -8,8 +8,8 @@ import {
   GetUserConnectionsReqBody,
   GetUserPendingConnectionsReqBody,
   UpdateUserConnectionReqBody,
-} from "../../types/user/user.connections.types";
-import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
+} from "../../ts/types/user/user.connections.types";
+import { IUserNotificationsService } from "../../ts/interfaces/user/user.notifications.interface";
 
 @injectable()
 export class UserConnectionsController {

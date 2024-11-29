@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
-import { IUserSession } from "../../interfaces/user/user.session.interface";
-import { UserSessionData } from "../../types/user/user.session.types";
+import { IUserSession } from "../../ts/interfaces/user/user.session.interface";
+import { UserSessionData } from "../../ts/types/user/user.session.types";
 import { CustomError } from "../../utils/error_handler";
 
 @injectable()

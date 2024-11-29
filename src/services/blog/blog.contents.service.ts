@@ -7,7 +7,7 @@ import {
   IBlogContentsRepository,
   IBlogContentsService,
   UpdateBlogContentParams,
-} from "../../interfaces/blog/blog.contents.interface";
+} from "../../ts/interfaces/blog/blog.contents.interface";
 import { TYPES } from "../../constants";
 
 @injectable()

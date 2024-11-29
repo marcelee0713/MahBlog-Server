@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { DEFAULT_LOG_CONTENT, UPDATE_DAYS_COOLDOWN } from "../../constants";
-import { IUserLogs } from "../../interfaces/user/user.logs.interface";
-import { LogType } from "../../types/user/user.logs.types";
+import { IUserLogs } from "../../ts/interfaces/user/user.logs.interface";
+import { LogType } from "../../ts/types/user/user.logs.types";
 
 @injectable()
 export class UserLogs implements IUserLogs {

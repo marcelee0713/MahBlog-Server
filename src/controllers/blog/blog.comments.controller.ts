@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
 import { Request, Response } from "express";
-import { IBlogCommentsService } from "../../interfaces/blog/blog.comments.interface";
+import { IBlogCommentsService } from "../../ts/interfaces/blog/blog.comments.interface";
 import { TYPES } from "../../constants";
 import { identifyErrors } from "../../utils/error_handler";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
-import { GetBlogCommentsBodyReq } from "../../types/blog/blog.comments.types";
-import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
+import { GetBlogCommentsBodyReq } from "../../ts/types/blog/blog.comments.types";
+import { IUserNotificationsService } from "../../ts/interfaces/user/user.notifications.interface";
 import { safeExecute } from "../../utils";
 
 @injectable()

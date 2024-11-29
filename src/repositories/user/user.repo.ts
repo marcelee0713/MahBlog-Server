@@ -3,8 +3,8 @@ import {
   IUserRepository,
   SignUpParams,
   UpdateUserParams,
-} from "../../interfaces/user/user.interface";
-import { UserData, GetUserParamsType, GetUserUseCase } from "../../types/user/user.types";
+} from "../../ts/interfaces/user/user.interface";
+import { UserData, GetUserParamsType, GetUserUseCase } from "../../ts/types/user/user.types";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import bcrypt from "bcryptjs";

@@ -23,6 +23,7 @@ model Users {
   sessions                UserSessions[]
   blacklistedTokens       UserBlacklistedTokens[]
   sentReports             UserReports[]           @relation("Sender")
+  devices                 UserDevices[]
   receivedReports         ReportDetails[]
   logs                    UserLogs[]
   blogs                   Blogs[]
@@ -93,6 +94,22 @@ model UserBlacklistedTokens {
   users     Users?   @relation(fields: [holderId], references: [userId], onDelete: Cascade)
   createdAt DateTime
   expiresAt DateTime
+}
+
+model UserDevices {
+  deviceId     String    @id
+  userId       String?
+  lastSignedIn DateTime?
+  users        Users?    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  createdAt    DateTime  @default(now())
+}
+
+model DeviceVerifications {
+  deviceVerificationId String    @id @default(cuid())
+  code                 String
+  expectedDeviceId     String
+  verifiedAt           DateTime?
+  createdAt            DateTime  @default(now())
 }
 
 model UserReports {

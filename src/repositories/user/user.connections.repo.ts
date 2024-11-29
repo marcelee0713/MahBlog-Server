@@ -4,12 +4,12 @@ import {
   UserConnections,
   UserPendingConnections,
   UserUpdateConnectionParams,
-} from "../../interfaces/user/user.connections.interface";
+} from "../../ts/interfaces/user/user.connections.interface";
 import {
   GetConnectionsUseCase,
   GetConnectionsParamsType,
   GetConnectionReturnType,
-} from "../../types/user/user.connections.types";
+} from "../../ts/types/user/user.connections.types";
 import { PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";

@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { IBlog } from "../../interfaces/blog/blog.interface";
+import { IBlog } from "../../ts/interfaces/blog/blog.interface";
 import { CustomError } from "../../utils/error_handler";
 
 @injectable()

@@ -4,7 +4,7 @@ import {
   IUserBlacklistedToken,
   IUserBlacklistedTokenRepository,
   IUserBlacklistedTokenService,
-} from "../../interfaces/user/user.blacklisted_token.interface";
+} from "../../ts/interfaces/user/user.blacklisted_token.interface";
 import { TYPES } from "../../constants";
 
 @injectable()

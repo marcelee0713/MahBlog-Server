@@ -7,10 +7,10 @@ import {
   IBlogRepository,
   IBlogService,
   UpdateBlogParams,
-} from "../../interfaces/blog/blog.interface";
+} from "../../ts/interfaces/blog/blog.interface";
 import { TYPES } from "../../constants";
-import { ILikesRepository, LikesInfo } from "../../interfaces/blog/blog.likes.interface";
-import { IBlogScores, IBlogScoresRepository } from "../../interfaces/blog/blog.scores.interface";
+import { ILikesRepository, LikesInfo } from "../../ts/interfaces/blog/blog.likes.interface";
+import { IBlogScores, IBlogScoresRepository } from "../../ts/interfaces/blog/blog.scores.interface";
 
 @injectable()
 export class BlogService implements IBlogService {

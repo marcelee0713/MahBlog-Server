@@ -3,8 +3,8 @@ import {
   IUserSession,
   IUserSessionRepository,
   IUserSessionService,
-} from "../../interfaces/user/user.session.interface";
-import { IAuthService } from "../../interfaces/auth.interface";
+} from "../../ts/interfaces/user/user.session.interface";
+import { IAuthService } from "../../ts/interfaces/auth.interface";
 import { TYPES } from "../../constants";
 import { generateSessionId } from "../../utils/session_id_generator";
 

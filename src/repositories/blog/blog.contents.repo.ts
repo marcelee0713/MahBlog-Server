@@ -5,7 +5,7 @@ import {
   DeleteBlogContentParams,
   IBlogContentsRepository,
   UpdateBlogContentParams,
-} from "../../interfaces/blog/blog.contents.interface";
+} from "../../ts/interfaces/blog/blog.contents.interface";
 import { PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";

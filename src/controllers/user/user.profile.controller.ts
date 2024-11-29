@@ -1,11 +1,11 @@
 import { inject, injectable } from "inversify";
-import { IUserProfileService } from "../../interfaces/user/user.profile.interface";
+import { IUserProfileService } from "../../ts/interfaces/user/user.profile.interface";
 import { TYPES } from "../../constants";
 import { CustomError, identifyErrors } from "../../utils/error_handler";
 import { Request, Response } from "express";
 import { FormatResponse } from "../../utils/response_handler";
-import { IMediaService } from "../../interfaces/media.interface";
-import { IUserLogsService } from "../../interfaces/user/user.logs.interface";
+import { IMediaService } from "../../ts/interfaces/media.interface";
+import { IUserLogsService } from "../../ts/interfaces/user/user.logs.interface";
 
 @injectable()
 export class UserProfileController {

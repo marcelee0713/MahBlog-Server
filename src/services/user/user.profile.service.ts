@@ -3,14 +3,14 @@ import {
   IUserProfile,
   IUserProfileRepository,
   IUserProfileService,
-} from "../../interfaces/user/user.profile.interface";
+} from "../../ts/interfaces/user/user.profile.interface";
 import {
   UserProfileData,
   DeleteUserProfileUseCase,
   UserProfileMinimizedData,
-} from "../../types/user/user.profile.types";
+} from "../../ts/types/user/user.profile.types";
 import { TYPES } from "../../constants";
-import { IUserRepository } from "../../interfaces/user/user.interface";
+import { IUserRepository } from "../../ts/interfaces/user/user.interface";
 
 @injectable()
 export class UserProfileService implements IUserProfileService {

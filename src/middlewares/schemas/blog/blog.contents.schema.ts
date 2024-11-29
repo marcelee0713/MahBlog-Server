@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UpdateBlogImageUseCaseArr } from "../../../types/blog/blog.types";
+import { UpdateBlogImageUseCaseArr } from "../../../ts/types/blog/blog.types";
 
 export const createAndGetBlogContentSchema = z.object({
   body: z.object({

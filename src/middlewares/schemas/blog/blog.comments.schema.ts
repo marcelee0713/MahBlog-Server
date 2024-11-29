@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { BlogSortingOptionsArr } from "../../../types/blog/blog.types";
+import { BlogSortingOptionsArr } from "../../../ts/types/blog/blog.types";
 
 export const createBlogCommentSchema = z.object({
   body: z.object({

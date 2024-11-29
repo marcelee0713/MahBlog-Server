@@ -5,11 +5,11 @@ import {
   GetBlogsParams,
   IBlogRepository,
   UpdateBlogParams,
-} from "../../interfaces/blog/blog.interface";
+} from "../../ts/interfaces/blog/blog.interface";
 import { db } from "../../config/db";
 import { CustomError } from "../../utils/error_handler";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { BlogSortingOptions } from "../../types/blog/blog.types";
+import { BlogSortingOptions } from "../../ts/types/blog/blog.types";
 import { injectable } from "inversify";
 
 @injectable()

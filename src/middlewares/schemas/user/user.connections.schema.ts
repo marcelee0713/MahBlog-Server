@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { SortOrderArr } from "../../../types";
-import { ConnectionStatusArr } from "../../../types/user/user.connections.types";
+import { SortOrderArr } from "../../../ts/types";
+import { ConnectionStatusArr } from "../../../ts/types/user/user.connections.types";
 
 export const createUserConnectionsSchema = z.object({
   body: z.object({

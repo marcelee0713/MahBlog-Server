@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { injectable, inject } from "inversify";
-import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
+import { IUserNotificationsService } from "../../ts/interfaces/user/user.notifications.interface";
 import { TYPES } from "../../constants";
 import { CustomError, identifyErrors } from "../../utils/error_handler";
 import {
   CreateNotificationReqBody,
   GetNotificationReqBody,
-} from "../../types/user/user.notifications.type";
+} from "../../ts/types/user/user.notifications.type";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
-import { IUserService } from "../../interfaces/user/user.interface";
+import { IUserService } from "../../ts/interfaces/user/user.interface";
 
 @injectable()
 export class UserNotificationsController {

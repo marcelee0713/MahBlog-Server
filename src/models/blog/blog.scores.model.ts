@@ -1,5 +1,8 @@
 import { injectable } from "inversify";
-import { BlogScoresCalculatedData, IBlogScores } from "../../interfaces/blog/blog.scores.interface";
+import {
+  BlogScoresCalculatedData,
+  IBlogScores,
+} from "../../ts/interfaces/blog/blog.scores.interface";
 
 @injectable()
 export class BlogScores implements IBlogScores {

@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { IUserBlacklistedToken } from "../../interfaces/user/user.blacklisted_token.interface";
+import { IUserBlacklistedToken } from "../../ts/interfaces/user/user.blacklisted_token.interface";
 import { CustomError } from "../../utils/error_handler";
 
 @injectable()

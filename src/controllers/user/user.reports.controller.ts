@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
-import { IUserReportsService } from "../../interfaces/user/user.reports.interface";
+import { IUserReportsService } from "../../ts/interfaces/user/user.reports.interface";
 import { TYPES } from "../../constants";
 import { CustomError, identifyErrors } from "../../utils/error_handler";
 import {
@@ -9,9 +9,9 @@ import {
   CreateUserReportIssueBodyReq,
   CreateUserReportUserBodyReq,
   GetUserReportBodyReq,
-} from "../../types/user/user.reports.type";
+} from "../../ts/types/user/user.reports.type";
 import { FormatResponse } from "../../utils/response_handler";
-import { IUserService } from "../../interfaces/user/user.interface";
+import { IUserService } from "../../ts/interfaces/user/user.interface";
 
 @injectable()
 export class UserReportsController {

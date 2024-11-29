@@ -5,7 +5,7 @@ import {
   IUserNotificationsRepository,
   IUserNotificationsService,
   UserNotificationsData,
-} from "../../interfaces/user/user.notifications.interface";
+} from "../../ts/interfaces/user/user.notifications.interface";
 import { TYPES } from "../../constants";
 
 @injectable()

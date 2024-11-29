@@ -2,7 +2,7 @@ import { it, expect } from "@jest/globals";
 import request from "supertest";
 import { app } from "../..";
 import { BlogVisibility } from "@prisma/client";
-import { UpdateBlogImageUseCase } from "../../types/blog/blog.types";
+import { UpdateBlogImageUseCase } from "../../ts/types/blog/blog.types";
 import path from "path";
 
 export const BlogTestSuite = () => {

@@ -4,7 +4,7 @@ import {
   GetUserNotificationsParams,
   IUserNotificationsRepository,
   UserNotificationsData,
-} from "../../interfaces/user/user.notifications.interface";
+} from "../../ts/interfaces/user/user.notifications.interface";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { CustomError } from "../../utils/error_handler";

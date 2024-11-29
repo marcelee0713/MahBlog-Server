@@ -7,7 +7,7 @@ import {
   MentionedDetails,
   RawBlogCommentRepliesData,
   UpdateBlogCommentRepliesParams,
-} from "../../interfaces/blog/blog.comments.replies.interface";
+} from "../../ts/interfaces/blog/blog.comments.replies.interface";
 import { PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { CustomError } from "../../utils/error_handler";

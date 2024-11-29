@@ -1,6 +1,6 @@
 import { Transporter, createTransport } from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
-import { EmailParams, IEmailService } from "../interfaces/email.interface";
+import { EmailParams, IEmailService } from "../ts/interfaces/email.interface";
 import { injectable } from "inversify";
 import { EMAIL_CHANGE_CONTENT, EMAIL_RESET_PASSWORD, EMAIL_VERIFY_CONTENT } from "../constants";
 import { CustomError } from "../utils/error_handler";

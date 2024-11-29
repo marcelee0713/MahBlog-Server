@@ -10,8 +10,8 @@ import {
   CreateReportUserParams,
   GetUserReportParams,
   UserReportsData,
-} from "../../interfaces/user/user.reports.interface";
-import { UserReportData } from "../../types/user/user.reports.type";
+} from "../../ts/interfaces/user/user.reports.interface";
+import { UserReportData } from "../../ts/types/user/user.reports.type";
 import { TYPES } from "../../constants";
 
 @injectable()

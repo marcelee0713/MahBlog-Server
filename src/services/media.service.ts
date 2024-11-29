@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { IMediaService } from "../interfaces/media.interface";
+import { IMediaService } from "../ts/interfaces/media.interface";
 import cloudinary from "../config/cloudinary";
 import { extractPublicId } from "cloudinary-build-url";
 import { CustomError } from "../utils/error_handler";

@@ -6,8 +6,8 @@ import {
   IBlogCommentRepliesRepository,
   IBlogCommentRepliesService,
   UpdateBlogCommentRepliesParams,
-} from "../../interfaces/blog/blog.comments.replies.interface";
-import { ILikesRepository, LikesInfo } from "../../interfaces/blog/blog.likes.interface";
+} from "../../ts/interfaces/blog/blog.comments.replies.interface";
+import { ILikesRepository, LikesInfo } from "../../ts/interfaces/blog/blog.likes.interface";
 import { TYPES } from "../../constants";
 
 @injectable()

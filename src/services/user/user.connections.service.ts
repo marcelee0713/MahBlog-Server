@@ -8,7 +8,7 @@ import {
   UserConnectionsCount,
   UserPendingConnections,
   UserUpdateConnectionParams,
-} from "../../interfaces/user/user.connections.interface";
+} from "../../ts/interfaces/user/user.connections.interface";
 import { TYPES } from "../../constants";
 
 @injectable()

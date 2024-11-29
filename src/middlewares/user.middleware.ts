@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { inject, injectable } from "inversify";
-import { IUserSessionService } from "../interfaces/user/user.session.interface";
+import { IUserSessionService } from "../ts/interfaces/user/user.session.interface";
 import { TYPES } from "../constants";
-import { IAuthService } from "../interfaces/auth.interface";
+import { IAuthService } from "../ts/interfaces/auth.interface";
 import { bodyError, CustomError, identifyErrors } from "../utils/error_handler";
 import { AnyZodObject, z } from "zod";
 import { upload } from "../config/multer";

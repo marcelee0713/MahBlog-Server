@@ -1,11 +1,11 @@
 import { injectable } from "inversify";
-import { IUserProfileRepository } from "../../interfaces/user/user.profile.interface";
+import { IUserProfileRepository } from "../../ts/interfaces/user/user.profile.interface";
 import {
   UserProfileData,
   DeleteUserProfileUseCase,
   UpdateUserProfileUseCase,
   UpdateUserProfileParamsType,
-} from "../../types/user/user.profile.types";
+} from "../../ts/types/user/user.profile.types";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { CustomError } from "../../utils/error_handler";

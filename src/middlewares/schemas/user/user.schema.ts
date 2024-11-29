@@ -3,7 +3,7 @@ import {
   GetUserByEmailUseCase,
   GetUserByEmailUseCaseArr,
   UpdateUserUseCaseArr,
-} from "../../../types/user/user.types";
+} from "../../../ts/types/user/user.types";
 
 export const updateUserSchema = z.object({
   body: z.object({

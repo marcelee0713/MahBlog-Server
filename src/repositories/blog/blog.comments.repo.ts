@@ -6,12 +6,12 @@ import {
   IBlogCommentsRepository,
   RawBlogCommentData,
   UpdateBlogCommentsParams,
-} from "../../interfaces/blog/blog.comments.interface";
+} from "../../ts/interfaces/blog/blog.comments.interface";
 import { PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { CustomError } from "../../utils/error_handler";
-import { BlogSortingOptions } from "../../types/blog/blog.types";
+import { BlogSortingOptions } from "../../ts/types/blog/blog.types";
 
 @injectable()
 export class BlogCommentsRepository implements IBlogCommentsRepository {

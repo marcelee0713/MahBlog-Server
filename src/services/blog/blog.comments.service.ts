@@ -6,10 +6,10 @@ import {
   IBlogCommentsRepository,
   IBlogCommentsService,
   UpdateBlogCommentsParams,
-} from "../../interfaces/blog/blog.comments.interface";
+} from "../../ts/interfaces/blog/blog.comments.interface";
 import { TYPES } from "../../constants";
-import { IBlogScores, IBlogScoresRepository } from "../../interfaces/blog/blog.scores.interface";
-import { ILikesRepository, LikesInfo } from "../../interfaces/blog/blog.likes.interface";
+import { IBlogScores, IBlogScoresRepository } from "../../ts/interfaces/blog/blog.scores.interface";
+import { ILikesRepository, LikesInfo } from "../../ts/interfaces/blog/blog.likes.interface";
 
 @injectable()
 export class BlogCommentsService implements IBlogCommentsService {

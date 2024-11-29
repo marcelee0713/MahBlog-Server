@@ -1,9 +1,9 @@
 import { injectable } from "inversify";
-import { ILikesRepository, LikesInfo } from "../../interfaces/blog/blog.likes.interface";
+import { ILikesRepository, LikesInfo } from "../../ts/interfaces/blog/blog.likes.interface";
 import { PrismaClient } from "@prisma/client";
 import { db } from "../../config/db";
 import { CustomError } from "../../utils/error_handler";
-import { CreateLikesParamsType, LikeStatus, LikeType } from "../../types/blog/blog.likes.types";
+import { CreateLikesParamsType, LikeStatus, LikeType } from "../../ts/types/blog/blog.likes.types";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 @injectable()

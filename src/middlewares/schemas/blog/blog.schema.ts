@@ -3,7 +3,7 @@ import {
   BlogSortingOptionsArr,
   BlogVisibilityArr,
   UpdateBlogImageUseCaseArr,
-} from "../../../types/blog/blog.types";
+} from "../../../ts/types/blog/blog.types";
 
 export const updateBlogSchema = z.object({
   body: z.object({

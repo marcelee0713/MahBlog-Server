@@ -4,11 +4,11 @@ import {
   IUserRepository,
   IUserService,
   SignUpParams,
-} from "../../interfaces/user/user.interface";
-import { AuthenticatedAs, SignInParamsType, UserData } from "../../types/user/user.types";
+} from "../../ts/interfaces/user/user.interface";
+import { AuthenticatedAs, SignInParamsType, UserData } from "../../ts/types/user/user.types";
 import { TYPES } from "../../constants";
-import { IUserProfile } from "../../interfaces/user/user.profile.interface";
-import { IUserSessionService } from "../../interfaces/user/user.session.interface";
+import { IUserProfile } from "../../ts/interfaces/user/user.profile.interface";
+import { IUserSessionService } from "../../ts/interfaces/user/user.session.interface";
 import { CustomError } from "../../utils/error_handler";
 
 @injectable()

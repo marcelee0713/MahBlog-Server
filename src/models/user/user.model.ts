@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { REG_EX } from "../../constants";
-import { IUser } from "../../interfaces/user/user.interface";
-import { AuthenticatedAs, UserData, UserRoles, UserStatus } from "../../types/user/user.types";
+import { IUser } from "../../ts/interfaces/user/user.interface";
+import { AuthenticatedAs, UserData, UserRoles, UserStatus } from "../../ts/types/user/user.types";
 import { CustomError } from "../../utils/error_handler";
 
 @injectable()

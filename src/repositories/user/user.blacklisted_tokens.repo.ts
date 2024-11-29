@@ -1,9 +1,9 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { IUserBlacklistedTokenRepository } from "../../interfaces/user/user.blacklisted_token.interface";
+import { IUserBlacklistedTokenRepository } from "../../ts/interfaces/user/user.blacklisted_token.interface";
 import {
   CreateUserBlackListedRepoParams,
   UserBlacklistedTokenData,
-} from "../../types/user/user.blacklisted_tokens.types";
+} from "../../ts/types/user/user.blacklisted_tokens.types";
 import { db } from "../../config/db";
 import { injectable } from "inversify";
 import { CustomError } from "../../utils/error_handler";

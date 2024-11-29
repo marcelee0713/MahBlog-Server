@@ -1,12 +1,12 @@
 import { injectable, inject } from "inversify";
 import { Request, Response } from "express";
-import { IBlogContentsService } from "../../interfaces/blog/blog.contents.interface";
+import { IBlogContentsService } from "../../ts/interfaces/blog/blog.contents.interface";
 import { TYPES } from "../../constants";
 import { CustomError, identifyErrors } from "../../utils/error_handler";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
-import { IMediaService } from "../../interfaces/media.interface";
-import { UpdateBlogContentsBodyReq } from "../../types/blog/blog.contents.types";
-import { UpdateBlogImageUseCase } from "../../types/blog/blog.types";
+import { IMediaService } from "../../ts/interfaces/media.interface";
+import { UpdateBlogContentsBodyReq } from "../../ts/types/blog/blog.contents.types";
+import { UpdateBlogImageUseCase } from "../../ts/types/blog/blog.types";
 
 @injectable()
 export class BlogContentsController {

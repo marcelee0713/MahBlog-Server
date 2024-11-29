@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
-import { IUserReports } from "../../interfaces/user/user.reports.interface";
-import { ReportCategories, ReportType } from "../../types/user/user.reports.type";
+import { IUserReports } from "../../ts/interfaces/user/user.reports.interface";
+import { ReportCategories, ReportType } from "../../ts/types/user/user.reports.type";
 import { CustomError } from "../../utils/error_handler";
 
 @injectable()

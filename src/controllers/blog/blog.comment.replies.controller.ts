@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { Request, Response } from "express";
-import { IBlogCommentRepliesService } from "../../interfaces/blog/blog.comments.replies.interface";
+import { IBlogCommentRepliesService } from "../../ts/interfaces/blog/blog.comments.replies.interface";
 import { TYPES } from "../../constants";
 import { identifyErrors } from "../../utils/error_handler";
 import { FormatResponse, FormatResponseArray } from "../../utils/response_handler";
@@ -8,8 +8,8 @@ import {
   CreateBlogCommentRepliesBodyReq,
   GetBlogCommentRepliesBodyReq,
   UpdateBlogCommentRepliesBodyReq,
-} from "../../types/blog/blog.comment.replies.types";
-import { IUserNotificationsService } from "../../interfaces/user/user.notifications.interface";
+} from "../../ts/types/blog/blog.comment.replies.types";
+import { IUserNotificationsService } from "../../ts/interfaces/user/user.notifications.interface";
 import { safeExecute } from "../../utils";
 
 @injectable()

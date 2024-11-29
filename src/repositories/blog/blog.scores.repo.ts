@@ -1,6 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { BlogScoresData, IBlogScoresRepository } from "../../interfaces/blog/blog.scores.interface";
-import { ScoreType, UpdateBlogScoresParams } from "../../types/blog/blog.scores.types";
+import {
+  BlogScoresData,
+  IBlogScoresRepository,
+} from "../../ts/interfaces/blog/blog.scores.interface";
+import { ScoreType, UpdateBlogScoresParams } from "../../ts/types/blog/blog.scores.types";
 import { db } from "../../config/db";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { CustomError } from "../../utils/error_handler";
