@@ -73,14 +73,15 @@ export class DeviceVerificationsRepository implements IDeviceVerificationsReposi
     }
   }
 
-  async update(deviceVerificationId: string, verifiedAt: Date): Promise<void> {
+  async update(deviceVerificationId: string, verifiedAt?: Date, token?: string): Promise<void> {
     try {
       await this.db.deviceVerifications.update({
         where: {
           deviceVerificationId,
         },
         data: {
-          verifiedAt,
+          verifiedAt: verifiedAt,
+          token: token,
         },
       });
     } catch (err) {

@@ -64,7 +64,7 @@ export const REG_EX = {
 
 export const TOKENS_LIFESPAN = {
   REFRESH: "30d",
-  ACCESS: "1m",
+  ACCESS: "1m", // TODO: Change this back when done testing
   DEVICE_VERIFY: "10m",
   EMAIL_VERIFY: "1d",
   EMAIL_CHANGE: "1d",

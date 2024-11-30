@@ -107,6 +107,7 @@ model UserDevices {
 model DeviceVerifications {
   deviceVerificationId String    @id @default(cuid())
   code                 String
+  token                String?
   expectedDeviceId     String
   verifiedAt           DateTime?
   createdAt            DateTime  @default(now())

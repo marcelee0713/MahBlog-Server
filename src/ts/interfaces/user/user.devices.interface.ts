@@ -28,7 +28,9 @@ export interface IUserDevicesService {
   createDeviceVerification(
     userId: string,
     unknownDeviceId: string
-  ): Promise<CreateDeviceData | null>;
+  ): Promise<CreateDeviceData | string>;
+
+  updateVerificationWithToken(deviceVerificationId: string, token: string): Promise<void>;
 
   removeExpiredDevicesId(): Promise<void>;
 
@@ -48,7 +50,7 @@ export interface IDeviceVerificationsRepository {
   get(deviceId: string): Promise<DeviceVerificationData | null>;
   getAll(): Promise<DeviceVerificationData[]>;
   create(code: string, expectedDeviceId: string): Promise<DeviceVerificationData>;
-  update(deviceVerificationId: string, verifiedAt: Date): Promise<void>;
+  update(deviceVerificationId: string, verifiedAt?: Date, token?: string): Promise<void>;
   deleteMany(deviceVerificationId: string[]): Promise<void>;
   delete(deviceVerificationId: string): Promise<void>;
 }
@@ -69,6 +71,7 @@ export interface UserDevicesData {
 export interface DeviceVerificationData {
   deviceVerificationId: string;
   expectedDeviceId: string;
+  token: string | null;
   code: string;
   verifiedAt: Date | null;
   createdAt: Date;

@@ -60,12 +60,18 @@ export class UserMiddleware {
 
         const verificationUrl = `${process.env.CLIENT_BASE_URL}${CLIENT_ROUTES.DEVICE_VERIFICATION}`;
 
-        if (!verifBody) throw new CustomError("unrecognized-device", verificationUrl);
+        if (typeof verifBody === "string") {
+          const token = verifBody;
+          const verificationUrlWithExisitingToken = `${verificationUrl}?token=${token}`;
+          throw new CustomError("unrecognized-device", verificationUrlWithExisitingToken);
+        }
 
         const token = this.auth.createToken(
           { deviceVerificationId: verifBody.deviceVerificationId, userId: payload.userId },
           "DEVICE_VERIFY"
         );
+
+        await this.device.updateVerificationWithToken(verifBody.deviceVerificationId, token);
 
         await this.email.sendDeviceVerification({
           code: verifBody.code,

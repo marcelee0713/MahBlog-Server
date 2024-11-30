@@ -62,14 +62,12 @@ export class UserDevicesService implements IUserDevicesService {
   async createDeviceVerification(
     userId: string,
     unknownDeviceId: string
-  ): Promise<CreateDeviceData | null> {
+  ): Promise<CreateDeviceData | string> {
     const data = await this.verifRepo.get(unknownDeviceId);
 
     if (data && data.expectedDeviceId === unknownDeviceId) {
-      const isItExpired = this.entity.isDeviceVerificationExpired(data.createdAt);
-
-      console.log("Is this expired?: " + isItExpired);
-      if (!this.entity.isDeviceVerificationExpired(data.createdAt)) return null;
+      if (!this.entity.isDeviceVerificationExpired(data.createdAt) && data.token != null)
+        return data.token;
     }
 
     const code = this.entity.generateRandomSixDigitCode();
@@ -83,6 +81,10 @@ export class UserDevicesService implements IUserDevicesService {
       deviceVerificationId,
       email,
     };
+  }
+
+  async updateVerificationWithToken(deviceVerificationId: string, token: string): Promise<void> {
+    return await this.verifRepo.update(deviceVerificationId, undefined, token);
   }
 
   async removeExpiredDevicesId(): Promise<void> {
