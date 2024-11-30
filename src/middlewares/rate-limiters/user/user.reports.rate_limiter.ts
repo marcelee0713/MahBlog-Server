@@ -16,7 +16,7 @@ export const getReportsRateLimit = rateLimit({
 
 export const createReportRateLimit = rateLimit({
   windowMs: 60 * 1000 * 15,
-  limit: 5,
+  limit: 3,
   standardHeaders: true,
   legacyHeaders: false,
 });

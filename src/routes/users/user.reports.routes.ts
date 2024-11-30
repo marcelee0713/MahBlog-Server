@@ -26,6 +26,13 @@ const userReportsRouter = express.Router();
 
 const controller = userContainer.container.get<UserReportsController>(TYPES.UserReportsController);
 
+userReportsRouter.post(
+  "/report-issue",
+  createReportRateLimit,
+  middleware.validateBody(createReportIssueSchema),
+  controller.onReportIssue.bind(controller)
+);
+
 userReportsRouter.use((req, res, next) => middleware.verifySession(req, res, next));
 
 userReportsRouter.post(
@@ -40,13 +47,6 @@ userReportsRouter.post(
   getReportsRateLimit,
   middleware.validateBody(getReportsSchema),
   controller.onGetAllReports.bind(controller)
-);
-
-userReportsRouter.post(
-  "/report-issue",
-  createReportRateLimit,
-  middleware.validateBody(createReportIssueSchema),
-  controller.onReportIssue.bind(controller)
 );
 
 userReportsRouter.post(
