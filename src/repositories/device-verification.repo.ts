@@ -16,11 +16,11 @@ export class DeviceVerificationsRepository implements IDeviceVerificationsReposi
     this.db = db;
   }
 
-  async get(deviceId: string): Promise<DeviceVerificationData | null> {
+  async get(deviceVerificationId: string): Promise<DeviceVerificationData | null> {
     try {
       const data = await this.db.deviceVerifications.findFirst({
         where: {
-          expectedDeviceId: deviceId,
+          deviceVerificationId: deviceVerificationId,
         },
       });
 

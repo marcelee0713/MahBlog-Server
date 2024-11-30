@@ -47,7 +47,7 @@ export interface IUserDevicesRepository {
 }
 
 export interface IDeviceVerificationsRepository {
-  get(deviceId: string): Promise<DeviceVerificationData | null>;
+  get(deviceVerificationId: string): Promise<DeviceVerificationData | null>;
   getAll(): Promise<DeviceVerificationData[]>;
   create(code: string, expectedDeviceId: string): Promise<DeviceVerificationData>;
   update(deviceVerificationId: string, verifiedAt?: Date, token?: string): Promise<void>;

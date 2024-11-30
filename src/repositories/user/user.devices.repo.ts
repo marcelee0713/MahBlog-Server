@@ -51,10 +51,10 @@ export class UserDevicesRepository implements IUserDevicesRepository {
     try {
       await this.db.userDevices.create({
         data: {
-          deviceId,
+          deviceId: deviceId,
           users: {
             connect: {
-              userId,
+              userId: userId,
             },
           },
         },
@@ -80,8 +80,10 @@ export class UserDevicesRepository implements IUserDevicesRepository {
     try {
       await this.db.userDevices.update({
         where: {
-          userId,
-          deviceId,
+          userId_deviceId: {
+            deviceId,
+            userId,
+          },
         },
         data: {
           lastSignedIn: signedInAt,
@@ -108,8 +110,10 @@ export class UserDevicesRepository implements IUserDevicesRepository {
     try {
       await this.db.userDevices.delete({
         where: {
-          deviceId,
-          userId,
+          userId_deviceId: {
+            deviceId,
+            userId,
+          },
         },
       });
     } catch (err) {

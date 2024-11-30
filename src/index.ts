@@ -53,6 +53,3 @@ app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
 // TODO: Think about what other feature, especially in the admin side would be added on?
 // Maybe be do this when you're finish on the web?
 // Might be Analytics, User Management. What routes should be for this one?
-
-// TODO: Maybe also identify the given device id?
-// Like check the user's database if that device id have been authorize?

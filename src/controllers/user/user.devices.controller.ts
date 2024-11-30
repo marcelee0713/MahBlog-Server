@@ -4,7 +4,6 @@ import { IUserDevicesService } from "../../ts/interfaces/user/user.devices.inter
 import { TYPES } from "../../constants";
 import { CustomError, identifyErrors } from "../../utils/error_handler";
 import { IAuthService } from "../../ts/interfaces/auth.interface";
-import { safeExecute } from "../../utils";
 import { IUserBlacklistedTokenService } from "../../ts/interfaces/user/user.blacklisted_token.interface";
 import { FormatResponse } from "../../utils/response_handler";
 import { IUserService } from "../../ts/interfaces/user/user.interface";
@@ -38,7 +37,7 @@ export class UserDevicesController {
 
       if (!deviceId) throw new CustomError("device-header-missing");
 
-      const validToken = await safeExecute(this.auth.verifyToken, token, "DEVICE_VERIFY");
+      const validToken = this.auth.verifyToken(token, "DEVICE_VERIFY");
 
       if (!validToken) throw new CustomError("invalid", "Invalid device verification request");
 
