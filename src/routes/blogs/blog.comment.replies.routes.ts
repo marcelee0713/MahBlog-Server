@@ -10,6 +10,13 @@ import {
   deleteCommentReplySchema,
   likeReplySchema,
 } from "../../middlewares/schemas/blog/blog.comment.replies.schema";
+import {
+  createReplyRateLimit,
+  deleteReplyRateLimit,
+  getAllReplyRateLimit,
+  likeReplyRateLimit,
+  updateReplyRateLimit,
+} from "../../middlewares/rate-limiters/blog/blog.reply.rate_limiter";
 
 const blogCommentRepliesRouter = express.Router();
 
@@ -21,21 +28,32 @@ blogCommentRepliesRouter.use((req, res, next) => middleware.verifySession(req, r
 
 blogCommentRepliesRouter
   .route("/")
-  .post(middleware.validateBody(createCommentReplySchema), controller.onReply.bind(controller))
-  .put(middleware.validateBody(updateCommentReplySchema), controller.onEditReply.bind(controller))
+  .post(
+    createReplyRateLimit,
+    middleware.validateBody(createCommentReplySchema),
+    controller.onReply.bind(controller)
+  )
+  .put(
+    updateReplyRateLimit,
+    middleware.validateBody(updateCommentReplySchema),
+    controller.onEditReply.bind(controller)
+  )
   .delete(
+    deleteReplyRateLimit,
     middleware.validateBody(deleteCommentReplySchema),
     controller.onRemoveReply.bind(controller)
   );
 
 blogCommentRepliesRouter.post(
   "/get-all",
+  getAllReplyRateLimit,
   middleware.validateBody(getCommentRepliesSchema),
   controller.onGetReplies.bind(controller)
 );
 
 blogCommentRepliesRouter.post(
   "/like",
+  likeReplyRateLimit,
   middleware.validateBody(likeReplySchema),
   controller.onToggleLike.bind(controller)
 );

@@ -9,6 +9,14 @@ import {
   likeBlogSchema,
   updateBlogSchema,
 } from "../../middlewares/schemas/blog/blog.schema";
+import {
+  createBlogRateLimit,
+  deleteBlogRateLimit,
+  getAllBlogRateLimit,
+  getBlogRateLimit,
+  likeBlogRateLimit,
+  updateBlogRateLimit,
+} from "../../middlewares/rate-limiters/blog/blog.rate_limiter";
 
 const blogRouter = express.Router();
 
@@ -18,28 +26,32 @@ blogRouter.use((req, res, next) => middleware.verifySession(req, res, next));
 
 blogRouter
   .route("/")
-  .post(controller.onCreateBlog.bind(controller))
+  .post(createBlogRateLimit, controller.onCreateBlog.bind(controller))
   .put(
+    updateBlogRateLimit,
     middleware.validateMulter("coverImage"),
     middleware.validateBody(updateBlogSchema),
     controller.onEditBlog.bind(controller)
   )
-  .delete(controller.onDeleteBlog.bind(controller));
+  .delete(deleteBlogRateLimit, controller.onDeleteBlog.bind(controller));
 
 blogRouter.post(
   "/get-all",
+  getAllBlogRateLimit,
   middleware.validateBody(getBlogsSchema),
   controller.onGetBlogs.bind(controller)
 );
 
 blogRouter.post(
   "/get",
+  getBlogRateLimit,
   middleware.validateBody(getBlogSchema),
   controller.onGetBlog.bind(controller)
 );
 
 blogRouter.post(
   "/like",
+  likeBlogRateLimit,
   middleware.validateBody(likeBlogSchema),
   controller.onToggleLike.bind(controller)
 );

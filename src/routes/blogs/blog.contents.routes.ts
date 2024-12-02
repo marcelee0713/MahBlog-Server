@@ -8,6 +8,12 @@ import {
   deleteBlogContentSchema,
   updateBlogContentSchema,
 } from "../../middlewares/schemas/blog/blog.contents.schema";
+import {
+  createBlogContentRateLimit,
+  updateBlogContentRateLimit,
+  deleteBlogContentRateLimit,
+  getAllBlogContentRateLimit,
+} from "../../middlewares/rate-limiters/blog/blog.content.rate_limiter";
 
 const blogContentsRouter = express.Router();
 
@@ -20,21 +26,25 @@ blogContentsRouter.use((req, res, next) => middleware.verifySession(req, res, ne
 blogContentsRouter
   .route("/")
   .post(
+    createBlogContentRateLimit,
     middleware.validateBody(createAndGetBlogContentSchema),
     controller.onCreateBlogContent.bind(controller)
   )
   .put(
+    updateBlogContentRateLimit,
     middleware.validateMulter("contentImage"),
     middleware.validateBody(updateBlogContentSchema),
     controller.onUpdateBlogContents.bind(controller)
   )
   .delete(
+    deleteBlogContentRateLimit,
     middleware.validateBody(deleteBlogContentSchema),
     controller.onDeleteContent.bind(controller)
   );
 
 blogContentsRouter.post(
   "/get-all",
+  getAllBlogContentRateLimit,
   middleware.validateBody(createAndGetBlogContentSchema),
   controller.onGetBlogContents.bind(controller)
 );

@@ -48,7 +48,7 @@ app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
 app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
 
-// TODO: Add Rate Limiters for Blogs
+// TODO: Implement WebSocket for User Notifications | SOON
 
 // TODO: Think about what other feature, especially in the admin side would be added on?
 // Maybe be do this when you're finish on the web?
