@@ -49,6 +49,10 @@ export class UserDevicesRepository implements IUserDevicesRepository {
 
   async create(userId: string, deviceId: string): Promise<void> {
     try {
+      const data = await this.get(userId, deviceId);
+
+      if (data) return;
+
       await this.db.userDevices.create({
         data: {
           deviceId: deviceId,

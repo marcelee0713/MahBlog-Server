@@ -77,10 +77,14 @@ export class UserService implements IUserService {
     return user;
   }
 
-  async getUserByEmail(email: string): Promise<UserData> {
-    const user = await this.repo.get({ email: email }, "EMAIL");
+  async getUserByEmail(email: string): Promise<UserData | null> {
+    try {
+      const user = await this.repo.get({ email: email }, "EMAIL");
 
-    return user;
+      return user;
+    } catch (err) {
+      return null;
+    }
   }
 
   async updateEmail(userId: string, oldEmail: string, newEmail: string): Promise<void> {
@@ -105,6 +109,16 @@ export class UserService implements IUserService {
       useCase: "CHANGE_PASSWORD",
       userId: userId,
       password: currentPassword,
+      newPassword: newPassword,
+    });
+  }
+
+  async resetPassword(userId: string, newPassword: string): Promise<void> {
+    this.entity.validatePassword(newPassword);
+
+    await this.repo.update({
+      useCase: "RESET_PASSWORD",
+      userId: userId,
       newPassword: newPassword,
     });
   }

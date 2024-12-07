@@ -150,10 +150,14 @@ export class UserController {
 
       if (data.body.useCase === "CHANGE_PASSWORD") {
         const userId = res.locals.userId;
-        const currentPassword = data.body.currentPassword ?? "";
-        const newPassword = data.body.password ?? "";
+        const currentPassword = data.body.password ?? "";
+        const newPassword = data.body.newPassword ?? "";
 
-        if (!currentPassword || !newPassword) throw new CustomError("missing-inputs");
+        if (!currentPassword || !newPassword)
+          throw new CustomError(
+            "missing-inputs",
+            "Missing password and newPassword in request body."
+          );
 
         await this.service.updatePassword(userId, currentPassword, newPassword);
 
@@ -164,10 +168,10 @@ export class UserController {
 
       if (data.body.useCase === "RESET_PASSWORD") {
         const token = data.body.token as string;
-        const currentPassword = data.body.currentPassword ?? "";
-        const newPassword = data.body.password ?? "";
+        const newPassword = data.body.newPassword ?? "";
 
-        if (!currentPassword || !newPassword || !token) throw new CustomError("missing-inputs");
+        if (!newPassword || !token)
+          throw new CustomError("missing-inputs", "Missing newPassword and token in request body.");
 
         if (!token) throw new CustomError("missing-inputs");
 
@@ -181,7 +185,7 @@ export class UserController {
 
         if (!isValid) throw new CustomError("request-expired");
 
-        await this.service.updatePassword(payload.userId, currentPassword, newPassword);
+        await this.service.resetPassword(payload.userId, newPassword);
 
         await this.blacklisted.addTokenToBlacklist({ token: token, ...payload });
 
@@ -223,7 +227,36 @@ export class UserController {
         const currentEmail = data.body.email;
         const newEmail = data.body.newEmail;
 
-        if (!currentEmail || !newEmail) throw new CustomError("missing-inputs");
+        if (!currentEmail || !newEmail)
+          throw new CustomError(
+            "missing-inputs",
+            "Missing currentEmail and newEmail in request body."
+          );
+
+        if (currentEmail === newEmail) {
+          throw new CustomError(
+            "user-modification-denied",
+            `User can not change its email when it's the same.`
+          );
+        }
+
+        const emailExist = await this.service.getUserByEmail(newEmail);
+
+        if (emailExist) {
+          throw new CustomError(
+            "user-already-exist",
+            "A user in our platform is already using this email."
+          );
+        }
+
+        const user = await this.service.getUser(userId);
+
+        if (user.authenticatedAs !== "LOCAL") {
+          throw new CustomError(
+            "user-modification-denied",
+            `User can not request to change an email due to authenticating as ${user.authenticatedAs}. We're sorry for the inconvenience.`
+          );
+        }
 
         const updateable = await this.logs.updateable(userId, "UPDATE_EMAIL");
 
@@ -313,6 +346,8 @@ export class UserController {
 
         const data = await this.service.getUserByEmail(payload.email);
 
+        if (!data) throw new CustomError("does-not-exist", "User does not exist");
+
         if (data.emailVerifiedAt) throw new CustomError("user-already-verified");
 
         const emailVerficationToken = this.auth.createToken(
@@ -336,6 +371,8 @@ export class UserController {
         if (!email) throw new CustomError("missing-inputs", "Email is required in the body.");
 
         const data = await this.service.getUserByEmail(email);
+
+        if (!data) throw new CustomError("does-not-exist", "User does not exist");
 
         if (data.emailVerifiedAt) throw new CustomError("user-already-verified");
 
@@ -369,6 +406,8 @@ export class UserController {
       const email: string = req.body.email;
 
       const data = await this.service.getUserByEmail(email);
+
+      if (!data) throw new CustomError("does-not-exist", "User does not exist");
 
       const passwordResetToken = this.auth.createToken({ userId: data.userId }, "RESET_PASS");
 

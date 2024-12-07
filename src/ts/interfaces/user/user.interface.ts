@@ -42,9 +42,10 @@ export interface IUserService {
   signOutAll: (userId: string) => Promise<void>;
   signUp: (params: SignUpParams) => Promise<UserData>;
   getUser: (userId: string) => Promise<UserData>;
-  getUserByEmail: (email: string) => Promise<UserData>;
+  getUserByEmail: (email: string) => Promise<UserData | null>;
   updateEmail: (userId: string, oldEmail: string, newEmail: string) => Promise<void>;
   updatePassword: (userId: string, currentPassword: string, newPassword: string) => Promise<void>;
+  resetPassword: (userId: string, newPassword: string) => Promise<void>;
   verifyEmail: (userId: string, email: string) => Promise<void>;
   deleteUser: (userId: string) => Promise<void>;
 }
@@ -81,6 +82,7 @@ export interface UpdateUserBodyReq {
     email?: string;
     newEmail?: string;
     currentPassword?: string;
+    newPassword?: string;
     password?: string;
     token?: string;
     removeSessions?: boolean;

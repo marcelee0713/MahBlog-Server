@@ -103,8 +103,27 @@ export class UserRepository implements IUserRepository {
 
   async update(params: UpdateUserParams): Promise<void> {
     try {
+      const user = await this.db.users.findFirst({
+        where: {
+          userId: params.userId,
+        },
+      });
+
+      if (!user) throw new CustomError("does-not-exist", "User does not exist.");
+
       if (params.useCase === "CHANGE_EMAIL") {
-        if (!params.email || !params.newEmail) throw new CustomError("missing-inputs");
+        if (!params.email || !params.newEmail)
+          throw new CustomError(
+            "missing-inputs",
+            "Missing email and newEmail in the request body."
+          );
+
+        if (user.authenticatedAs !== "LOCAL") {
+          throw new CustomError(
+            "user-modification-denied",
+            `User can not change email due to authenticating as ${user.authenticatedAs}`
+          );
+        }
 
         await this.db.users.update({
           where: {
@@ -116,26 +135,20 @@ export class UserRepository implements IUserRepository {
             emailVerifiedAt: null,
           },
         });
-
-        return;
       }
 
       if (params.useCase === "CHANGE_PASSWORD") {
-        if (!params.password || !params.newPassword) throw new CustomError("missing-inputs");
-
-        const user = await this.db.users.findFirst({
-          where: {
-            userId: params.userId,
-          },
-        });
-
-        if (!user) throw new CustomError("does-not-exist", "User does not exist.");
+        if (!params.password || !params.newPassword)
+          throw new CustomError(
+            "missing-inputs",
+            "Missing password and newPassword in request body."
+          );
 
         const currentUserPassword = user.password;
 
         if (user.authenticatedAs !== "LOCAL" || !currentUserPassword) {
           throw new CustomError(
-            "invalid",
+            "user-modification-denied",
             `User can not change password due to authenticating as ${user.authenticatedAs}`
           );
         }
@@ -156,12 +169,38 @@ export class UserRepository implements IUserRepository {
             password: await bcrypt.hash(params.newPassword, 10),
           },
         });
+      }
 
-        return;
+      if (params.useCase === "RESET_PASSWORD") {
+        const currentUserPassword = user.password;
+
+        if (user.authenticatedAs !== "LOCAL" || !currentUserPassword) {
+          throw new CustomError(
+            "user-modification-denied",
+            `User can not reset password due to authenticating as ${user.authenticatedAs}`
+          );
+        }
+
+        if (!params.newPassword)
+          throw new CustomError("missing-inputs", "Missing newPassword in request body.");
+
+        const samePassword = await bcrypt.compare(params.newPassword, currentUserPassword);
+
+        if (samePassword) throw new CustomError("user-enters-same-password");
+
+        await this.db.users.update({
+          where: {
+            userId: params.userId,
+          },
+          data: {
+            password: await bcrypt.hash(params.newPassword, 10),
+          },
+        });
       }
 
       if (params.useCase === "VERIFY_EMAIL") {
-        if (!params.email) throw new CustomError("missing-inputs");
+        if (!params.email)
+          throw new CustomError("missing-inputs", "Missing email in request body.");
 
         await this.db.users.update({
           where: {
