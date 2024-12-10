@@ -25,7 +25,7 @@ export class UserProfileController {
 
   async onGetUserProfileData(req: Request, res: Response) {
     try {
-      const userId = res.locals.userId as string;
+      const userId = req.params.userId ?? (res.locals.userId as string);
 
       const data = await this.service.getUserProfile(userId);
 

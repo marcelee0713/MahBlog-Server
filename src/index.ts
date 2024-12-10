@@ -48,6 +48,9 @@ app.use("/api/v1/blog-contents", blogContentsRouter);
 app.use("/api/v1/blog-comment", blogCommentsRouter);
 app.use("/api/v1/blog-comment/reply", blogCommentRepliesRouter);
 
+// TODO: Implement Connection Visibility for Blogs.
+// You might have to do a raw sql queries for this one rather than relying on ORM.
+
 // TODO: Implement WebSocket for User Notifications | SOON
 
 // TODO: Think about what other feature, especially in the admin side would be added on?

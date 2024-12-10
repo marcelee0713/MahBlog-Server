@@ -29,6 +29,12 @@ userProfileRouter.use((req, res, next) => middleware.verifySession(req, res, nex
 
 userProfileRouter.get("/", getProfileRateLimit, controller.onGetUserProfileData.bind(controller));
 
+userProfileRouter.get(
+  "/:userId",
+  getProfileRateLimit,
+  controller.onGetUserProfileData.bind(controller)
+);
+
 userProfileRouter.put(
   "/update-name",
   updateProfileRateLimit,
