@@ -11,10 +11,10 @@ const multerStorage = multer.diskStorage({
 const options: multer.Options = {
   storage: multerStorage,
   limits: {
-    fileSize: 3 * 1024 * 1024,
+    fileSize: 5 * 1024 * 1024,
   },
   fileFilter(req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif|JPG)$/)) {
       return cb(null, false);
     }
 

@@ -53,7 +53,7 @@ export const KNOWN_ERRORS: Record<ErrorType, ErrorObject> = {
 
   "invalid-image-upload": {
     status: 400,
-    message: "Invalid image, only accepts png, jpg, jpeg, and gif with a maximum of 3mb.",
+    message: "Invalid image, only accepts png, jpg, jpeg, and gif with a maximum of 5mb.",
   },
 
   "request-expired": {
@@ -113,7 +113,7 @@ export const KNOWN_ERRORS: Record<ErrorType, ErrorObject> = {
 
   "invalid-bio": {
     status: 400,
-    message: "Invalid last name, maximum of 255 characters only.",
+    message: "Invalid bio, maximum of 255 characters only.",
   },
 
   "invalid-report-description": {
