@@ -133,7 +133,7 @@ export class UserService implements IUserService {
     });
   }
 
-  async deleteUser(userId: string): Promise<void> {
-    await this.repo.delete(userId);
+  async deleteUser(userId: string, password?: string): Promise<void> {
+    await this.repo.delete(userId, password);
   }
 }

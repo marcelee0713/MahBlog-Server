@@ -231,8 +231,28 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async delete(userId: string): Promise<void> {
+  async delete(userId: string, password?: string): Promise<void> {
     try {
+      const user = await this.db.users.findFirst({
+        where: {
+          userId,
+        },
+      });
+
+      if (!user) throw new CustomError("does-not-exist", "User does not exist.");
+
+      if (user.authenticatedAs === "LOCAL" && user.password) {
+        if (!password)
+          throw new CustomError(
+            "does-not-exist",
+            "Your password does not exist, this is unexpected. Please report it to the devs!"
+          );
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) throw new CustomError("wrong-credentials", "Entered the wrong password!");
+      }
+
       await this.db.users.delete({
         where: {
           userId: userId,

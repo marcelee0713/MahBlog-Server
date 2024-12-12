@@ -428,8 +428,12 @@ export class UserController {
   async onDeleteUser(req: Request, res: Response) {
     try {
       const userId = res.locals.userId;
+      const password = req.body.password as string | undefined;
 
-      await this.service.deleteUser(userId);
+      // TODO: I think we should also delete the images from the blogs and blog contents.
+      // The profile picture and profile cover too.
+
+      await this.service.deleteUser(userId, password);
 
       return res.status(200).json(FormatResponse({}, "Deleted the user"));
     } catch (err) {

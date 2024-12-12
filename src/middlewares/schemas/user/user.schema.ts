@@ -51,3 +51,9 @@ export const deviceVerificationReqSchema = z.object({
     token: z.string(),
   }),
 });
+
+export const deleteUserSchema = z.object({
+  body: z.object({
+    password: z.string().trim().optional(),
+  }),
+});

@@ -4,6 +4,7 @@ import { UserController } from "../../controllers/user/user.controller";
 import { TYPES } from "../../constants";
 import { UserMiddleware } from "../../middlewares/user.middleware";
 import {
+  deleteUserSchema,
   deviceVerificationReqSchema,
   emailVerificationReqSchema,
   resetPasswordReqSchema,
@@ -56,6 +57,7 @@ userRouter
   )
   .delete(
     deleteUserRateLimit,
+    middleware.validateBody(deleteUserSchema),
     (req, res, next) => middleware.verifySession(req, res, next),
     controller.onDeleteUser.bind(controller)
   );
