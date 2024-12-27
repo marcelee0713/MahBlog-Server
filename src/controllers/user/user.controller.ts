@@ -10,12 +10,14 @@ import { IUserBlacklistedTokenService } from "../../ts/interfaces/user/user.blac
 import { IUserLogsService } from "../../ts/interfaces/user/user.logs.interface";
 import { GetUserByEmailUseCase, UserData } from "../../ts/types/user/user.types";
 import { IUserDevicesService } from "../../ts/interfaces/user/user.devices.interface";
+import { IMediaService } from "../../ts/interfaces/media.interface";
 
 @injectable()
 export class UserController {
   private auth: IAuthService;
   private service: IUserService;
   private emailService: IEmailService;
+  private mediaService: IMediaService;
   private blacklisted: IUserBlacklistedTokenService;
   private logs: IUserLogsService;
   private device: IUserDevicesService;
@@ -23,6 +25,7 @@ export class UserController {
   constructor(
     @inject(TYPES.AuthService) auth: IAuthService,
     @inject(TYPES.EmailService) emailService: IEmailService,
+    @inject(TYPES.MediaService) mediaService: IMediaService,
     @inject(TYPES.UserService) service: IUserService,
     @inject(TYPES.UserBlacklistedTokenService) blacklisted: IUserBlacklistedTokenService,
     @inject(TYPES.UserLogsService) logs: IUserLogsService,
@@ -30,6 +33,7 @@ export class UserController {
   ) {
     this.emailService = emailService;
     this.auth = auth;
+    this.mediaService = mediaService;
     this.service = service;
     this.blacklisted = blacklisted;
     this.logs = logs;
@@ -430,12 +434,11 @@ export class UserController {
       const userId = res.locals.userId;
       const password = req.body.password as string | undefined;
 
-      // TODO: I think we should also delete the images from the blogs and blog contents.
-      // The profile picture and profile cover too.
+      const images = await this.service.deleteUser(userId, password);
 
-      await this.service.deleteUser(userId, password);
+      await this.mediaService.removeUserDirectory(userId, images);
 
-      return res.status(200).json(FormatResponse({}, "Deleted the user"));
+      return res.status(200).json(FormatResponse({}));
     } catch (err) {
       const errObj = identifyErrors(err);
 

@@ -47,14 +47,14 @@ export interface IUserService {
   updatePassword: (userId: string, currentPassword: string, newPassword: string) => Promise<void>;
   resetPassword: (userId: string, newPassword: string) => Promise<void>;
   verifyEmail: (userId: string, email: string) => Promise<void>;
-  deleteUser: (userId: string, password?: string) => Promise<void>;
+  deleteUser: (userId: string, password?: string) => Promise<string[]>;
 }
 
 export interface IUserRepository {
   create: (params: SignUpParams) => Promise<UserData>;
   get: <T extends GetUserUseCase>(params: GetUserParamsType<T>, type: T) => Promise<UserData>;
   update: (params: UpdateUserParams) => Promise<void>;
-  delete: (userId: string, password?: string) => Promise<void>;
+  delete: (userId: string, password?: string) => Promise<string[]>;
 }
 
 export interface GetUserParams {

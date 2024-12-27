@@ -231,11 +231,24 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async delete(userId: string, password?: string): Promise<void> {
+  async delete(userId: string, password?: string): Promise<string[]> {
     try {
       const user = await this.db.users.findFirst({
         where: {
           userId,
+        },
+        include: {
+          profile: true,
+          blogs: {
+            select: {
+              contents: {
+                select: {
+                  contentImage: true,
+                },
+              },
+              coverImage: true,
+            },
+          },
         },
       });
 
@@ -253,12 +266,37 @@ export class UserRepository implements IUserRepository {
         if (!isMatch) throw new CustomError("wrong-credentials", "Entered the wrong password!");
       }
 
-      await this.db.users.delete({
-        where: {
-          userId: userId,
-        },
+      const images: string[] = [];
+
+      if (user.profile?.profileCover) images.push(user.profile.profileCover);
+      if (user.profile?.profilePicture) images.push(user.profile.profilePicture);
+
+      user.blogs.forEach((val) => {
+        if (val.coverImage) images.push(val.coverImage);
+
+        val.contents.forEach((cont) => {
+          if (cont.contentImage) images.push(cont.contentImage);
+        });
       });
+
+      await this.db.$transaction([
+        this.db.userConnections.deleteMany({
+          where: {
+            OR: [{ sourceUserId: userId }, { targetUserId: userId }],
+          },
+        }),
+
+        this.db.users.delete({
+          where: {
+            userId: userId,
+          },
+        }),
+      ]);
+
+      return images;
     } catch (err) {
+      if (err instanceof CustomError) throw err;
+
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === "P2025") {
           throw new CustomError("does-not-exist", "User does not exist.");

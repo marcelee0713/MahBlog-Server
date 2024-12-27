@@ -34,4 +34,25 @@ export class MediaService implements IMediaService {
       throw new CustomError("media-service-error");
     }
   }
+
+  async removeUserDirectory(userId: string, images: string[]): Promise<void> {
+    try {
+      const publicIds = images.map((image) => extractPublicId(image));
+
+      const chunkSize = 100;
+      const chunks = [];
+
+      for (let i = 0; i < publicIds.length; i += chunkSize) {
+        chunks.push(publicIds.slice(i, i + chunkSize));
+      }
+
+      for (const chunk of chunks) {
+        await this.media.api.delete_resources(chunk);
+      }
+
+      await this.media.api.delete_folder(`/mahblog/user_media/${userId}`);
+    } catch (err) {
+      throw new CustomError("media-service-error");
+    }
+  }
 }
