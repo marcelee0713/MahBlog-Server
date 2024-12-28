@@ -25,6 +25,7 @@ declare global {
       GOOGLE_CLIENT_SECRET: string;
       GOOGLE_CALLBACK_URL: string;
       GOOGLE_OAUTH_URL: string;
+      MEDIA_DIRECTORY: string;
     }
   }
 }

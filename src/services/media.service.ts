@@ -7,12 +7,15 @@ import { CustomError } from "../utils/error_handler";
 @injectable()
 export class MediaService implements IMediaService {
   private media: typeof cloudinary;
+  private readonly rootPath: string;
 
   constructor() {
     this.media = cloudinary;
+
+    this.rootPath = process.env.MEDIA_DIRECTORY as string;
   }
   async uploadImage(userId: string, path: string, folderPath: string = `/`): Promise<string> {
-    const defaultFolderPath = `/mahblog/user_media/${userId}${folderPath}`;
+    const defaultFolderPath = `${this.rootPath}${userId}${folderPath}`;
     try {
       const image = await this.media.uploader.upload(path, {
         folder: defaultFolderPath,
@@ -50,7 +53,7 @@ export class MediaService implements IMediaService {
         await this.media.api.delete_resources(chunk);
       }
 
-      await this.media.api.delete_folder(`/mahblog/user_media/${userId}`);
+      await this.media.api.delete_folder(`${this.rootPath}${userId}`);
     } catch (err) {
       throw new CustomError("media-service-error");
     }
