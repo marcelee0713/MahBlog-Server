@@ -38,8 +38,8 @@ export const updateUserRateLimit = rateLimit({
 });
 
 export const deleteUserRateLimit = rateLimit({
-  windowMs: 60 * 1000 * 10,
-  limit: 5,
+  windowMs: 60 * 1000 * 15,
+  limit: 4,
   standardHeaders: true,
   legacyHeaders: false,
 });

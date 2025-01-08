@@ -4,6 +4,7 @@ import {
   EmailChangePayload,
   EmailVerifyPayload,
   ResetPassPayload,
+  UserDeletionVerifyPayload,
   UserSessionPayload,
 } from "../../interfaces/auth.interface";
 import { IUserSession } from "../../interfaces/user/user.session.interface";
@@ -16,7 +17,8 @@ export type SessionType =
   | "EMAIL_VERIFY"
   | "EMAIL_CHANGE"
   | "RESET_PASS"
-  | "DEVICE_VERIFY";
+  | "DEVICE_VERIFY"
+  | "USER_DELETION_VERIFY";
 
 export type PayloadType<T extends SessionType> = PayloadMapping[T];
 
@@ -27,4 +29,5 @@ type PayloadMapping = {
   EMAIL_CHANGE: EmailChangePayload;
   RESET_PASS: ResetPassPayload;
   DEVICE_VERIFY: DeviceVerifyPayload;
+  USER_DELETION_VERIFY: UserDeletionVerifyPayload;
 };

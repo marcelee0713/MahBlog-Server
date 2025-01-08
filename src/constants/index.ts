@@ -69,6 +69,7 @@ export const TOKENS_LIFESPAN = {
   EMAIL_VERIFY: "1d",
   EMAIL_CHANGE: "1d",
   PASS_RESET: "1d",
+  USER_DELETION: "10m",
 };
 
 export const DEVICE_VERIFY_CONTENT = {
@@ -91,6 +92,11 @@ export const EMAIL_RESET_PASSWORD = {
   SUBJECT: "An email for resetting your password from MahBlog.",
 };
 
+export const USER_DELETION_CONTENT = {
+  NAME: "MahBlog User Deletion Verification",
+  SUBJECT: "A verification for deleting your account from MahBlog.",
+};
+
 export const UPDATE_DAYS_COOLDOWN = {
   NAME_AND_EMAIL: 90,
 };
@@ -107,4 +113,5 @@ export const CLIENT_ROUTES = {
   EMAIL_VERIFICATION: "/email-verification",
   RESET_PASSWORD: "/reset-password",
   DEVICE_VERIFICATION: "/device-verification",
+  USER_DELETION: "/goodbye",
 };

@@ -11,6 +11,7 @@ import {
   EMAIL_CHANGE_CONTENT,
   EMAIL_RESET_PASSWORD,
   EMAIL_VERIFY_CONTENT,
+  USER_DELETION_CONTENT,
 } from "../constants";
 import { CustomError } from "../utils/error_handler";
 
@@ -101,6 +102,27 @@ export class EmailService implements IEmailService {
         },
         subject: EMAIL_RESET_PASSWORD.SUBJECT,
         html: `<h1>Password Reset</h1><br><a href=${link}>Reset your password</a><br><p>This will expire in one day. <strong>DO NOT SHARE THIS LINK!</strong></p>`,
+      });
+    } catch (err) {
+      throw new CustomError("email-service-error");
+    }
+  }
+
+  async sendUserDeletionVerification(info: EmailParams): Promise<void> {
+    try {
+      const link = `${this.clientBaseUrl}${info.clientRoute}?token=${info.token}`;
+
+      await this.transporter.sendMail({
+        to: info.emailToSend,
+        from: {
+          name: USER_DELETION_CONTENT.NAME,
+          address: this.emailAddress,
+        },
+        subject: USER_DELETION_CONTENT.SUBJECT,
+        html: `<h1>User Deletion</h1>
+        <br>
+        <a href=${link}>Delete your account</a><br>
+        <p>This will expire in 10 minutes. <strong>DO NOT SHARE THIS LINK!</strong></p>`,
       });
     } catch (err) {
       throw new CustomError("email-service-error");

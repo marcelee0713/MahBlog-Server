@@ -35,3 +35,7 @@ export interface DeviceVerifyPayload extends AuthServicePayload {
   userId: string;
   deviceVerificationId: string;
 }
+
+export interface UserDeletionVerifyPayload extends AuthServicePayload {
+  userId: string;
+}

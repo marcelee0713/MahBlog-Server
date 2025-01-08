@@ -139,4 +139,11 @@ userRouter.post(
   userDeviceController.OAuthStoreDeviceID.bind(userDeviceController)
 );
 
+userRouter.delete(
+  "/delete-user-oauth",
+  middleware.validateBody(deleteUserSchema),
+  (req, res, next) => middleware.verifySession(req, res, next),
+  controller.onDeleteUserOAuth.bind(controller)
+);
+
 export default userRouter;

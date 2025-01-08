@@ -14,6 +14,7 @@ export class AuthService implements IAuthService {
   private emailVerifySecret: string;
   private resetPassSecret: string;
   private deviceVerifySecret: string;
+  private userDeletionSecret: string;
 
   constructor() {
     this.jwtClient = jwt;
@@ -23,6 +24,7 @@ export class AuthService implements IAuthService {
     this.emailVerifySecret = process.env.EMAIL_VERIFICATION_SECRETKEY as string;
     this.resetPassSecret = process.env.RESET_PASSWORD_SECRETKEY as string;
     this.deviceVerifySecret = process.env.DEVICE_VERIFICATION_SECRETKEY as string;
+    this.userDeletionSecret = process.env.USER_DELETION_VERIFICATION_SECRETKEY as string;
   }
 
   createToken<T extends SessionType>(payload: PayloadType<T>, type: T): string {
@@ -75,6 +77,14 @@ export class AuthService implements IAuthService {
         return token;
       }
 
+      case "USER_DELETION_VERIFY": {
+        const token = this.jwtClient.sign(payload as PayloadType<T>, this.userDeletionSecret, {
+          expiresIn: TOKENS_LIFESPAN.USER_DELETION,
+        });
+
+        return token;
+      }
+
       default:
         throw new CustomError(
           "internal-server-error",
@@ -113,6 +123,10 @@ export class AuthService implements IAuthService {
           this.jwtClient.verify(token, this.deviceVerifySecret);
           break;
 
+        case "USER_DELETION_VERIFY":
+          this.jwtClient.verify(token, this.userDeletionSecret);
+          break;
+
         default:
           throw new CustomError(
             "internal-server-error",
@@ -147,6 +161,9 @@ export class AuthService implements IAuthService {
         return this.jwtClient.decode(token) as PayloadType<T>;
 
       case "DEVICE_VERIFY":
+        return this.jwtClient.decode(token) as PayloadType<T>;
+
+      case "USER_DELETION_VERIFY":
         return this.jwtClient.decode(token) as PayloadType<T>;
 
       default:

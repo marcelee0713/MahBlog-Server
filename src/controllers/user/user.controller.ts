@@ -434,15 +434,57 @@ export class UserController {
       const userId = res.locals.userId;
       const password = req.body.password as string | undefined;
 
-      const images = await this.service.deleteUser(userId, password);
+      const user = await this.service.getUser(userId);
 
-      await this.mediaService.removeUserDirectory(userId, images);
+      if (user.authenticatedAs !== "LOCAL") {
+        const token = this.auth.createToken({ userId: user.userId }, "USER_DELETION_VERIFY");
 
-      return res.status(200).json(FormatResponse({}));
+        await this.emailService.sendResetPassword({
+          clientRoute: CLIENT_ROUTES.USER_DELETION,
+          emailToSend: user.email,
+          token: token,
+        });
+
+        return res.status(200).json(FormatResponse({}, "User Deletion Verification sent"));
+      }
+
+      await this.#deleteUser(res, user.userId, password);
     } catch (err) {
       const errObj = identifyErrors(err);
 
       return res.status(errObj.status).json(errObj);
     }
+  }
+
+  async onDeleteUserOAuth(req: Request, res: Response) {
+    try {
+      const userId = res.locals.userId;
+      const token = req.body.token as string;
+      const password = req.body.password as string | undefined;
+
+      if (!token) throw new CustomError("missing-inputs");
+
+      const isValid = this.auth.verifyToken(token, "USER_DELETION_VERIFY");
+
+      if (!isValid) throw new CustomError("request-expired");
+
+      const user = await this.service.getUser(userId);
+
+      if (user.authenticatedAs === "LOCAL") throw new CustomError("user-not-authorized");
+
+      await this.#deleteUser(res, user.userId, password);
+    } catch (err) {
+      const errObj = identifyErrors(err);
+
+      return res.status(errObj.status).json(errObj);
+    }
+  }
+
+  async #deleteUser(res: Response, userId: string, password?: string) {
+    const images = await this.service.deleteUser(userId, password);
+
+    await this.mediaService.removeUserDirectory(userId, images);
+
+    return res.status(200).json(FormatResponse({}));
   }
 }
