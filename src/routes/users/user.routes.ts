@@ -141,7 +141,7 @@ userRouter.post(
 
 userRouter.delete(
   "/delete-user-oauth",
-  middleware.validateBody(deleteUserSchema),
+  deleteUserRateLimit,
   (req, res, next) => middleware.verifySession(req, res, next),
   controller.onDeleteUserOAuth.bind(controller)
 );

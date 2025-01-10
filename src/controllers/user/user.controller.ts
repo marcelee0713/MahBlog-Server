@@ -439,7 +439,7 @@ export class UserController {
       if (user.authenticatedAs !== "LOCAL") {
         const token = this.auth.createToken({ userId: user.userId }, "USER_DELETION_VERIFY");
 
-        await this.emailService.sendResetPassword({
+        await this.emailService.sendUserDeletionVerification({
           clientRoute: CLIENT_ROUTES.USER_DELETION,
           emailToSend: user.email,
           token: token,
@@ -460,7 +460,6 @@ export class UserController {
     try {
       const userId = res.locals.userId;
       const token = req.body.token as string;
-      const password = req.body.password as string | undefined;
 
       if (!token) throw new CustomError("missing-inputs");
 
@@ -472,7 +471,7 @@ export class UserController {
 
       if (user.authenticatedAs === "LOCAL") throw new CustomError("user-not-authorized");
 
-      await this.#deleteUser(res, user.userId, password);
+      await this.#deleteUser(res, user.userId);
     } catch (err) {
       const errObj = identifyErrors(err);
 

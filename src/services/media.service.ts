@@ -53,7 +53,13 @@ export class MediaService implements IMediaService {
         await this.media.api.delete_resources(chunk);
       }
 
-      await this.media.api.delete_folder(`${this.rootPath}${userId}`);
+      const folderPath = `${this.rootPath}${userId}`;
+      const folders = await this.media.api.root_folders();
+      const folderExists = folders.folders.some(
+        (folder: { path: string }) => folder.path === folderPath
+      );
+
+      if (folderExists) await this.media.api.delete_folder(`${this.rootPath}${userId}`);
     } catch (err) {
       throw new CustomError("media-service-error");
     }

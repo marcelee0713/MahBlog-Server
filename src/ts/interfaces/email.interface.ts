@@ -3,6 +3,7 @@ export interface IEmailService {
   sendEmailChangeConfirmation(info: EmailParams): Promise<void>;
   sendResetPassword(info: EmailParams): Promise<void>;
   sendDeviceVerification(info: DeviceVerificationEmailParams): Promise<void>;
+  sendUserDeletionVerification(info: EmailParams): Promise<void>;
 }
 
 export interface EmailParams {
